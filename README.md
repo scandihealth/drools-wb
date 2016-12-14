@@ -20,7 +20,7 @@ _Work in progress - will be updated as we find out if all these steps are necess
 1. Make sure you run Windows 7 (64bit) and have at least 8BG physical memory 
 2. Install Git for windows, IntelliJ IDEA 2016.3, Java JDK 8 64bit, maven (>=3.3.9)
 3. Configure Maven to use our internal Artifactory maven repository
-   - Copy \\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
+   - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
 4. Configure Git to use long paths
    - Open a command prompt with administrator access and run: <code>git config --system core.longpaths true</code>
 5. Open IDEA (64 bit) -> Default Settings -> Maven
