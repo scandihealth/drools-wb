@@ -13,7 +13,7 @@ CSC Version
 This branch contains modifications to 6.5.0.Final made by CSC Scandihealth.<br>
 The modifications customizes Drools Workbench for embedded use within the LPR project (under construction).  
 
-How To Setup For Internal CSC Development (Windows 7)
+How To Setup For Internal CSC Development (Windows 7 64bit)
 ==========================
 _Work in progress - will be updated as we find out if all these steps are necessary or not._
 
@@ -23,13 +23,19 @@ _Work in progress - will be updated as we find out if all these steps are necess
    - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
 4. Configure Git to use long paths
    - Open a command prompt with administrator access and run: <code>git config --system core.longpaths true</code>
-5. Open IDEA (64 bit) -> Default Settings -> Maven
+5. Download the official droolsjbpm IDEA Code Style and save it in %USERPROFILE%\\.IntelliJIdea2016.3\config\codestyles  
+   - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/6.5.0.Final/ide-configuration/intellij-configuration/code-style/intellij-code-style_droolsjbpm-java-conventions.xml   
+6. Open IDEA (64 bit) -> Default Settings -> Maven
    - Change Maven home directory to your maven 3.3.9 installation
    - Change Maven -> Runner -> VM Options to <code>-Xms256m -Xmx3056m</code>
-   - Change Maven -> Runner -> JRE to <code>1.8</code>
-6. Open IDEA (64 bit) -> Help -> Edit Custom VM Options 
+   - Change Maven -> Runner -> JRE to <code>1.8</code> (64bit)
+7. Open IDEA (64 bit) -> Help -> Edit Custom VM Options 
    - Change the existing -Xmx setting to <code>-Xmx3056m</code>    
-7. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
+8. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
    - Open the pom.xml as a project
    - Change git branch to origin/csc-6.5.0
-8. You are now ready to run Maven commands
+9. Change the Code Style used by IDEA for this project
+   - Select Settings -> Editor -> Code Style -> Scheme: <code>Drools and jBPM: Java Conventions</code>
+10. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
+    - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij    
+11. You are now ready to run Maven commands and develop
