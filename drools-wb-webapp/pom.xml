@@ -883,8 +883,9 @@
 
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>gwt-maven-plugin</artifactId>
+        <groupId>com.csc.scandihealth</groupId>
+        <artifactId>csc-gwt-maven-plugin</artifactId>
+        <version>2.7.0</version>
         <configuration>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
           <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
