@@ -77,7 +77,8 @@ _Work in progress - will be updated as we find out if all these steps are necess
 ##How To Setup GWT Super Dev Mode
 _Work in progress - we are still figuring out the best way to run Super Dev Mode_
 ###Running GWT code server through maven (works!) 
-https://tkobayas.wordpress.com/2015/11/20/debugging-kie-workbench/
+Based on: https://tkobayas.wordpress.com/2015/11/20/debugging-kie-workbench/
+
 1. On _Drools Workbench - WebApp_ run Maven 'clean'
 2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
 3. Attach a remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
