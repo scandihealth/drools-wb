@@ -22,8 +22,10 @@ We have packaged that fork using maven and uploaded the jar to our own internal 
 #How To Setup For Internal CSC Development (Windows 7 64bit)
 _Work in progress - will be updated as we find out if all these steps are necessary or not._
 
+##Setting Up Build Configuration
 1. Make sure you run Windows 7 (64bit) 
 2. Install Git for windows, IntelliJ IDEA 2016.3, Java JDK 8 64bit, maven (>=3.3.9)
+    - If you have any other JDKs you must follow this guide to make sure IDEA runs under 1.8: https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under 
 3. Configure Maven to use our internal Artifactory maven repository
    - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
 4. Configure Git to use long paths
@@ -46,43 +48,55 @@ _Work in progress - will be updated as we find out if all these steps are necess
 10. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
     - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
 11. Click "Toggle 'Skip Tests' Mode" button in the Maven Projects window
-12. Download [WildFly 8.1.0.Final](http://download.jboss.org/wildfly/8.1.0.Final/wildfly-8.1.0.Final.zip) and unzip it to your drools-wb parent folder. 
-    - Example: If drools-wb is placed here: C:\dev\drools-wb then WildFly should be placed here: C:\dev\wildfly-8.1.0.Final
-    - Insert this into _wildfly-8.1.0.Final\standalone\configuration\standalone.xml_ after the `<extensions>` element
-    (modify paths to your liking)
-    ```
-            <system-properties>
-               <property name="org.uberfire.nio.git.dir" value="C:\dev\drools-wb-devdb"/>
-               <property name="org.uberfire.nio.git.ssh.cert.dir" value="C:\dev\drools-wb-devdb"/>
-               <property name="org.uberfire.metadata.index.dir" value="C:\dev\drools-wb-devdb"/>
-               <property name="org.guvnor.m2repo.dir" value="C:\dev\drools-wb-devdb"/>
-               <property name="org.kie.demo" value="false"/>
-           </system-properties>
-    ```
 13. You are now ready to run Maven commands and develop
     - Run Drools Workbench (root) -> package (takes 10-15 minutes)
-14. Set up a new Run configuration
+    
+##Setting Up Run Configuration
+1. Download [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip) and unzip it to your drools-wb parent folder. 
+    - Example: If drools-wb is placed here: C:\dev\drools-wb then WildFly should be placed here: C:\dev\wildfly-10.1.0.Final
+    - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone-full.xml_ after the `<extensions>` element
+    (modify to your liking)
+    ```
+        <system-properties>
+            <property name="org.uberfire.nio.git.dir" value="C:\dev\drools-wb-devdb"/>
+            <property name="org.uberfire.nio.git.ssh.cert.dir" value="C:\dev\drools-wb-devdb"/>
+            <property name="org.uberfire.metadata.index.dir" value="C:\dev\drools-wb-devdb"/>
+            <property name="org.guvnor.m2repo.dir" value="C:\dev\drools-wb-devdb"/>
+            <property name="org.kie.server.id" value="dev-kie-server"/>
+            <property name="org.kie.server.location" value="http://localhost:8080/kie-server/services/rest/server"/>
+            <property name="org.kie.server.controller" value="http://localhost:8080/drools-wb-webapp/rest/controller"/>
+            <property name="org.kie.server.controller.user" value="admin"/>
+            <property name="org.kie.server.controller.pwd" value="admin"/>
+            <property name="org.kie.server.bypass.auth.user" value="true"/>
+        </system-properties>
+    ```
+    - Run the following command: _wildfly-10.1.0.Final\bin\add-user.bat -a -u kieserver -p kieserver1! -ro kie-server_ (make sure JAVA_HOME environment variable is pointing to JRE 1.8)
+2. Download [KIE Server 6.5.0.Final ee7 war file](http://repo1.maven.org/maven2/org/kie/server/kie-server/6.5.0.Final/kie-server-6.5.0.Final-ee7.war)
+    - Rename it kie-server.war and save it to wildfly-10.1.0.Final\standalone\deployments (or deploy manually via web interface on http://127.0.0.1:9990)
+3. Setup a new Run configuration in IDEA
     - First make sure you have enabled JBoss integration
         - [Drools](https://confluence.jetbrains.com/display/IntelliJIDEA/Getting+Started+with+JBoss+Technologies+in+IntelliJ+IDEA#GettingStartedwithJBossTechnologiesinIntelliJIDEA-DroolsExpert)
         - [WildFly](https://confluence.jetbrains.com/display/IntelliJIDEA/Getting+Started+with+JBoss+Technologies+in+IntelliJ+IDEA#GettingStartedwithJBossTechnologiesinIntelliJIDEA-JBossEAPandWildFly)
     - Run -> Edit confiugrations -> Add New Configuration (+ button) -> JBoss -> Local
-        - Application server: JBoss 8.1.0.Final (if not present then click _Configure..._ and choose the folder where you downloaded Wildfly 8.1.0.Final)
-        - After launch: http://localhost:8080/drools-wb-webapp/drools-wb.html
+        - Application server: JBoss 10.1.0.Final (if not present then click _Configure..._ and choose the folder where you downloaded Wildfly 10.1.0.Final)
         - Deployment tab -> Add (+ button) -> pick _drools-wb-webapp:war exploded_
         - Remove all tasks in 'Before Launch'
-15. Now you should be able to run this configuration and the Drools Workbench login page should open automatically
+        - Startup/Connection -> Run + Debug -> Startup script -> Untick 'use default' and add --server-config=standalone-full.xml so it looks something like this: _wildfly-10.1.0.Final\bin\standalone.bat --server-config=standalone-full.xml_
+4. Now you should be able to run this configuration and the Drools Workbench login page should open automatically
     - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if you have made GWT code changes you want to include
     - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if switching from debugging GWT to running normally
 
-##How To Setup GWT Super Dev Mode
+##Setting Up GWT Super Dev Mode
 _Work in progress - we are still figuring out the best way to run Super Dev Mode_
 ###Running GWT code server through maven (works!) 
-Based on: https://tkobayas.wordpress.com/2015/11/20/debugging-kie-workbench/
-
 1. On _Drools Workbench - WebApp_ run Maven 'clean'
 2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
-3. Attach a remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
+3. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
 4. Click the "Launch Default Browser" button when it is available
+
+**There is still some problems in GWT debug mode:**
+The Drools-WB controller cannot be instantiated
+[INFO] ERROR [io.undertow.request] UT005023: Exception handling request to /drools-wb-webapp/rest/controller/server/dev-kie-server: org.jboss.resteasy.spi.UnhandledException: java.lang.NoClassDefFoundError: Could not initialize class org.kie.server.controller.rest.ControllerUtils
 
 ###Running GWT code server through IDEA (not working) 
 http://blog.athico.com/2014/05/running-drools-wb-with-gwts-superdevmode.html
@@ -93,3 +107,7 @@ Use parameters from gwt-maven-plugin <extraJvmArgs> element:
 Example:
 VM Options: -Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=C:\dev\wildfly-8.1.0.Final -Derrai.marshalling.server.classOutput=src/main/webapp/WEB-INF/classes -Dorg.uberfire.async.executor.safemode=true
 Dev Mode parameters: -server org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher
+
+#Troubleshooting
+- If deployment to WildFly fails with a "FileSystem"-related error, a "SocialUserProfile"-related error, or a "Lucene"-related error, then stop the server and delete the .index and .niogit folders and try again
+  - Note: This will reset all your application data (Data Model, rules, etc)

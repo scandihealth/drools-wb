@@ -34,10 +34,20 @@
 
   <properties>
     <errai.version>${version.org.jboss.errai}</errai.version>
-    <as.version>8.1.0.Final</as.version>
+    <as.version>10.1.0.Final</as.version>
     <!-- Add the absolute path for $JBOSS_HOME below to manage another instance -->
     <errai.jboss.home>${project.basedir}/../../wildfly-${as.version}</errai.jboss.home>
   </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.wildfly.core</groupId>
+        <artifactId>wildfly-embedded</artifactId>
+        <version>2.1.0.Final</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
 
   <dependencies>
 
@@ -499,10 +509,11 @@
       <groupId>org.guvnor</groupId>
       <artifactId>guvnor-rest-backend</artifactId>
     </dependency>
-    <!--<dependency>-->
-    <!--<groupId>org.jboss.resteasy</groupId>-->
-    <!--<artifactId>resteasy-jaxrs</artifactId>-->
-    <!--</dependency>-->
+    <dependency>
+      <groupId>org.jboss.resteasy</groupId>
+      <artifactId>resteasy-jaxrs</artifactId>
+      <scope>provided</scope>
+    </dependency>
     <!-- REST exception handling -->
     <dependency>
       <groupId>org.kie.remote</groupId>
@@ -834,6 +845,24 @@
       <artifactId>encoder</artifactId>
     </dependency>
 
+    <!--WildFly imports to enable embedded WildFly 10 server used when debugging GWT (required by com.csc.gwtdebug.EmbeddedWildFlyLauncher) -->
+    <dependency>
+      <groupId>org.wildfly.core</groupId>
+      <artifactId>wildfly-embedded</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.google.gwt</groupId>
+      <artifactId>gwt-dev</artifactId>
+      <!--todo fix com.csc.gwtdebug.EmbeddedWildFlyLauncher so it is 1) not included in deployment files and 2) not causing gwt-dev and wildfly-embedded to be included into production war file-->
+      <scope>compile</scope>
+      <exclusions>
+        <!-- Contains a ServletContainerInitializer that breaks the EmbeddedWildFlyLauncher -->
+        <exclusion>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>apache-jsp</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
     <!-- Rouge imports to avoid OSGi errors -->
     <dependency>
       <groupId>org.osgi</groupId>
@@ -887,14 +916,23 @@
         <artifactId>csc-gwt-maven-plugin</artifactId>
         <version>2.7.0</version>
         <configuration>
+          <!--
+            See all GWT Compiler / Dev Mode options here:
+            http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#DevGuideCompilerOptions
+            http://www.gwtproject.org/doc/latest/DevGuideCompilingAndDebugging.html#What_options_can_be_passed_to_development_mode
+
+            See GWT-Maven-Plugin Test support here:
+            https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
+          -->
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone-full.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
           <module>org.drools.workbench.DroolsWorkbench</module>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
-          <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
+          <server>com.csc.gwtdebug.EmbeddedWildFlyLauncher</server>
+          <port>8080</port>
           <disableCastChecking>true</disableCastChecking>
-          <runTarget>drools-wb.html</runTarget>
+          <runTarget>drools-wb-webapp/drools-wb.html</runTarget>
           <hostedWebapp>src/main/webapp</hostedWebapp>
           <!-- drools-compiler has dependency on org.eclipse.jdt.core.compiler:ecj:jar:3.5.1:compile, see http://code.google.com/p/google-web-toolkit/issues/detail?id=4479 -->
           <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
@@ -1091,6 +1129,7 @@
           </execution>
         </executions>
       </plugin>
+<!-- no longer needed as our dev setup use a static WildFly installation
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
@@ -1116,6 +1155,7 @@
           </execution>
         </executions>
       </plugin>
+      -->
     </plugins>
 
   </build>
