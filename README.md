@@ -88,15 +88,15 @@ _Work in progress - will be updated as we find out if all these steps are necess
 
 ##Setting Up GWT Super Dev Mode
 _Work in progress - we are still figuring out the best way to run Super Dev Mode_
-###Running GWT code server through maven (works!) 
+###Running GWT code server through maven (works partially) 
 1. On _Drools Workbench - WebApp_ run Maven 'clean'
 2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
 3. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
 4. Click the "Launch Default Browser" button when it is available
 
 **There is still some problems in GWT debug mode:**
-The Drools-WB controller cannot be instantiated
-[INFO] ERROR [io.undertow.request] UT005023: Exception handling request to /drools-wb-webapp/rest/controller/server/dev-kie-server: org.jboss.resteasy.spi.UnhandledException: java.lang.NoClassDefFoundError: Could not initialize class org.kie.server.controller.rest.ControllerUtils
+Currently it is not possible to connect a KIE Execution Server while debugging drools-wb. 
+If you try to connect a KIE server to drools-wb, it will produce errors.
 
 ###Running GWT code server through IDEA (not working) 
 http://blog.athico.com/2014/05/running-drools-wb-with-gwts-superdevmode.html
@@ -109,5 +109,14 @@ VM Options: -Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -X
 Dev Mode parameters: -server org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher
 
 #Troubleshooting
-- If deployment to WildFly fails with a "FileSystem"-related error, a "SocialUserProfile"-related error, or a "Lucene"-related error, then stop the server and delete the .index and .niogit folders and try again
+- If deployment to WildFly fails with a "JGitFileSystemProvider"-related error it most likely means that a Drools-WB instance is already running and connected to your Git repository and has taken a file lock
+  - Just stop all instances, delete drools-wb-webapp <deployment> element in the WildFly standalone.xml and try again
+- If deployment to WildFly fails with a "SocialUserProfile"-related error, or a "Lucene"-related error, then stop the server and delete the .index and .niogit folders and try again
   - Note: This will reset all your application data (Data Model, rules, etc)
+
+#Tips & Tricks
+- To open <b>standalone mode</b> use the following URL: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&perspective=AuthoringPerspective
+  - <u>perspective</u> can be replaced by <u>path</u> parameter which will open the file (in it's appropriate editor) directly, e.g. 
+    - Example: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&path=default://master@uf-playground/mortgages/src/main/resources/org/mortgages/Dummy%2520rule.drl
+  - If using the <u>path</u> parameter, an optional <u>editor</u> parameter can be appended to open any "Place" (e.g. the "Search Asset" screen). A "Place" is a WorkbenchPerspective, a WorkbenchScreen, a WorkbenchPopup, a WorkbenchEditor, or a WorkbenchPart 
+    - Example: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&path=default://master@uf-playground/mortgages/src/main/resources/org/mortgages/Dummy%2520rule.drl&editor=FindForm
