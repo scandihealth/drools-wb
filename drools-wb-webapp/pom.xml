@@ -925,7 +925,7 @@
             https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
           -->
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <extraJvmArgs>-Xmx3G -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone-full.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <extraJvmArgs>-Xmx3G -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
           <module>org.drools.workbench.DroolsWorkbench</module>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
