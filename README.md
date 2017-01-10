@@ -24,19 +24,18 @@ _Work in progress - will be updated as we find out if all these steps are necess
 
 ##Setting Up Build Configuration
 1. Make sure you run Windows 7 (64bit) 
-2. Install Git for windows, IntelliJ IDEA 2016.3, Java JDK 8 64bit, maven (>=3.3.9)
+2. Install Git for windows, IntelliJ IDEA 2016.3, Java JDK 8 64bit
     - If you have any other JDKs you must follow this guide to make sure IDEA runs under 1.8: https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under 
 3. Configure Maven to use our internal Artifactory maven repository
    - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
 4. Configure Git to use long paths
    - Open a command prompt with administrator access and run: <code>git config --system core.longpaths true</code>
 5. Download the official droolsjbpm IDEA Code Style and save it in %USERPROFILE%\\.IntelliJIdea2016.3\config\codestyles  
-   - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/6.5.0.Final/ide-configuration/intellij-configuration/code-style/intellij-code-style_droolsjbpm-java-conventions.xml   
-6. Open IDEA (64 bit) -> Default Settings -> Maven
-   - Change Maven home directory to your maven 3.3.9 installation
+   - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/ide-configuration/intellij-configuration/code-style/intellij-code-style_droolsjbpm-java-conventions.xml
+6. Open IDEA (64 bit) by opening idea64.exe -> Default Settings -> Maven
    - Change Maven -> Runner -> VM Options to <code>-Xms256m -Xmx3056m</code>
    - Change Maven -> Runner -> JRE to <code>1.8</code> (64bit)
-7. Open IDEA (64 bit) -> Help -> Edit Custom VM Options 
+7. Open IDEA (64 bit) -> Help -> Edit Custom VM Options (NECESSARY?)
    - Change the existing -Xmx setting to <code>-Xmx3056m</code>    
 8. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
    - Open the pom.xml as a project
@@ -49,12 +48,12 @@ _Work in progress - will be updated as we find out if all these steps are necess
     - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
 11. Click "Toggle 'Skip Tests' Mode" button in the Maven Projects window
 13. You are now ready to run Maven commands and develop
-    - Run Drools Workbench (root) -> package (takes 10-15 minutes)
+    - Run Drools Workbench (root) -> install (takes 10-15 minutes)
     
 ##Setting Up Run Configuration
 1. Download [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip) and unzip it to your drools-wb parent folder. 
     - Example: If drools-wb is placed here: C:\dev\drools-wb then WildFly should be placed here: C:\dev\wildfly-10.1.0.Final
-    - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone-full.xml_ after the `<extensions>` element
+    - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone-full.xml_ and _standalone.xml_ after the `<extensions>` element
     (modify to your liking)
     ```
         <system-properties>
@@ -88,24 +87,18 @@ _Work in progress - will be updated as we find out if all these steps are necess
 
 ##Setting Up GWT Super Dev Mode
 _Work in progress - we are still figuring out the best way to run Super Dev Mode_
-###Running GWT code server through maven (works!) 
+###Running GWT code server through maven (works! But only using standalone.xml configuration) 
 1. On _Drools Workbench - WebApp_ run Maven 'clean'
 2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
 3. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
 4. Click the "Launch Default Browser" button when it is available
-
-**There is still some problems in GWT debug mode:**
-The Drools-WB controller cannot be instantiated
-[INFO] ERROR [io.undertow.request] UT005023: Exception handling request to /drools-wb-webapp/rest/controller/server/dev-kie-server: org.jboss.resteasy.spi.UnhandledException: java.lang.NoClassDefFoundError: Could not initialize class org.kie.server.controller.rest.ControllerUtils
 
 ###Running GWT code server through IDEA (not working) 
 http://blog.athico.com/2014/05/running-drools-wb-with-gwts-superdevmode.html
 http://www.uberfireframework.org/docs/tutorial/intellij_idea.html
 http://docs.jboss.org/errai/latest/errai/reference/html_single/#_running_and_debugging_in_your_ide_using_gwt_tooling
 
-Use parameters from gwt-maven-plugin <extraJvmArgs> element:
-Example:
-VM Options: -Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=C:\dev\wildfly-8.1.0.Final -Derrai.marshalling.server.classOutput=src/main/webapp/WEB-INF/classes -Dorg.uberfire.async.executor.safemode=true
+Use parameters from gwt-maven-plugin <extraJvmArgs> element
 Dev Mode parameters: -server org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher
 
 #Troubleshooting
