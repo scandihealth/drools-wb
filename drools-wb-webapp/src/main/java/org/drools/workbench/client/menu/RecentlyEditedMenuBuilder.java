@@ -10,7 +10,6 @@ import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.inbox.client.InboxPresenter;
 import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.constants.IconType;
-import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.workbench.model.menu.MenuFactory;
@@ -19,21 +18,21 @@ import org.uberfire.workbench.model.menu.MenuPosition;
 import org.uberfire.workbench.model.menu.impl.BaseMenuCustom;
 
 @ApplicationScoped
-public class RecentlyViewedMenuBuilder implements MenuFactory.CustomMenuBuilder {
+public class RecentlyEditedMenuBuilder implements MenuFactory.CustomMenuBuilder {
 
     @Inject
     private PlaceManager placeManager;
 
     private AnchorListItem link = new AnchorListItem();
 
-    public RecentlyViewedMenuBuilder() {
-        link.setIcon( IconType.EYE );
-        link.setTitle( AppConstants.INSTANCE.RecentlyOpened() );
+    public RecentlyEditedMenuBuilder() {
+        link.setIcon( IconType.BOOKMARK );
+        link.setTitle( AppConstants.INSTANCE.RecentlyEdited() );
         link.addClickHandler( new ClickHandler() {
             @Override
             public void onClick( ClickEvent event ) {
                 DefaultPlaceRequest placeRequest = new DefaultPlaceRequest( "Inbox" );
-                placeRequest.addParameter( "inboxname", InboxPresenter.RECENT_VIEWED_ID );
+                placeRequest.addParameter( "inboxname", InboxPresenter.RECENT_EDITED_ID );
                 placeManager.goTo( placeRequest );
             }
         } );

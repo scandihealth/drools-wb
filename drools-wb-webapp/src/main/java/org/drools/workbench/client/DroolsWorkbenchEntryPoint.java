@@ -22,6 +22,8 @@ import com.google.gwt.animation.client.Animation;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.ui.RootPanel;
+import org.drools.workbench.client.menu.IncomingChangesMenuBuilder;
+import org.drools.workbench.client.menu.RecentlyEditedMenuBuilder;
 import org.drools.workbench.client.menu.RecentlyViewedMenuBuilder;
 import org.guvnor.common.services.shared.config.AppConfigService;
 import org.guvnor.common.services.shared.security.KieWorkbenchACL;
@@ -109,6 +111,12 @@ public class DroolsWorkbenchEntryPoint {
 
         final Menus utilityMenus = MenuFactory
                 .newTopLevelCustomMenu( iocManager.lookupBean( RecentlyViewedMenuBuilder.class ).getInstance() )
+                .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( RecentlyEditedMenuBuilder.class ).getInstance() )
+                .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( IncomingChangesMenuBuilder.class ).getInstance() )
+                .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( WorkbenchViewModeSwitcherMenuBuilder.class ).getInstance() )
                 .endMenu()
                 .newTopLevelCustomMenu( iocManager.lookupBean( ResetPerspectivesMenuBuilder.class ).getInstance() )
                 .endMenu()
