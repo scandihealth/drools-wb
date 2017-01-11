@@ -22,11 +22,11 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.drools.workbench.client.docks.AuthoringWorkbenchDocks;
+import org.drools.workbench.client.menu.NewRulesMenu;
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.inbox.client.InboxPresenter;
 import org.kie.workbench.common.screens.projecteditor.client.menu.ProjectMenu;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
-import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
 import org.kie.workbench.common.widgets.client.menu.RepositoryMenu;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
@@ -56,7 +56,7 @@ public class AuthoringPerspective {
     private NewResourcePresenter newResourcePresenter;
 
     @Inject
-    private NewResourcesMenu newResourcesMenu;
+    private NewRulesMenu newResourcesMenu;
 
     @Inject
     private ProjectMenu projectMenu;
