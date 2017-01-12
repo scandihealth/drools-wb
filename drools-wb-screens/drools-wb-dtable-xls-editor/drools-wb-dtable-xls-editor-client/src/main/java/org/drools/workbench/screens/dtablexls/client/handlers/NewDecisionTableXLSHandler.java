@@ -34,6 +34,8 @@ import org.jboss.errai.bus.client.api.ClientMessageBus;
 import org.jboss.errai.bus.client.framework.ClientMessageBusImpl;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.widget.AttachmentFileWidget;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
@@ -46,7 +48,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new XLS Decision Tables
  */
 @ApplicationScoped
-public class NewDecisionTableXLSHandler extends DefaultNewResourceHandler {
+public class NewDecisionTableXLSHandler extends DefaultNewRuleHandler {
 
     private ClientMessageBus clientMessageBus;
     private PlaceManager placeManager;
@@ -120,7 +122,7 @@ public class NewDecisionTableXLSHandler extends DefaultNewResourceHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewResourcePresenter presenter ) {
+                        final NewRulePresenter presenter ) {
         busyIndicatorView.showBusyIndicator( DecisionTableXLSEditorConstants.INSTANCE.Uploading() );
 
         final Path path = pkg.getPackageMainResourcesPath();

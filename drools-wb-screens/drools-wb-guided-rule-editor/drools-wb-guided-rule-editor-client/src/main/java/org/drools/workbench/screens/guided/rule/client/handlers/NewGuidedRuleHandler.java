@@ -31,6 +31,8 @@ import org.gwtbootstrap3.client.ui.CheckBox;
 import org.jboss.errai.common.client.api.Caller;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.type.ClientResourceType;
@@ -43,7 +45,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new Guided Rules
  */
 @ApplicationScoped
-public class NewGuidedRuleHandler extends DefaultNewResourceHandler {
+public class NewGuidedRuleHandler extends DefaultNewRuleHandler {
 
     @Inject
     private PlaceManager placeManager;
@@ -88,7 +90,7 @@ public class NewGuidedRuleHandler extends DefaultNewResourceHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewResourcePresenter presenter ) {
+                        final NewRulePresenter presenter ) {
         final RuleModel ruleModel = new RuleModel();
         final boolean useDSL = useDSLCheckbox.getValue();
         final ClientResourceType resourceType = ( useDSL ? resourceTypeDSLR : resourceTypeDRL );

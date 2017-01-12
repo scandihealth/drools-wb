@@ -34,8 +34,8 @@ import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.kie.workbench.common.services.datamodel.model.PackageDataModelOracleBaselinePayload;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracle;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracleFactory;
-import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
-import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
@@ -48,7 +48,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new Guided Decision Tables
  */
 @ApplicationScoped
-public class NewGuidedDecisionTableHandler extends DefaultNewResourceHandler {
+public class NewGuidedDecisionTableHandler extends DefaultNewRuleHandler {
 
     @Inject
     private PlaceManager placeManager;
@@ -75,7 +75,7 @@ public class NewGuidedDecisionTableHandler extends DefaultNewResourceHandler {
 
     private AsyncPackageDataModelOracle oracle;
 
-    private NewResourcePresenter newResourcePresenter;
+    private NewRulePresenter newRulePresenter;
 
     @PostConstruct
     private void setupExtensions() {
@@ -101,8 +101,8 @@ public class NewGuidedDecisionTableHandler extends DefaultNewResourceHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewResourcePresenter presenter ) {
-        this.newResourcePresenter = presenter;
+                        final NewRulePresenter presenter ) {
+        this.newRulePresenter = presenter;
         if ( !options.isUsingWizard() ) {
             createEmptyDecisionTable( pkg.getPackageMainResourcesPath(),
                                       baseFileName,
@@ -132,7 +132,7 @@ public class NewGuidedDecisionTableHandler extends DefaultNewResourceHandler {
 
             @Override
             public void callback( final PackageDataModelOracleBaselinePayload dataModel ) {
-                newResourcePresenter.complete();
+                newRulePresenter.complete();
                 oracle = oracleFactory.makeAsyncPackageDataModelOracle( contextPath,
                                                                         dataModel );
 
@@ -164,7 +164,7 @@ public class NewGuidedDecisionTableHandler extends DefaultNewResourceHandler {
         destroyWizard();
         oracleFactory.destroy( oracle );
         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Saving() );
-        service.call( getSuccessCallback( newResourcePresenter ),
+        service.call( getSuccessCallback( newRulePresenter ),
                       new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).create( contextPath,
                                                                                               buildFileName( baseFileName,
                                                                                                              resourceType ),

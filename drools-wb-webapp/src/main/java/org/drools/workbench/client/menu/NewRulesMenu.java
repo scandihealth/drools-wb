@@ -28,6 +28,8 @@ import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
 import com.google.gwt.core.client.Callback;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.drools.workbench.screens.drltext.client.handlers.NewDrlTextHandler;
 import org.drools.workbench.screens.dtablexls.client.handlers.NewDecisionTableXLSHandler;
 import org.drools.workbench.screens.guided.dtable.client.handlers.NewGuidedDecisionTableHandler;
@@ -39,8 +41,6 @@ import org.guvnor.common.services.project.context.ProjectContext;
 import org.guvnor.common.services.project.context.ProjectContextChangeEvent;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
-import org.kie.workbench.common.widgets.client.handlers.NewResourceHandler;
-import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.uberfire.mvp.Command;
 import org.uberfire.workbench.model.menu.MenuFactory;
 import org.uberfire.workbench.model.menu.MenuItem;
@@ -52,11 +52,11 @@ import org.uberfire.workbench.model.menu.MenuItem;
 public class NewRulesMenu {
 
     private SyncBeanManager iocBeanManager;
-    private NewResourcePresenter newResourcePresenter;
+    private NewRulePresenter newRulePresenter;
     private ProjectContext projectContext;
 
     private final List<MenuItem> items = new ArrayList<MenuItem>();
-    private final Map<NewResourceHandler, MenuItem> newResourceHandlers = new HashMap<NewResourceHandler, MenuItem>();
+    private final Map<NewRuleHandler, MenuItem> newRuleHandlers = new HashMap<NewRuleHandler, MenuItem>();
 
     public NewRulesMenu() {
         //Zero argument constructor for CDI proxies
@@ -64,10 +64,10 @@ public class NewRulesMenu {
 
     @Inject
     public NewRulesMenu(final SyncBeanManager iocBeanManager,
-                        final NewResourcePresenter newResourcePresenter,
+                        final NewRulePresenter newRulePresenter,
                         final ProjectContext projectContext) {
         this.iocBeanManager = iocBeanManager;
-        this.newResourcePresenter = newResourcePresenter;
+        this.newRulePresenter = newRulePresenter;
         this.projectContext = projectContext;
     }
 
@@ -76,44 +76,44 @@ public class NewRulesMenu {
     @PostConstruct
     public void setup() {
 
-        addNewResourceHandlers();
+        addNewRuleHandlers();
 
         sortMenuItemsByCaption();
 
         addProjectMenuItem();
     }
 
-    private void addNewResourceHandlers() {
-        final Collection<IOCBeanDef<NewResourceHandler>> handlerBeans = iocBeanManager.lookupBeans(NewResourceHandler.class);
+    private void addNewRuleHandlers() {
+        final Collection<IOCBeanDef<NewRuleHandler>> handlerBeans = iocBeanManager.lookupBeans(NewRuleHandler.class);
 
-        for (final IOCBeanDef<NewResourceHandler> handlerBean : handlerBeans) {
-            NewResourceHandler newResourceHandler = handlerBean.getInstance();
-            if (isRuleHandler(newResourceHandler)) {
-                addMenuItem(newResourceHandler);
+        for (final IOCBeanDef<NewRuleHandler> handlerBean : handlerBeans) {
+            NewRuleHandler newRuleHandler = handlerBean.getInstance();
+            if (isRuleHandler(newRuleHandler)) {
+                addMenuItem(newRuleHandler);
             }
         }
     }
 
-    private boolean isRuleHandler(NewResourceHandler newResourceHandler) {
-        return newResourceHandler instanceof NewDrlTextHandler
-                || newResourceHandler instanceof NewDecisionTableXLSHandler
-                || newResourceHandler instanceof NewGuidedDecisionTableHandler
-                || newResourceHandler instanceof NewGuidedDecisionTableWizard
-                || newResourceHandler instanceof NewGuidedDecisionTreeHandler
-                || newResourceHandler instanceof NewGuidedRuleHandler
-                || newResourceHandler instanceof NewGuidedRuleTemplateHandler;
+    private boolean isRuleHandler(NewRuleHandler newRuleHandler) {
+        return newRuleHandler instanceof NewDrlTextHandler
+                || newRuleHandler instanceof NewDecisionTableXLSHandler
+                || newRuleHandler instanceof NewGuidedDecisionTableHandler
+                || newRuleHandler instanceof NewGuidedDecisionTableWizard
+                || newRuleHandler instanceof NewGuidedDecisionTreeHandler
+                || newRuleHandler instanceof NewGuidedRuleHandler
+                || newRuleHandler instanceof NewGuidedRuleTemplateHandler;
     }
 
-    private void addMenuItem(final NewResourceHandler newResourceHandler) {
+    private void addMenuItem(final NewRuleHandler newRuleHandler) {
 
-        if (newResourceHandler.canCreate()) {
+        if (newRuleHandler.canCreate()) {
 
-            final MenuItem menuItem = getMenuItem(newResourceHandler);
+            final MenuItem menuItem = getMenuItem(newRuleHandler);
 
-            newResourceHandlers.put(newResourceHandler,
+            newRuleHandlers.put(newRuleHandler,
                     menuItem);
 
-            if (isProjectMenuItem(newResourceHandler)) {
+            if (isProjectMenuItem(newRuleHandler)) {
                 this.projectMenuItem = menuItem;
             } else {
                 items.add(menuItem);
@@ -142,18 +142,18 @@ public class NewRulesMenu {
                 });
     }
 
-    private MenuItem getMenuItem(final NewResourceHandler activeHandler) {
+    private MenuItem getMenuItem(final NewRuleHandler activeHandler) {
         final String description = activeHandler.getDescription();
         return MenuFactory.newSimpleItem(description).respondsWith(new Command() {
             @Override
             public void execute() {
-                final Command command = activeHandler.getCommand(newResourcePresenter);
+                final Command command = activeHandler.getCommand( newRulePresenter );
                 command.execute();
             }
         }).endMenu().build().getItems().get(0);
     }
 
-    private boolean isProjectMenuItem(final NewResourceHandler activeHandler) {
+    private boolean isProjectMenuItem(final NewRuleHandler activeHandler) {
         return activeHandler.getClass().getName().contains("NewProjectHandler");
     }
 
@@ -180,8 +180,8 @@ public class NewRulesMenu {
     }
 
     void enableMenuItemsForContext() {
-        for (Map.Entry<NewResourceHandler, MenuItem> entry : this.newResourceHandlers.entrySet()) {
-            final NewResourceHandler handler = entry.getKey();
+        for (Map.Entry<NewRuleHandler, MenuItem> entry : this.newRuleHandlers.entrySet()) {
+            final NewRuleHandler handler = entry.getKey();
             final MenuItem menuItem = entry.getValue();
 
             handler.acceptContext(projectContext,

@@ -29,6 +29,8 @@ import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.ext.widgets.common.client.common.BusyIndicatorView;
@@ -38,7 +40,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new Guided Decision Trees
  */
 @ApplicationScoped
-public class NewGuidedDecisionTreeHandler extends DefaultNewResourceHandler {
+public class NewGuidedDecisionTreeHandler extends DefaultNewRuleHandler {
 
     @Inject
     private Caller<GuidedDecisionTreeEditorService> service;
@@ -67,7 +69,7 @@ public class NewGuidedDecisionTreeHandler extends DefaultNewResourceHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewResourcePresenter presenter ) {
+                        final NewRulePresenter presenter ) {
         final GuidedDecisionTree model = new GuidedDecisionTree();
         model.setTreeName( baseFileName );
         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Saving() );

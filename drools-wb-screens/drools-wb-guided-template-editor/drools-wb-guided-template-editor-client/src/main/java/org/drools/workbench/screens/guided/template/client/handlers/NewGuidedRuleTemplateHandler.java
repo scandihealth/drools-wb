@@ -29,6 +29,8 @@ import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -39,7 +41,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new Guided Templates
  */
 @ApplicationScoped
-public class NewGuidedRuleTemplateHandler extends DefaultNewResourceHandler {
+public class NewGuidedRuleTemplateHandler extends DefaultNewRuleHandler {
 
     @Inject
     private PlaceManager placeManager;
@@ -71,7 +73,7 @@ public class NewGuidedRuleTemplateHandler extends DefaultNewResourceHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewResourcePresenter presenter ) {
+                        final NewRulePresenter presenter ) {
         final TemplateModel templateModel = new TemplateModel();
         templateModel.name = baseFileName;
         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Saving() );
