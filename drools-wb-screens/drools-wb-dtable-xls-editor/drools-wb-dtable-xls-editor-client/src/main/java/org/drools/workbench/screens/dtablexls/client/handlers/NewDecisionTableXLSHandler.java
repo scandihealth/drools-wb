@@ -32,10 +32,8 @@ import org.drools.workbench.screens.dtablexls.client.type.DecisionTableXLSXResou
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.bus.client.api.ClientMessageBus;
 import org.jboss.errai.bus.client.framework.ClientMessageBusImpl;
-import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
-import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
-import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
-import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
+import org.kie.workbench.common.widgets.client.handlers.DefaultNewRuleHandler;
+import org.kie.workbench.common.widgets.client.handlers.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.widget.AttachmentFileWidget;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;

@@ -31,9 +31,11 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
+import jdk.nashorn.internal.objects.annotations.Getter;
 import org.drools.workbench.client.menu.IncomingChangesMenuBuilder;
 import org.drools.workbench.client.menu.RecentlyEditedMenuBuilder;
 import org.drools.workbench.client.menu.RecentlyViewedMenuBuilder;
+import org.drools.workbench.client.menu.WorkbenchViewModeSwitcherUtilityMenuBuilder;
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.common.services.shared.config.AppConfigService;
 import org.guvnor.common.services.shared.security.KieWorkbenchACL;
@@ -53,6 +55,7 @@ import org.kie.workbench.common.services.shared.preferences.ApplicationPreferenc
 import org.kie.workbench.common.widgets.client.menu.AboutMenuBuilder;
 import org.kie.workbench.common.widgets.client.menu.ResetPerspectivesMenuBuilder;
 import org.uberfire.client.menu.CustomSplashHelp;
+import org.uberfire.client.menu.WorkbenchViewModeSwitcherMenuBuilder;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.PerspectiveActivity;
@@ -139,6 +142,8 @@ public class DroolsWorkbenchEntryPoint {
                 .newTopLevelCustomMenu( iocManager.lookupBean( IncomingChangesMenuBuilder.class ).getInstance() )
                 .endMenu()
                 .newTopLevelCustomMenu( iocManager.lookupBean( ResetPerspectivesMenuBuilder.class ).getInstance() )
+                .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( WorkbenchViewModeSwitcherUtilityMenuBuilder.class ).getInstance() )
                 .endMenu()
                 .build();
 
