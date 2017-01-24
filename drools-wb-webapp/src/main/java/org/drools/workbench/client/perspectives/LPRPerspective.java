@@ -7,17 +7,16 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.drools.workbench.client.docks.LPRWorkbenchDocks;
-import org.drools.workbench.client.menu.WorkbenchViewModeSwitcherUtilityMenuBuilder;
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.inbox.client.InboxPresenter;
-import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
-import org.kie.workbench.common.widgets.client.handlers.NewRulesMenu;
+import org.kie.workbench.common.screens.explorer.client.widgets.ActiveContextManager;
+import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulesMenu;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPerspective;
-import org.uberfire.client.menu.WorkbenchViewModeSwitcherMenuBuilder;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.panels.impl.MultiListWorkbenchPanelPresenter;
+import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBar;
 import org.uberfire.mvp.Command;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
@@ -41,9 +40,6 @@ public class LPRPerspective {
     @Inject
     private LPRWorkbenchDocks docks;
 
-    @Inject
-    private WorkbenchViewModeSwitcherMenuBuilder switcher;
-
     @PostConstruct
     public void setup() {
         docks.setup("LPRPerspective" );
@@ -60,9 +56,9 @@ public class LPRPerspective {
     @WorkbenchMenu
     public Menus buildMenuBar() {
         return MenuFactory
-                .newTopLevelMenu( AppConstants.INSTANCE.Explore())
-                .withItems(getExploreMenuItems())
-                .endMenu()
+//                .newTopLevelMenu( AppConstants.INSTANCE.Explore())
+//                .withItems(getExploreMenuItems())
+//                .endMenu()
                 .newTopLevelMenu(AppConstants.INSTANCE.New())
                 .withItems( newRulesMenu.getMenuItems())
                 .endMenu()

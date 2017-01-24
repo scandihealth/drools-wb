@@ -26,7 +26,7 @@ import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.inbox.client.InboxPresenter;
 import org.kie.workbench.common.screens.projecteditor.client.menu.ProjectMenu;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
-import org.kie.workbench.common.widgets.client.handlers.NewRulesMenu;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
 import org.kie.workbench.common.widgets.client.menu.RepositoryMenu;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
@@ -56,7 +56,7 @@ public class AuthoringPerspective {
     private NewResourcePresenter newResourcePresenter;
 
     @Inject
-    private NewRulesMenu newRulesMenu;
+    private NewResourcesMenu newResourcesMenu;
 
     @Inject
     private ProjectMenu projectMenu;
@@ -90,7 +90,7 @@ public class AuthoringPerspective {
                 .withItems(getExploreMenuItems())
                 .endMenu()
                 .newTopLevelMenu(AppConstants.INSTANCE.New())
-                .withItems( newRulesMenu.getMenuItems())
+                .withItems(newResourcesMenu.getMenuItems())
                 .endMenu()
                 .newTopLevelMenu(AppConstants.INSTANCE.Project())
                 .withItems(projectMenu.getMenuItems())
