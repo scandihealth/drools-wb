@@ -207,6 +207,12 @@ public class ActiveContextOptions {
         return noContext || noContextNavigationOption;
     }
 
+    public boolean isCustomizeViewEnabled() {
+        final boolean noCustomizeViewQueryParam = doWindowParametersContain( "no_customize_view" );
+        final boolean noCustomizeViewPlaceParam = placeRequest.getParameterNames().contains( "no_customize_view" );
+        return !(noCustomizeViewPlaceParam || noCustomizeViewQueryParam);
+    }
+
     protected String getWindowParameter( final String parameterName ) {
         if ( doWindowParametersContain( parameterName ) ) {
             return Window.Location.getParameterMap()

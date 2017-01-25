@@ -24,6 +24,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 import org.drools.workbench.client.lpr.explorer.client.resources.i18n.ProjectExplorerConstants;
 import org.drools.workbench.client.lpr.explorer.client.utils.URLHelper;
+import org.drools.workbench.client.lpr.explorer.client.widgets.ActiveContextOptions;
 import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
@@ -52,6 +53,9 @@ public class ExplorerMenuViewImpl
     private final AnchorListItem archiveRepository = new AnchorListItem( ProjectExplorerConstants.INSTANCE.downloadRepository() );
 
     private final AnchorListItem archiveProject = new AnchorListItem( ProjectExplorerConstants.INSTANCE.downloadProject() );
+
+    @Inject
+    protected ActiveContextOptions activeOptions;
 
     private ExplorerMenu presenter;
 
@@ -194,13 +198,15 @@ public class ExplorerMenuViewImpl
                             @Override
                             public Widget build() {
                                 return new ButtonGroup() {{
-                                    add( new Button() {{
-                                        setToggleCaret( false );
-                                        setDataToggle( Toggle.DROPDOWN );
-                                        setIcon( IconType.COG );
-                                        setSize( ButtonSize.SMALL );
-                                        setTitle( ProjectExplorerConstants.INSTANCE.customizeView() );
-                                    }} );
+                                    if ( activeOptions.isCustomizeViewEnabled() ) {
+                                        add( new Button() {{
+                                            setToggleCaret( false );
+                                            setDataToggle( Toggle.DROPDOWN );
+                                            setIcon( IconType.COG );
+                                            setSize( ButtonSize.SMALL );
+                                            setTitle( ProjectExplorerConstants.INSTANCE.customizeView() );
+                                        }} );
+                                    }
                                     add( new DropDownMenu() {{
                                         addStyleName( "pull-right" );
                                         add( businessView );

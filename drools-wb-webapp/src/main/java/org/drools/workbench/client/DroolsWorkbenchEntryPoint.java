@@ -150,24 +150,13 @@ public class DroolsWorkbenchEntryPoint {
         utilityMenuBar.addMenus( utilityMenus );
 
         final Menus menus = MenuFactory
-                .newTopLevelMenu( AppConstants.INSTANCE.Home() )
-                .respondsWith( new Command() {
-                    @Override
-                    public void execute() {
-                        if ( defaultPerspective != null ) {
-                            placeManager.goTo( new DefaultPlaceRequest( defaultPerspective.getIdentifier() ) );
-                        } else {
-                            Window.alert( "Default perspective not found." );
-                        }
-                    }
-                } )
+                .newTopLevelMenu( "Author" ).perspective( "AuthoringPerspective" )
                 .endMenu()
-                .newTopLevelMenu( AppConstants.INSTANCE.Perspectives() )
-                .withItems( getPerspectives() )
+                .newTopLevelMenu( "LPR" ).perspective( "LPRPerspective" )
                 .endMenu()
                 .build();
 
-//        menubar.addMenus( menus );
+        menubar.addMenus( menus );
     }
 
     private List<MenuItem> getPerspectives() {

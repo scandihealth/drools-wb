@@ -36,8 +36,10 @@ public class LPRWorkbenchDocks {
 
     public void setup( String perspectiveIdentifier ) {
         this.perspectiveIdentifier = perspectiveIdentifier;
-        DefaultPlaceRequest projectExplorerPlaceRequest = new DefaultPlaceRequest( "org.kie.guvnor.explorer" );
+        DefaultPlaceRequest projectExplorerPlaceRequest = new DefaultPlaceRequest( "lpr.explorer" );
+        projectExplorerPlaceRequest.addParameter( "mode", "business_explorer" );
         projectExplorerPlaceRequest.addParameter( "no_context", "true" );
+        projectExplorerPlaceRequest.addParameter( "no_customize_view", "true" );
         //todo ttn localize label
         projectExplorerDock = new UberfireDock( UberfireDockPosition.WEST, "ADJUST", projectExplorerPlaceRequest, perspectiveIdentifier ).withSize( 400 ).withLabel( "Project Explorer" );
 
