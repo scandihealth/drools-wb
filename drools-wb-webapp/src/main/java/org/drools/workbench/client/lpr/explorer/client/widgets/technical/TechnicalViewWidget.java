@@ -175,6 +175,16 @@ public class TechnicalViewWidget
     }
 
     @Override
+    public void hideNavigatorExpandCollapseButton() {
+        explorer.hideNavigatorExpandCollapseButton();
+    }
+
+    @Override
+    public void showNavigatorExpandCollapseButton() {
+        explorer.showNavigatorExpandCollapseButton();
+    }
+
+    @Override
     public void showBusyIndicator( final String message ) {
         BusyPopup.showMessage( message );
     }

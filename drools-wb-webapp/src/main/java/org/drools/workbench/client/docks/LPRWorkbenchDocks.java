@@ -40,6 +40,7 @@ public class LPRWorkbenchDocks {
         projectExplorerPlaceRequest.addParameter( "mode", "business_explorer" );
         projectExplorerPlaceRequest.addParameter( "no_context", "true" );
         projectExplorerPlaceRequest.addParameter( "no_customize_view", "true" );
+        projectExplorerPlaceRequest.addParameter( "no_navigator_expand_collapse_button", "true" );
         //todo ttn localize label
         projectExplorerDock = new UberfireDock( UberfireDockPosition.WEST, "ADJUST", projectExplorerPlaceRequest, perspectiveIdentifier ).withSize( 400 ).withLabel( "Project Explorer" );
 

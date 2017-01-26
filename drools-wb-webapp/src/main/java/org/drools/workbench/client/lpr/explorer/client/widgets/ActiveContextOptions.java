@@ -213,6 +213,12 @@ public class ActiveContextOptions {
         return !(noCustomizeViewPlaceParam || noCustomizeViewQueryParam);
     }
 
+    public boolean isNavigatorExpandCollapseButtonEnabled() {
+        final boolean noNavigatorExpandCollapseButtonQueryParam = doWindowParametersContain( "no_navigator_expand_collapse_button" );
+        final boolean noNavigatorExpandCollapseButtonPlaceParam = placeRequest.getParameterNames().contains( "no_navigator_expand_collapse_button" );
+        return !(noNavigatorExpandCollapseButtonPlaceParam || noNavigatorExpandCollapseButtonQueryParam);
+    }
+
     protected String getWindowParameter( final String parameterName ) {
         if ( doWindowParametersContain( parameterName ) ) {
             return Window.Location.getParameterMap()

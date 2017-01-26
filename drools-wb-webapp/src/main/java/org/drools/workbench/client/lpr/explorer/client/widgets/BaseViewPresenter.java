@@ -161,6 +161,12 @@ public abstract class BaseViewPresenter
             baseView.showHeaderNavigator();
         }
 
+        if ( activeOptions.isNavigatorExpandCollapseButtonEnabled() ) {
+            baseView.showNavigatorExpandCollapseButton();
+        } else {
+            baseView.hideNavigatorExpandCollapseButton();
+        }
+
         if ( activeOptions.canShowTag() ) {
             baseView.showTagFilter();
             activeContextManager.refresh();

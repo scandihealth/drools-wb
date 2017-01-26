@@ -54,6 +54,7 @@ public class Explorer
     private NavigatorBreadcrumbs navigatorBreadcrumbs;
     private NavigatorExpandCollapseButton navigatorExpandCollapseButton;
     private boolean hideHeaderNavigator = false;
+    private boolean hideNavigatorExpandCollapseButton = false;
 
     private boolean isAlreadyInitialized = false;
 
@@ -290,6 +291,20 @@ public class Explorer
         hideHeaderNavigator = false;
         if ( navigatorBreadcrumbs != null ) {
             navigatorBreadcrumbs.setVisible( true );
+        }
+    }
+
+    public void hideNavigatorExpandCollapseButton() {
+        hideNavigatorExpandCollapseButton = true;
+        if ( navigatorExpandCollapseButton != null ) {
+            navigatorExpandCollapseButton.setVisible( false );
+        }
+    }
+
+    public void showNavigatorExpandCollapseButton() {
+        hideNavigatorExpandCollapseButton = false;
+        if ( navigatorExpandCollapseButton != null ) {
+            navigatorExpandCollapseButton.setVisible( true );
         }
     }
 

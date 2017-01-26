@@ -266,6 +266,16 @@ public class BusinessViewWidget extends BaseViewImpl implements View {
     }
 
     @Override
+    public void hideNavigatorExpandCollapseButton() {
+        explorer.hideNavigatorExpandCollapseButton();
+    }
+
+    @Override
+    public void showNavigatorExpandCollapseButton() {
+        explorer.showNavigatorExpandCollapseButton();
+    }
+
+    @Override
     public Explorer getExplorer() {
         return explorer;
     }

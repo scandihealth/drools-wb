@@ -15,28 +15,20 @@
  */
 package org.drools.workbench.client;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import javax.inject.Inject;
 
 import com.google.gwt.animation.client.Animation;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
-import jdk.nashorn.internal.objects.annotations.Getter;
 import org.drools.workbench.client.menu.IncomingChangesMenuBuilder;
 import org.drools.workbench.client.menu.RecentlyEditedMenuBuilder;
 import org.drools.workbench.client.menu.RecentlyViewedMenuBuilder;
 import org.drools.workbench.client.menu.WorkbenchViewModeSwitcherUtilityMenuBuilder;
-import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.common.services.shared.config.AppConfigService;
 import org.guvnor.common.services.shared.security.KieWorkbenchACL;
 import org.guvnor.common.services.shared.security.KieWorkbenchPolicy;
@@ -47,40 +39,28 @@ import org.jboss.errai.ioc.client.api.AfterInitialization;
 import org.jboss.errai.ioc.client.api.EntryPoint;
 import org.jboss.errai.ioc.client.container.IOCBeanDef;
 import org.jboss.errai.ioc.client.container.SyncBeanManager;
-import org.jboss.errai.security.shared.api.Role;
-import org.jboss.errai.security.shared.api.identity.User;
 import org.jboss.errai.security.shared.service.AuthenticationService;
-import org.kie.workbench.common.screens.search.client.menu.SearchMenuBuilder;
 import org.kie.workbench.common.services.shared.preferences.ApplicationPreferences;
-import org.kie.workbench.common.widgets.client.menu.AboutMenuBuilder;
 import org.kie.workbench.common.widgets.client.menu.ResetPerspectivesMenuBuilder;
-import org.uberfire.client.menu.CustomSplashHelp;
-import org.uberfire.client.menu.WorkbenchViewModeSwitcherMenuBuilder;
+import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.PerspectiveActivity;
+import org.uberfire.client.mvp.PerspectiveManager;
 import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.client.views.pfly.menu.UserMenu;
 import org.uberfire.client.workbench.widgets.menu.UtilityMenuBar;
-import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBar;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBarPresenter;
 import org.uberfire.mvp.Command;
-import org.uberfire.mvp.impl.DefaultPlaceRequest;
+import org.uberfire.mvp.PlaceRequest;
+import org.uberfire.mvp.impl.ForcedPlaceRequest;
 import org.uberfire.workbench.model.menu.MenuFactory;
-import org.uberfire.workbench.model.menu.MenuItem;
-import org.uberfire.workbench.model.menu.MenuPosition;
 import org.uberfire.workbench.model.menu.Menus;
-
-import static org.uberfire.workbench.model.menu.MenuFactory.*;
 
 /**
  * GWT's Entry-point for Drools Workbench
  */
 @EntryPoint
 public class DroolsWorkbenchEntryPoint {
-
-    @Inject
-    private User identity;
 
     @Inject
     private Caller<AppConfigService> appConfigService;
@@ -109,6 +89,9 @@ public class DroolsWorkbenchEntryPoint {
     @Inject
     private UtilityMenuBar utilityMenuBar;
 
+    @Inject
+    private PerspectiveManager perspectiveManager;
+
     @AfterInitialization
     public void startApp() {
         kieSecurityService.call( new RemoteCallback<String>() {
@@ -132,7 +115,7 @@ public class DroolsWorkbenchEntryPoint {
     }
 
     private void setupMenu() {
-        final AbstractWorkbenchPerspectiveActivity defaultPerspective = getDefaultPerspectiveActivity();
+//        final AbstractWorkbenchPerspectiveActivity defaultPerspective = getDefaultPerspectiveActivity();
 
         final Menus utilityMenus = MenuFactory
                 .newTopLevelCustomMenu( iocManager.lookupBean( RecentlyViewedMenuBuilder.class ).getInstance() )
@@ -150,15 +133,41 @@ public class DroolsWorkbenchEntryPoint {
         utilityMenuBar.addMenus( utilityMenus );
 
         final Menus menus = MenuFactory
-                .newTopLevelMenu( "Author" ).perspective( "AuthoringPerspective" )
+                .newTopLevelMenu( "Authoring" ).perspective( "AuthoringPerspective" )
                 .endMenu()
                 .newTopLevelMenu( "LPR" ).perspective( "LPRPerspective" )
+                .endMenu()
+                .newTopLevelMenu( CommonConstants.INSTANCE.ResetPerspectivesTooltip() ).respondsWith( getResetPerspectivesCommand() )
                 .endMenu()
                 .build();
 
         menubar.addMenus( menus );
     }
 
+    private Command getResetPerspectivesCommand() {
+        return new Command() {
+            @Override
+            public void execute() {
+                if ( Window.confirm( CommonConstants.INSTANCE.PromptResetPerspectives() ) ) {
+                    final PerspectiveActivity currentPerspective = perspectiveManager.getCurrentPerspective();
+                    perspectiveManager.removePerspectiveStates( new Command() {
+                        @Override
+                        public void execute() {
+                            if ( currentPerspective != null ) {
+                                //Use ForcedPlaceRequest to force re-loading of the current Perspective
+                                final PlaceRequest pr = new ForcedPlaceRequest( currentPerspective.getIdentifier(),
+                                        currentPerspective.getPlace().getParameters() );
+                                placeManager.goTo( pr );
+                            }
+                        }
+                    } );
+                }
+            }
+        };
+    }
+
+
+/*
     private List<MenuItem> getPerspectives() {
         final List<MenuItem> perspectives = new ArrayList<MenuItem>();
         for ( final PerspectiveActivity perspective : getPerspectiveActivities() ) {
@@ -169,6 +178,7 @@ public class DroolsWorkbenchEntryPoint {
 
         return perspectives;
     }
+*/
 
     private AbstractWorkbenchPerspectiveActivity getDefaultPerspectiveActivity() {
         AbstractWorkbenchPerspectiveActivity defaultPerspective = null;
@@ -188,6 +198,7 @@ public class DroolsWorkbenchEntryPoint {
         return defaultPerspective;
     }
 
+/*
     private List<PerspectiveActivity> getPerspectiveActivities() {
 
         //Get Perspective Providers
@@ -208,6 +219,7 @@ public class DroolsWorkbenchEntryPoint {
 
         return sortedActivities;
     }
+*/
 
     //Fade out the "Loading application" pop-up
     private void hideLoadingPopup() {
