@@ -34,8 +34,8 @@ import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.kie.workbench.common.services.datamodel.model.PackageDataModelOracleBaselinePayload;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracle;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracleFactory;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
-import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
@@ -75,7 +75,7 @@ public class NewGuidedDecisionTableHandler extends DefaultNewRuleHandler {
 
     private AsyncPackageDataModelOracle oracle;
 
-    private NewRulePresenter newRulePresenter;
+    private NewResourcePresenter newResourcePresenter;
 
     @PostConstruct
     private void setupExtensions() {
@@ -101,8 +101,8 @@ public class NewGuidedDecisionTableHandler extends DefaultNewRuleHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewRulePresenter presenter ) {
-        this.newRulePresenter = presenter;
+                        final NewResourcePresenter presenter ) {
+        this.newResourcePresenter = presenter;
         if ( !options.isUsingWizard() ) {
             createEmptyDecisionTable( pkg.getPackageMainResourcesPath(),
                                       baseFileName,
@@ -132,7 +132,7 @@ public class NewGuidedDecisionTableHandler extends DefaultNewRuleHandler {
 
             @Override
             public void callback( final PackageDataModelOracleBaselinePayload dataModel ) {
-                newRulePresenter.complete();
+                newResourcePresenter.complete();
                 oracle = oracleFactory.makeAsyncPackageDataModelOracle( contextPath,
                                                                         dataModel );
 
@@ -164,7 +164,7 @@ public class NewGuidedDecisionTableHandler extends DefaultNewRuleHandler {
         destroyWizard();
         oracleFactory.destroy( oracle );
         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Saving() );
-        service.call( getSuccessCallback( newRulePresenter ),
+        service.call( getSuccessCallback( newResourcePresenter ),
                       new HasBusyIndicatorDefaultErrorCallback( busyIndicatorView ) ).create( contextPath,
                                                                                               buildFileName( baseFileName,
                                                                                                              resourceType ),

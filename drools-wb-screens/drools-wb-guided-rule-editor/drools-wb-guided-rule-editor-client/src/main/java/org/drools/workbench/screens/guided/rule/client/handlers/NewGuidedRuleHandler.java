@@ -29,8 +29,8 @@ import org.drools.workbench.screens.guided.rule.service.GuidedRuleEditorService;
 import org.guvnor.common.services.project.model.Package;
 import org.gwtbootstrap3.client.ui.CheckBox;
 import org.jboss.errai.common.client.api.Caller;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
-import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.type.ClientResourceType;
@@ -88,7 +88,7 @@ public class NewGuidedRuleHandler extends DefaultNewRuleHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewRulePresenter presenter ) {
+                        final NewResourcePresenter presenter ) {
         final RuleModel ruleModel = new RuleModel();
         final boolean useDSL = useDSLCheckbox.getValue();
         final ClientResourceType resourceType = ( useDSL ? resourceTypeDSLR : resourceTypeDRL );

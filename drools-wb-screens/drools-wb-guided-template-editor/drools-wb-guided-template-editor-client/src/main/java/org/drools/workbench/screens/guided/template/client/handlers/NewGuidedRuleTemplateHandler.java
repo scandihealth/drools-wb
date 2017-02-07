@@ -27,8 +27,8 @@ import org.drools.workbench.screens.guided.template.client.type.GuidedRuleTempla
 import org.drools.workbench.screens.guided.template.service.GuidedRuleTemplateEditorService;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
-import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -71,7 +71,7 @@ public class NewGuidedRuleTemplateHandler extends DefaultNewRuleHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewRulePresenter presenter ) {
+                        final NewResourcePresenter presenter ) {
         final TemplateModel templateModel = new TemplateModel();
         templateModel.name = baseFileName;
         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Saving() );

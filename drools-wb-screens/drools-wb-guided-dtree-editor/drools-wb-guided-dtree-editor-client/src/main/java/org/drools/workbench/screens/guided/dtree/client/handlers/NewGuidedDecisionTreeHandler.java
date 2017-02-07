@@ -27,8 +27,8 @@ import org.drools.workbench.screens.guided.dtree.client.type.GuidedDTreeResource
 import org.drools.workbench.screens.guided.dtree.service.GuidedDecisionTreeEditorService;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
+import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
-import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.ext.widgets.common.client.common.BusyIndicatorView;
@@ -67,7 +67,7 @@ public class NewGuidedDecisionTreeHandler extends DefaultNewRuleHandler {
     @Override
     public void create( final Package pkg,
                         final String baseFileName,
-                        final NewRulePresenter presenter ) {
+                        final NewResourcePresenter presenter ) {
         final GuidedDecisionTree model = new GuidedDecisionTree();
         model.setTreeName( baseFileName );
         busyIndicatorView.showBusyIndicator( CommonConstants.INSTANCE.Saving() );

@@ -31,8 +31,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
-
-import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulePresenter;
 import org.kie.workbench.common.widgets.client.widget.AttachmentFileWidget;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
@@ -59,7 +57,7 @@ public class NewDecisionTableXLSHandlerTest {
     private BusyIndicatorView busyIndicatorView;
 
     @Mock
-    private NewRulePresenter newResourcePresenter;
+    private NewResourcePresenter newResourcePresenter;
 
     @Mock
     private ClientMessageBus clientMessageBus;
