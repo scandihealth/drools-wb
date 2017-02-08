@@ -46,9 +46,12 @@ import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jboss.errai.security.shared.api.Role;
 import org.jboss.errai.security.shared.api.identity.User;
 import org.jboss.errai.security.shared.service.AuthenticationService;
+import org.kie.workbench.common.screens.search.client.menu.SearchMenuBuilder;
 import org.kie.workbench.common.services.shared.preferences.ApplicationPreferences;
+import org.kie.workbench.common.widgets.client.menu.AboutMenuBuilder;
 import org.kie.workbench.common.widgets.client.menu.ResetPerspectivesMenuBuilder;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
+import org.uberfire.client.menu.CustomSplashHelp;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.PerspectiveActivity;
@@ -140,6 +143,10 @@ public class DroolsWorkbenchEntryPoint {
         }
 
         final Menus utilityMenus = MenuFactory
+                .newTopLevelCustomMenu( iocManager.lookupBean( CustomSplashHelp.class ).getInstance() )
+                .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( AboutMenuBuilder.class ).getInstance() )
+                .endMenu()
                 .newTopLevelCustomMenu( iocManager.lookupBean( ResetPerspectivesMenuBuilder.class ).getInstance() )
                 .endMenu()
                 .newTopLevelCustomMenu( iocManager.lookupBean( WorkbenchViewModeSwitcherUtilityMenuBuilder.class ).getInstance() )
@@ -165,6 +172,8 @@ public class DroolsWorkbenchEntryPoint {
                 .endMenu()
                 .newTopLevelMenu( AppConstants.INSTANCE.Perspectives() )
                 .withItems( getPerspectives() )
+                .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( SearchMenuBuilder.class ).getInstance() )
                 .endMenu()
                 .newTopLevelMenu( CommonConstants.INSTANCE.ResetPerspectivesTooltip() ).respondsWith( getResetPerspectivesCommand() )
                 .endMenu()

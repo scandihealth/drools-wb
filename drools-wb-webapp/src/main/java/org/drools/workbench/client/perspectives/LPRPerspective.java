@@ -54,9 +54,6 @@ public class LPRPerspective {
     @WorkbenchMenu
     public Menus buildMenuBar() {
         return MenuFactory
-//                .newTopLevelMenu( AppConstants.INSTANCE.Explore())
-//                .withItems(getExploreMenuItems())
-//                .endMenu()
                 .newTopLevelMenu(AppConstants.INSTANCE.New())
                 .withItems( newRulesMenu.getMenuItems())
                 .endMenu()
@@ -69,36 +66,5 @@ public class LPRPerspective {
                 .endMenu()
                 .build();
     }
-
-    private List<? extends MenuItem> getExploreMenuItems() {
-        ArrayList<MenuItem> menuItems = new ArrayList<MenuItem>();
-        menuItems.add(MenuFactory.newSimpleItem(AppConstants.INSTANCE.IncomingChanges()).respondsWith(
-                new Command() {
-                    @Override
-                    public void execute() {
-                        placeManager.goTo("Inbox");
-                    }
-                }).endMenu().build().getItems().get(0));
-        menuItems.add(MenuFactory.newSimpleItem(AppConstants.INSTANCE.RecentlyEdited()).respondsWith(
-                new Command() {
-                    @Override
-                    public void execute() {
-                        PlaceRequest p = new DefaultPlaceRequest("Inbox");
-                        p.addParameter("inboxname", InboxPresenter.RECENT_EDITED_ID);
-                        placeManager.goTo(p);
-                    }
-                }).endMenu().build().getItems().get(0));
-        menuItems.add(MenuFactory.newSimpleItem(AppConstants.INSTANCE.RecentlyOpened()).respondsWith(
-                new Command() {
-                    @Override
-                    public void execute() {
-                        PlaceRequest p = new DefaultPlaceRequest("Inbox");
-                        p.addParameter("inboxname", InboxPresenter.RECENT_VIEWED_ID);
-                        placeManager.goTo(p);
-                    }
-                }).endMenu().build().getItems().get(0));
-        return menuItems;
-    }
-
 
 }
