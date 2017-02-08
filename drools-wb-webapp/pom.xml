@@ -23,7 +23,7 @@
   <parent>
     <groupId>org.drools</groupId>
     <artifactId>drools-wb</artifactId>
-    <version>6.5.0.Final</version>
+    <version>6.5.0.csc-SNAPSHOT</version>
   </parent>
 
   <artifactId>drools-wb-webapp</artifactId>
@@ -117,6 +117,10 @@
     </dependency>
     <dependency>
       <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-commons-editor-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.uberfire</groupId>
       <artifactId>uberfire-io</artifactId>
     </dependency>
     <dependency>
@@ -151,6 +155,10 @@
       <groupId>org.uberfire</groupId>
       <artifactId>uberfire-widgets-commons</artifactId>
       <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>uberfire-widgets-core-client</artifactId>
     </dependency>
     <dependency>
       <groupId>org.uberfire</groupId>
@@ -853,7 +861,7 @@
     <dependency>
       <groupId>com.google.gwt</groupId>
       <artifactId>gwt-dev</artifactId>
-      <!--todo fix com.csc.gwtdebug.EmbeddedWildFlyLauncher so it is 1) not included in deployment files and 2) not causing gwt-dev and wildfly-embedded to be included into production war file-->
+      <!--todo ttn fix com.csc.gwtdebug.EmbeddedWildFlyLauncher so it is 1) not included in deployment files and 2) not causing gwt-dev and wildfly-embedded to be included into production war file-->
       <scope>compile</scope>
       <exclusions>
         <!-- Contains a ServletContainerInitializer that breaks the EmbeddedWildFlyLauncher -->
@@ -925,12 +933,12 @@
             https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
           -->
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <extraJvmArgs>-Xmx2048m -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone-full.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <extraJvmArgs>-Xmx4G -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
           <module>org.drools.workbench.DroolsWorkbench</module>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
           <server>com.csc.gwtdebug.EmbeddedWildFlyLauncher</server>
-          <port>8080</port>
+          <port>8088</port>
           <disableCastChecking>true</disableCastChecking>
           <runTarget>drools-wb-webapp/drools-wb.html</runTarget>
           <hostedWebapp>src/main/webapp</hostedWebapp>

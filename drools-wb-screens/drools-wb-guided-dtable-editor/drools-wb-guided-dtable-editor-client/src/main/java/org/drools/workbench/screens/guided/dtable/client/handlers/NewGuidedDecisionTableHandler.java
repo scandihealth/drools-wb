@@ -34,8 +34,8 @@ import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.kie.workbench.common.services.datamodel.model.PackageDataModelOracleBaselinePayload;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracle;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracleFactory;
-import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.mvp.PlaceManager;
@@ -48,7 +48,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new Guided Decision Tables
  */
 @ApplicationScoped
-public class NewGuidedDecisionTableHandler extends DefaultNewResourceHandler {
+public class NewGuidedDecisionTableHandler extends DefaultNewRuleHandler {
 
     @Inject
     private PlaceManager placeManager;

@@ -1,12 +1,12 @@
 /*
  * Copyright 2012 Red Hat, Inc. and/or its affiliates.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -31,6 +31,7 @@ import com.google.gwt.dom.client.Element;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.RootPanel;
+import org.drools.workbench.client.menu.WorkbenchViewModeSwitcherUtilityMenuBuilder;
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.common.services.shared.config.AppConfigService;
 import org.guvnor.common.services.shared.security.KieWorkbenchACL;
@@ -49,19 +50,22 @@ import org.kie.workbench.common.screens.search.client.menu.SearchMenuBuilder;
 import org.kie.workbench.common.services.shared.preferences.ApplicationPreferences;
 import org.kie.workbench.common.widgets.client.menu.AboutMenuBuilder;
 import org.kie.workbench.common.widgets.client.menu.ResetPerspectivesMenuBuilder;
+import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.menu.CustomSplashHelp;
 import org.uberfire.client.mvp.AbstractWorkbenchPerspectiveActivity;
 import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.PerspectiveActivity;
+import org.uberfire.client.mvp.PerspectiveManager;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.views.pfly.menu.UserMenu;
 import org.uberfire.client.workbench.widgets.menu.UtilityMenuBar;
 import org.uberfire.client.workbench.widgets.menu.WorkbenchMenuBarPresenter;
 import org.uberfire.mvp.Command;
+import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.mvp.impl.DefaultPlaceRequest;
+import org.uberfire.mvp.impl.ForcedPlaceRequest;
 import org.uberfire.workbench.model.menu.MenuFactory;
 import org.uberfire.workbench.model.menu.MenuItem;
-import org.uberfire.workbench.model.menu.MenuPosition;
 import org.uberfire.workbench.model.menu.Menus;
 
 import static org.uberfire.workbench.model.menu.MenuFactory.*;
@@ -105,6 +109,10 @@ public class DroolsWorkbenchEntryPoint {
     @Inject
     private UserMenu userMenu;
 
+
+    @Inject
+    private PerspectiveManager perspectiveManager;
+
     @AfterInitialization
     public void startApp() {
         kieSecurityService.call( new RemoteCallback<String>() {
@@ -141,6 +149,8 @@ public class DroolsWorkbenchEntryPoint {
                 .endMenu()
                 .newTopLevelCustomMenu( iocManager.lookupBean( ResetPerspectivesMenuBuilder.class ).getInstance() )
                 .endMenu()
+                .newTopLevelCustomMenu( iocManager.lookupBean( WorkbenchViewModeSwitcherUtilityMenuBuilder.class ).getInstance() )
+                .endMenu()
                 .newTopLevelCustomMenu( userMenu )
                 .endMenu()
                 .build();
@@ -165,6 +175,8 @@ public class DroolsWorkbenchEntryPoint {
                 .endMenu()
                 .newTopLevelCustomMenu( iocManager.lookupBean( SearchMenuBuilder.class ).getInstance() )
                 .endMenu()
+                .newTopLevelMenu( CommonConstants.INSTANCE.ResetPerspectivesTooltip() ).respondsWith( getResetPerspectivesCommand() )
+                .endMenu()
                 .build();
 
         menubar.addMenus( menus );
@@ -180,6 +192,31 @@ public class DroolsWorkbenchEntryPoint {
         }
         return result;
     }
+
+
+    private Command getResetPerspectivesCommand() {
+        return new Command() {
+            @Override
+            public void execute() {
+                if ( Window.confirm( CommonConstants.INSTANCE.PromptResetPerspectives() ) ) {
+                    final PerspectiveActivity currentPerspective = perspectiveManager.getCurrentPerspective();
+                    perspectiveManager.removePerspectiveStates( new Command() {
+                        @Override
+                        public void execute() {
+                            if ( currentPerspective != null ) {
+                                //Use ForcedPlaceRequest to force re-loading of the current Perspective
+                                final PlaceRequest pr = new ForcedPlaceRequest( currentPerspective.getIdentifier(),
+                                        currentPerspective.getPlace().getParameters() );
+                                placeManager.goTo( pr );
+                            }
+                        }
+                    } );
+                }
+            }
+        };
+    }
+
+
 
     private List<MenuItem> getPerspectives() {
         final List<MenuItem> perspectives = new ArrayList<MenuItem>();

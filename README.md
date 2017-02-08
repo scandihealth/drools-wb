@@ -24,9 +24,10 @@ _Work in progress - will be updated as we find out if all these steps are necess
 
 ##Setting Up Build Configuration
 1. Make sure you run Windows 7 (64bit) 
-2. Install Git for windows, IntelliJ IDEA 2016.3, Java JDK 8 64bit
-    - If you have any other JDKs you must follow this guide to make sure IDEA runs under 1.8: https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under 
-3. Configure Maven to use our internal Artifactory maven repository
+2. Install Git for windows, IntelliJ IDEA 2016.3.2 or newer, Java JDK 8 64bit
+    - During IDEA installation, select to download an internal JRE 8 for IDEA 64.
+    If you do not, then you need to make sure IDEA 64 uses a JRE 8 using this guide: https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under 
+3. Configure Maven to use our internal Scandihealth Artifactory maven repository at http://repo.scandihealth.com
    - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
 4. Configure Git to use long paths
    - Open a command prompt with administrator access and run: <code>git config --system core.longpaths true</code>
@@ -34,20 +35,17 @@ _Work in progress - will be updated as we find out if all these steps are necess
    - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/ide-configuration/intellij-configuration/code-style/intellij-code-style_droolsjbpm-java-conventions.xml
 6. Open IDEA (64 bit) by opening idea64.exe -> Default Settings -> Maven
    - Change Maven -> Runner -> VM Options to <code>-Xms256m -Xmx3056m</code>
-   - Change Maven -> Runner -> JRE to <code>1.8</code> (64bit)
-7. Open IDEA (64 bit) -> Help -> Edit Custom VM Options (NECESSARY?)
-   - Change the existing -Xmx setting to <code>-Xmx3056m</code>    
-8. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
+7. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
    - Open the pom.xml as a project
    - Make sure to "Enable Auto Import" in Maven and add GWT facets (IDEA should ask you these questions in popup balloons)
    - Change File -> Project Structure -> Project -> Project SDK to <code>1.8</code> (64bit)
    - Change git branch to origin/csc-6.5.0
-9. Change the Code Style used by IDEA for this project
+8. Change the Code Style used by IDEA for this project
    - Select Settings -> Editor -> Code Style -> Scheme: <code>Drools and jBPM: Java Conventions</code>
-10. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
+9. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
     - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
-11. Click "Toggle 'Skip Tests' Mode" button in the Maven Projects window
-13. You are now ready to run Maven commands and develop
+10. Click "Toggle 'Skip Tests' Mode" button in the Maven Projects window
+11. You are now ready to run Maven commands and develop
     - Run Drools Workbench (root) -> install (takes 10-15 minutes)
     
 ##Setting Up Run Configuration
@@ -87,11 +85,15 @@ _Work in progress - will be updated as we find out if all these steps are necess
 
 ##Setting Up GWT Super Dev Mode
 _Work in progress - we are still figuring out the best way to run Super Dev Mode_
-###Running GWT code server through maven (works! But only using standalone.xml configuration) 
+###Running GWT code server through maven (works! But it is using standalone.xml configuration) 
 1. On _Drools Workbench - WebApp_ run Maven 'clean'
 2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
 3. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
 4. Click the "Launch Default Browser" button when it is available
+
+*There is still some problems using standalone-full confiugration in GWT debug mode:*
+Currently it is not possible to connect a KIE Execution Server while debugging drools-wb. 
+If you try to run csc-gwt:debug using standalone-full.xml configuration and connect a KIE server to drools-wb, it will produce errors.
 
 ###Running GWT code server through IDEA (not working) 
 http://blog.athico.com/2014/05/running-drools-wb-with-gwts-superdevmode.html
@@ -102,5 +104,14 @@ Use parameters from gwt-maven-plugin <extraJvmArgs> element
 Dev Mode parameters: -server org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher
 
 #Troubleshooting
-- If deployment to WildFly fails with a "FileSystem"-related error, a "SocialUserProfile"-related error, or a "Lucene"-related error, then stop the server and delete the .index and .niogit folders and try again
+- If deployment to WildFly fails with a "JGitFileSystemProvider"-related error it most likely means that a Drools-WB instance is already running and connected to your Git repository and has taken a file lock
+  - Just stop all instances, delete drools-wb-webapp <deployment> element in the WildFly standalone.xml and try again
+- If deployment to WildFly fails with a "SocialUserProfile"-related error, or a "Lucene"-related error, then stop the server and delete the .index and .niogit folders and try again
   - Note: This will reset all your application data (Data Model, rules, etc)
+
+#Tips & Tricks
+- To open <b>standalone mode</b> use the following URL: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&perspective=AuthoringPerspective
+  - <u>perspective</u> can be replaced by <u>path</u> parameter which will open the file (in it's appropriate editor) directly, e.g. 
+    - Example: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&path=default://master@uf-playground/mortgages/src/main/resources/org/mortgages/Dummy%2520rule.drl
+  - If using the <u>path</u> parameter, an optional <u>editor</u> parameter can be appended to open any "Place" (e.g. the "Search Asset" screen). A "Place" is a WorkbenchPerspective, a WorkbenchScreen, a WorkbenchPopup, a WorkbenchEditor, or a WorkbenchPart 
+    - Example: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&path=default://master@uf-playground/mortgages/src/main/resources/org/mortgages/Dummy%2520rule.drl&editor=FindForm
