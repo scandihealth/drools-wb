@@ -35,7 +35,7 @@ public class LPRPerspective {
     @PostConstruct
     public void setup() {
         docks.setup("LPRPerspective" );
-        listenForMessages();
+        listenForPostMessage();
     }
 
 //    public final native void onBeforeUnload() /*-{
@@ -43,16 +43,21 @@ public class LPRPerspective {
 //        window.onbeforeunload = function() {return "test";};
 //    }-*/;
 
-    public final native void listenForMessages() /*-{
-        console.log('Drools-WB listening for messages on ', window.location.href);
-        window.addEventListener('message', receiveMessage, false);
-
-        function receiveMessage(event) {
-            console.log('Message received: ' + event.data);
-            e.source.postMessage('Hello back', event.origin);
-        }
+    private final native void listenForPostMessage() /*-{
+        console.log('Drools-WB listening for messages');
+        var that = this;
+        $wnd.addEventListener("message", function(event) {
+            $wnd.alert('Drools-WB message received: ' + event.data);
+            console.log('Drools-WB message received: ', event.data);
+            var dirty = that.@org.drools.workbench.client.perspectives.LPRPerspective::isDirty(Ljava/lang/String;Ljava/lang/String;)(event.data, event.origin);
+            console.log('Drools-WB sending message:', event.data);
+            event.source.postMessage('Hello back - dirty='+dirty, event.origin);
+        });
     }-*/;
 
+    private boolean isDirty( String data, String origin) {
+        return false;
+    }
 
     @Perspective
     public PerspectiveDefinition buildPerspective() {
