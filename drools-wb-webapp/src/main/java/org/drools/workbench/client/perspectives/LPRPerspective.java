@@ -45,7 +45,7 @@ public class LPRPerspective {
 
     public final native void listenForMessages() /*-{
         console.log('Drools-WB listening for messages on ', window.location.href);
-        window.addEventListener("message", receiveMessage, false);
+        window.addEventListener('message', receiveMessage, false);
 
         function receiveMessage(event) {
             console.log('Message received: ' + event.data);
