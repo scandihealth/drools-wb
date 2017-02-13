@@ -1,14 +1,11 @@
 package org.drools.workbench.client.perspectives;
 
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.drools.workbench.client.docks.LPRWorkbenchDocks;
 import org.drools.workbench.client.resources.i18n.AppConstants;
-import org.guvnor.inbox.client.InboxPresenter;
 import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulesMenu;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
@@ -16,12 +13,9 @@ import org.uberfire.client.annotations.WorkbenchPerspective;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.panels.impl.MultiListWorkbenchPanelPresenter;
 import org.uberfire.mvp.Command;
-import org.uberfire.mvp.PlaceRequest;
-import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.workbench.model.PerspectiveDefinition;
 import org.uberfire.workbench.model.impl.PerspectiveDefinitionImpl;
 import org.uberfire.workbench.model.menu.MenuFactory;
-import org.uberfire.workbench.model.menu.MenuItem;
 import org.uberfire.workbench.model.menu.MenuPosition;
 import org.uberfire.workbench.model.menu.Menus;
 
@@ -41,7 +35,24 @@ public class LPRPerspective {
     @PostConstruct
     public void setup() {
         docks.setup("LPRPerspective" );
+        listenForMessages();
     }
+
+//    public final native void onBeforeUnload() /*-{
+//        console.log('unbeforeunload');
+//        window.onbeforeunload = function() {return "test";};
+//    }-*/;
+
+    public final native void listenForMessages() /*-{
+        console.log('Drools-WB listening for messages on ', window.location.href);
+        window.addEventListener("message", receiveMessage, false);
+
+        function receiveMessage(event) {
+            console.log('Message received: ' + event.data);
+            e.source.postMessage('Hello back', event.origin);
+        }
+    }-*/;
+
 
     @Perspective
     public PerspectiveDefinition buildPerspective() {
