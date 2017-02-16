@@ -48,54 +48,47 @@ public class LPRPerspective {
 
     @PostConstruct
     public void setup() {
-        docks.setup( "LPRPerspective" );
         listenForPostMessage();
+        docks.setup( "LPRPerspective" );
     }
-
-//    public final native void onBeforeUnload() /*-{
-//        console.log('unbeforeunload');
-//        window.onbeforeunload = function() {return "test";};
-//    }-*/;
 
     private native void listenForPostMessage() /*-{
         console.log('Drools-WB listening for messages');
         var that = this;
         $wnd.addEventListener("message", function (event) {
-//        $wnd.setTimeout(function () {
             console.log('Drools-WB message received: ', event.data);
 //          todo filter out messages not from our drools-wb application
 //          var origin = event.origin || event.originalEvent.origin; // For Chrome, the origin property is in the event.originalEvent object.
 //          if (origin !== "http://example.org:8080")
 //                return;
             try {
-                if (event.data === 'isDirty') {
+                if (event.data === 'mayClose') {
                     var activityManager = that.@org.drools.workbench.client.perspectives.LPRPerspective::activityManager;
 //                    console.log('activityManager', activityManager);
                     var startedActivities = activityManager.@org.uberfire.client.mvp.ActivityManagerImpl::startedActivities;
 //                    console.log('startedActivities', startedActivities);
-                    var dirty = that.@org.drools.workbench.client.perspectives.LPRPerspective::isDirty(*)(startedActivities);
-                    var message = {message: dirty, isResponseTo: 'isDirty'};
+                    var mayClose = that.@org.drools.workbench.client.perspectives.LPRPerspective::mayClose(*)(startedActivities);
+                    var message = {message: mayClose, isResponseTo: 'mayClose'};
                     console.log('Drools-WB sending message:', message);
                     event.source.postMessage(message, event.origin);
                 }
             } catch (e) {
                 console.error(e);
             }
-//        }, 10000);
         }, false);
     }-*/;
 
-    private boolean isDirty( Map<Activity, PlaceRequest> startedActivities ) {
-        boolean dirty = false;
-        log.info( "Calling isDirty with startedActivities=" + Arrays.toString( startedActivities.entrySet().toArray() ) );
+    private boolean mayClose( Map<Activity, PlaceRequest> startedActivities ) {
+        boolean mayClose = true;
+        log.trace( "Calling mayClose with startedActivities=" + Arrays.toString( startedActivities.entrySet().toArray() ) );
         for ( Activity activity : startedActivities.keySet() ) {
-            log.info( "Checking Activity: " + activity.getIdentifier() );
-            if ( !dirty && activity instanceof WorkbenchActivity ) {
-                dirty = !(( WorkbenchActivity ) activity).onMayClose();
-                log.info( "WorkbenchActivity: " + activity.getIdentifier() + " is " + dirty + " dirty" );
+            log.trace( "Checking Activity: " + activity.getIdentifier() );
+            if ( mayClose && activity instanceof WorkbenchActivity ) {
+                mayClose = (( WorkbenchActivity ) activity).onMayClose();
+                log.trace( "WorkbenchActivity: " + activity.getIdentifier() + " may close: " + mayClose );
             }
         }
-        return dirty;
+        return mayClose;
     }
 
     @Perspective
