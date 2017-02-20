@@ -2,7 +2,6 @@ package org.drools.workbench.client.perspectives;
 
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -48,11 +47,11 @@ public class LPRPerspective {
 
     @PostConstruct
     public void setup() {
-        listenForPostMessage();
+        listenForMessageEvents();
         docks.setup( "LPRPerspective" );
     }
 
-    private native void listenForPostMessage() /*-{
+    private native void listenForMessageEvents() /*-{
         console.log('Drools-WB listening for messages');
         var that = this;
         $wnd.addEventListener("message", function (event) {
