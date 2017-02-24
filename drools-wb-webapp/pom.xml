@@ -919,6 +919,41 @@
     <outputDirectory>src/main/webapp/WEB-INF/classes</outputDirectory>
 
     <plugins>
+      <!-- build-helper-maven-plugin makes it possible in a GWT multi-module setup to "hot swap" (recompile) sources from other GWT modules when running in GWT hosted mode (Super Dev Mode) -->
+      <!-- Simply add the source roots (and resource roots) you want to include in your GWT compilation below -->
+      <!-- See https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/productivity.html -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <!--<source>c:/dev/kie-wb-common/kie-wb-common-screens/kie-wb-common-search-screen/kie-wb-common-search-screen-client/src/main/java</source>-->
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-resource</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <!--<resource>-->
+                  <!--<directory>c:/dev/kie-wb-common/kie-wb-common-screens/kie-wb-common-search-screen/kie-wb-common-search-screen-client/src/main/resources</directory>-->
+                <!--</resource>-->
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>com.csc.scandihealth</groupId>
         <artifactId>csc-gwt-maven-plugin</artifactId>
