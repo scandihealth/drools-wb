@@ -23,6 +23,7 @@ import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.guvnor.common.services.backend.metadata.attribute.LprMetaView;
 import org.guvnor.common.services.backend.metadata.attribute.OtherMetaView;
 import org.guvnor.messageconsole.backend.DefaultIndexEngineObserver;
 import org.jboss.errai.security.shared.api.identity.User;
@@ -74,7 +75,8 @@ public class ApplicationScopedProducer {
                                                             defaultIndexEngineObserver,
                                                             DublinCoreView.class,
                                                             VersionAttributeView.class,
-                                                            OtherMetaView.class );
+                                                            OtherMetaView.class,
+                LprMetaView.class);
 
         if ( clusterServiceFactory == null ) {
             ioService = service;
