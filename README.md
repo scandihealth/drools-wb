@@ -8,25 +8,45 @@ It solves all known pitfalls that can disrupt your development.
 It also describes all guidelines, tips and tricks.
 If you want your pull requests (or patches) to be merged into master, please respect those guidelines.
 
-#CSC Version
+# DXC Version
 
 This branch contains modifications to 6.5.0.Final made by CSC Scandihealth.<br>
 The modifications customizes Drools Workbench for embedded use within the LPR project (under construction).
   
-##New Dependency to <code>csc-gwt-maven-plugin</code>
+## New Dependency to <code>csc-gwt-maven-plugin</code>
 
 Running the **gwt-maven-plugin** to compile the gwt code in the <code>drools-wb-webapp</code> project under Windows 7 gives an error (see https://github.com/gwt-maven-plugin/gwt-maven-plugin/issues/113).<br>
 To fix this we have backported the 2.8.0 fix to our own fork of <code>gwt-maven-plugin</code> 2.7.0 found here: https://github.com/scandihealth/gwt-maven-plugin/tree/csc-2.7.0 <br>
 We have packaged that fork using maven and uploaded the jar to our own internal Artifactory maven repository so that it can be resolved when building this <code>drools-wb</code> fork internally at CSC.
 
-#How To Setup For Internal CSC Development (Windows 7 64bit)
-_Work in progress - will be updated as we find out if all these steps are necessary or not._
+# How To Setup For Internal CSC Development (Windows 7 64bit)
 
-##Setting Up Build Configuration
+## How to setup for development
+1. Installer [Java JDK SE 1.8 (64 bit)](http://http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
+2. Download [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip) og unzip til en vilkårlig mappe.
+3. Sæt JAVA_HOME miljøvariablen til JDK mappen (fx C:\Program Files\Java\jdk1.8.0_121)
+4. Sæt JBOSS_HOME miljøvariablen til WildFly mappen (fx C:\dev\wildfly-10.1.0.Final)
+6. Kopier \\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml til din .m2 mappe (fx C:\Users\ttn\.m2) - opret hvis mappen ikke eksisterer
+7. Installer Git (https://git-scm.com/download/win)
+9. Installer IntelliJ IDEA (https://www.jetbrains.com/idea/#chooseYourEdition)
+10. Start IDEA op uden at åbne et projekt (evt luk projekt med *File -> Close Project*)
+12. Åben *Checkout From Version Control -> Git* -> Sæt Git Repository URL: https://github.com/scandihealth/drools-wb.git -> Sæt *Parent Directory* (fx C:\dev) -> Tryk *Clone*
+13. Der åbnes en dialog, der spørger om du vil åbne pom.xml som projekt. Tryk *Yes*.
+14. Åben *Project Structure* -> Project -> Project SDK -> vælg 1.8
+    * Hvis JDK 1.8 ikke er i dropdown listen så tryk *New... -> JDK* -> Vælg JDK 1.8 rodmappen -> Ok
+15. Kopier indholdet af [wildfly10](appserver/wildfly10) til din WildFly mappe
+16. Åben *View -> Tool Windows -> Maven Projects*
+    * Nu skulle der gerne være en lang liste af maven projekter.
+    * Hvis IDEA spørger dig i en popup om du vil importere nye maven moduler så vælg *Enable Auto Import* (eller noget i den dur)
+    * Dobbeltklik på *Drools Workbench (root)* -> Lifecycle -> install 
+17. Start en kommandoprompt og eksekver [standalone.bat](appserver/wildfly10/bin/standalone.bat) (fra der du kopierede den hen)
+18. LPR applikationen er nu startet og GUI kan åbnes på [http://localhost:8080/gui-client/LPR.html](http://localhost:8080/gui-client/LPR.html)
+19. Optional: Installer *Settings -> Plugins -> Install Jetbrains Plugin... -> Markdown support*
+    * Markdown er tekstformatet denne .md fil er skrevet i. Se: https://guides.github.com/features/mastering-markdown/
+
+## Setting Up Build Configuration
 1. Make sure you run Windows 7 (64bit) 
-2. Install Git for windows, IntelliJ IDEA 2016.3.2 or newer & Java JDK 8 64bit
-    - During IDEA installation, select to download an internal JRE 8 for IDEA 64.
-    If you do not, then you need to make sure IDEA 64 uses a JRE 8 using this guide: https://intellij-support.jetbrains.com/hc/en-us/articles/206544879-Selecting-the-JDK-version-the-IDE-will-run-under 
+2. Install Git for windows, IntelliJ IDEA & Java JDK 8 64bit
 3. Configure Maven to use our internal Scandihealth Artifactory maven repository at http://repo.maven.scandihealth.com
    - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
 4. Configure Git to use long paths
@@ -43,15 +63,15 @@ style/intellij-code-style_droolsjbpm-java-conventions.xml
 8. You are now ready to run Maven commands and develop
     - Run Drools Workbench (root) -> install (takes 10-15 minutes)
 
-##Setting Up Code Style
-1. Download the official droolsjbpm IDEA Code Style and save it in %USERPROFILE%\\.IntelliJIdea2016.3\config\codestyles  
+## Setting Up Code Style
+1. Download the official droolsjbpm IDEA Code Style and save it in %USERPROFILE%\\.IntelliJIdea\<your IDEA version>\config\codestyles  
    - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/ide-configuration/intellij-configuration/code-
 2. Change the Code Style used by IDEA for this project
    - Select Settings -> Editor -> Code Style -> Scheme: <code>Drools and jBPM: Java Conventions</code>
 3. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
     - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
 
-##Setting Up Run Configuration
+## Setting Up Run Configuration
 1. Download [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip) and unzip it to your drools-wb parent folder. 
     - Example: If drools-wb is placed here: C:\dev\drools-wb then WildFly should be placed here: C:\dev\wildfly-10.1.0.Final
     - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone-full.xml_ and _standalone.xml_ after the `<extensions>` element
@@ -86,9 +106,9 @@ style/intellij-code-style_droolsjbpm-java-conventions.xml
     - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if you have made GWT code changes you want to include
     - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if switching from debugging GWT to running normally
 
-##Setting Up GWT Super Dev Mode
+## Setting Up GWT Super Dev Mode
 _Work in progress - we are still figuring out the best way to run Super Dev Mode_
-###Running GWT code server through maven (works! But it is using standalone.xml configuration) 
+### Running GWT code server through maven (works! But it is using standalone.xml configuration) 
 1. On _Drools Workbench - WebApp_ run Maven 'clean'
 2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
 3. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
@@ -100,7 +120,7 @@ _Work in progress - we are still figuring out the best way to run Super Dev Mode
 Currently it is not possible to connect a KIE Execution Server while debugging drools-wb. 
 If you try to run csc-gwt:debug using standalone-full.xml configuration and connect a KIE server to drools-wb, it will produce errors.
 
-###Running GWT code server through IDEA (not working) 
+### Running GWT code server through IDEA (not working) 
 http://blog.athico.com/2014/05/running-drools-wb-with-gwts-superdevmode.html
 http://www.uberfireframework.org/docs/tutorial/intellij_idea.html
 http://docs.jboss.org/errai/latest/errai/reference/html_single/#_running_and_debugging_in_your_ide_using_gwt_tooling
@@ -108,13 +128,14 @@ http://docs.jboss.org/errai/latest/errai/reference/html_single/#_running_and_deb
 Use parameters from gwt-maven-plugin <extraJvmArgs> element
 Dev Mode parameters: -server org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher
 
-#Troubleshooting
-- If deployment to WildFly fails with a "JGitFileSystemProvider"-related error it most likely means that a Drools-WB instance is already running and connected to your Git repository and has taken a file lock
-  - Just stop all instances, delete drools-wb-webapp <deployment> element in the WildFly standalone.xml and try again
-- If deployment to WildFly fails with a "SocialUserProfile"-related error, or a "Lucene"-related error, then stop the server and delete the .index and .niogit folders and try again
+# Troubleshooting
+- If deployment to WildFly fails with a file system or persistence related error it most likely means that a previous Drools-WB Java process was not terminated and has taken a file lock or JVM address binding
+  - Make sure drools-wb-webapp is not already deployed (check standalone.xml \<deployment> tags and check \wildfly-10.1.0.Final\standalone\deployments folder)
+  - Close the server and kill all instances of java.exe in your Windows task manager
+- If this doesn't fix the rpoblem, then stop the server and delete the .index and .niogit folders in the dir specified by "org.uberfire.nio.git.dir" and "org.uberfire.metadata.index.dir" and try again
   - Note: This will reset all your application data (Data Model, rules, etc)
 
-#Tips & Tricks
+# Tips & Tricks
 - To open <b>standalone mode</b> use the following URL: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&perspective=AuthoringPerspective
   - <u>perspective</u> can be replaced by <u>path</u> parameter which will open the file (in it's appropriate editor) directly, e.g. 
     - Example: http://localhost:8080/drools-wb-webapp/drools-wb.html?standalone=true&path=default://master@uf-playground/mortgages/src/main/resources/org/mortgages/Dummy%2520rule.drl
