@@ -1,80 +1,32 @@
-Developing Drools and jBPM
-==========================
-
-**If you want to build or contribute to a droolsjbpm project, [read this document](https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md).**
-
-**It will save you and us a lot of time by setting up your development environment correctly.**
-It solves all known pitfalls that can disrupt your development.
-It also describes all guidelines, tips and tricks.
-If you want your pull requests (or patches) to be merged into master, please respect those guidelines.
-
-# DXC Version
-
-This branch contains modifications to 6.5.0.Final made by CSC Scandihealth.<br>
-The modifications customizes Drools Workbench for embedded use within the LPR project (under construction).
+## DXC version of Drools Workbench for LPR
+This repository is used by DXC (CSC Scandihealth) to modify Drools Workbench for use with LPR.<br>
+This branch contains modifications to [6.5.0.Final](https://github.com/kiegroup/drools-wb/tree/6.5.0.Final) made by DXC (CSC Scandihealth).
   
 ## New Dependency to <code>csc-gwt-maven-plugin</code>
-
 Running the **gwt-maven-plugin** to compile the gwt code in the <code>drools-wb-webapp</code> project under Windows 7 gives an error (see https://github.com/gwt-maven-plugin/gwt-maven-plugin/issues/113).<br>
 To fix this we have backported the 2.8.0 fix to our own fork of <code>gwt-maven-plugin</code> 2.7.0 found here: https://github.com/scandihealth/gwt-maven-plugin/tree/csc-2.7.0 <br>
-We have packaged that fork using maven and uploaded the jar to our own internal Artifactory maven repository so that it can be resolved when building this <code>drools-wb</code> fork internally at CSC.
+We have packaged that fork using maven and uploaded the jar to our own internal Artifactory maven repository so that it can be resolved when building this <code>drools-wb</code> fork internally at DXC.
 
-# How To Setup For Internal CSC Development (Windows 7 64bit)
-
-## How to setup for development
-1. Installer [Java JDK SE 1.8 (64 bit)](http://http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
-2. Download [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip) og unzip til en vilkårlig mappe.
-3. Sæt JAVA_HOME miljøvariablen til JDK mappen (fx C:\Program Files\Java\jdk1.8.0_121)
-4. Sæt JBOSS_HOME miljøvariablen til WildFly mappen (fx C:\dev\wildfly-10.1.0.Final)
-6. Kopier \\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml til din .m2 mappe (fx C:\Users\ttn\.m2) - opret hvis mappen ikke eksisterer
-7. Installer Git (https://git-scm.com/download/win)
-9. Installer IntelliJ IDEA (https://www.jetbrains.com/idea/#chooseYourEdition)
-10. Start IDEA op uden at åbne et projekt (evt luk projekt med *File -> Close Project*)
-12. Åben *Checkout From Version Control -> Git* -> Sæt Git Repository URL: https://github.com/scandihealth/drools-wb.git -> Sæt *Parent Directory* (fx C:\dev) -> Tryk *Clone*
-13. Der åbnes en dialog, der spørger om du vil åbne pom.xml som projekt. Tryk *Yes*.
-14. Åben *Project Structure* -> Project -> Project SDK -> vælg 1.8
-    * Hvis JDK 1.8 ikke er i dropdown listen så tryk *New... -> JDK* -> Vælg JDK 1.8 rodmappen -> Ok
-15. Kopier indholdet af [wildfly10](appserver/wildfly10) til din WildFly mappe
-16. Åben *View -> Tool Windows -> Maven Projects*
-    * Nu skulle der gerne være en lang liste af maven projekter.
-    * Hvis IDEA spørger dig i en popup om du vil importere nye maven moduler så vælg *Enable Auto Import* (eller noget i den dur)
-    * Dobbeltklik på *Drools Workbench (root)* -> Lifecycle -> install 
-17. Start en kommandoprompt og eksekver [standalone.bat](appserver/wildfly10/bin/standalone.bat) (fra der du kopierede den hen)
-18. LPR applikationen er nu startet og GUI kan åbnes på [http://localhost:8080/gui-client/LPR.html](http://localhost:8080/gui-client/LPR.html)
-19. Optional: Installer *Settings -> Plugins -> Install Jetbrains Plugin... -> Markdown support*
-    * Markdown er tekstformatet denne .md fil er skrevet i. Se: https://guides.github.com/features/mastering-markdown/
-
+# How To Setup For Development (Windows 7 64bit)
 ## Setting Up Build Configuration
-1. Make sure you run Windows 7 (64bit) 
-2. Install Git for windows, IntelliJ IDEA & Java JDK 8 64bit
-3. Configure Maven to use our internal Scandihealth Artifactory maven repository at http://repo.maven.scandihealth.com
+1. Install Git for windows, IntelliJ IDEA & Java JDK 8 64bit
+2. Configure Maven to use our internal Scandihealth Artifactory maven repository
    - Copy \\\sh\shares\scvcomn\LPR3\udviklersetup\settings.xml to your %USERPROFILE%\\.m2 folder (create folder if necessary)
-4. Configure Git to use long paths
-   - Open a command prompt with administrator access and run: <code>git config --system core.longpaths true</code>
-style/intellij-code-style_droolsjbpm-java-conventions.xml
-5. Open IDEA (64 bit) by opening idea64.exe -> Default Settings -> Maven
+3. Configure Git to use long paths
+   - Open a command prompt with administrator rights and run: <code>git config --system core.longpaths true</code>
+4. Open IDEA (64 bit) by opening idea64.exe -> Default Settings -> Maven
    - Change Maven -> Runner -> VM Options to <code>-Xms256m -Xmx3G</code>
-6. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
+5. Using IDEA (64 bit): Checkout the repository from Git https://github.com/scandihealth/drools-wb.git
    - Open the root pom.xml as a project
    - Make sure to "Enable Auto Import" in Maven and add GWT facets (IDEA should ask you these questions in popup balloons)
    - Change File -> Project Structure -> Project -> Project SDK to <code>1.8</code> (64bit)
-   - Check out Git branch origin/6.5.0.csc
-7. Click the "Toggle 'Skip Tests' Mode" button in the Maven Projects sidebar window
-8. You are now ready to run Maven commands and develop
+6. Click the "Toggle 'Skip Tests' Mode" button in the Maven Projects sidebar window
+7. You are now ready to run Maven commands and develop
     - Run Drools Workbench (root) -> install (takes 10-15 minutes)
 
-## Setting Up Code Style
-1. Download the official droolsjbpm IDEA Code Style and save it in %USERPROFILE%\\.IntelliJIdea\<your IDEA version>\config\codestyles  
-   - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/ide-configuration/intellij-configuration/code-
-2. Change the Code Style used by IDEA for this project
-   - Select Settings -> Editor -> Code Style -> Scheme: <code>Drools and jBPM: Java Conventions</code>
-3. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
-    - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
-
 ## Setting Up Run Configuration
-1. Download [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip) and unzip it to your drools-wb parent folder. 
-    - Example: If drools-wb is placed here: C:\dev\drools-wb then WildFly should be placed here: C:\dev\wildfly-10.1.0.Final
-    - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone-full.xml_ and _standalone.xml_ after the `<extensions>` element
+1. Download and unzip [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip)
+    - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone.xml_ after the `<extensions>` element
     (modify to your liking)
     ```
         <system-properties>
@@ -82,51 +34,33 @@ style/intellij-code-style_droolsjbpm-java-conventions.xml
             <property name="org.uberfire.nio.git.ssh.cert.dir" value="C:\dev\drools-wb-devdb"/>
             <property name="org.uberfire.metadata.index.dir" value="C:\dev\drools-wb-devdb"/>
             <property name="org.guvnor.m2repo.dir" value="C:\dev\drools-wb-devdb"/>
-            <property name="org.kie.server.id" value="dev-kie-server"/>
-            <property name="org.kie.server.location" value="http://localhost:8080/kie-server/services/rest/server"/>
-            <property name="org.kie.server.controller" value="http://localhost:8080/drools-wb-webapp/rest/controller"/>
-            <property name="org.kie.server.controller.user" value="admin"/>
-            <property name="org.kie.server.controller.pwd" value="admin"/>
-            <property name="org.kie.server.bypass.auth.user" value="true"/>
         </system-properties>
     ```
-    - Run the following command: _wildfly-10.1.0.Final\bin\add-user.bat -a -u kieserver -p kieserver1! -ro kie-server_ (make sure your JAVA_HOME environment variable is pointing to JRE 1.8)
-2. Download [KIE Server 6.5.0.Final ee7 war file](http://repo1.maven.org/maven2/org/kie/server/kie-server/6.5.0.Final/kie-server-6.5.0.Final-ee7.war)
-    - Rename it kie-server.war and save it to wildfly-10.1.0.Final\standalone\deployments (or deploy manually via web interface on http://127.0.0.1:9990)
-3. Setup a new Run configuration in IDEA
+2. Setup a new Run configuration in IDEA
     - First make sure you have enabled JBoss integration
         - [Drools](https://confluence.jetbrains.com/display/IntelliJIDEA/Getting+Started+with+JBoss+Technologies+in+IntelliJ+IDEA#GettingStartedwithJBossTechnologiesinIntelliJIDEA-DroolsExpert)
         - [WildFly](https://confluence.jetbrains.com/display/IntelliJIDEA/Getting+Started+with+JBoss+Technologies+in+IntelliJ+IDEA#GettingStartedwithJBossTechnologiesinIntelliJIDEA-JBossEAPandWildFly)
     - Run -> Edit confiugrations -> Add New Configuration (+ button) -> JBoss -> Local
-        - Application server: JBoss 10.1.0.Final (if not present then click _Configure..._ and choose the folder where you downloaded Wildfly 10.1.0.Final)
+        - Application server: JBoss 10.1.0.Final (if not present then click _Configure..._ and choose the folder where you unzipped Wildfly 10.1.0.Final)
         - Deployment tab -> Add (+ button) -> pick _drools-wb-webapp:war exploded_
-        - Remove all tasks in 'Before Launch'
-        - Startup/Connection -> Run + Debug -> Startup script -> Untick 'use default' and add --server-config=standalone-full.xml so it looks something like this: _wildfly-10.1.0.Final\bin\standalone.bat --server-config=standalone-full.xml_
-4. Now you should be able to run this configuration and the Drools Workbench login page should open automatically
-    - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if you have made GWT code changes you want to include
+3. Now you should be able to run this configuration and the Drools Workbench login page should open automatically
+    - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if you have made changes to GWT code you want to include
     - Remember on _Drools Workbench - WebApp_ to run Maven 'clean' and then 'install' if switching from debugging GWT to running normally
+4. Login with admin/admin    
 
-## Setting Up GWT Super Dev Mode
-_Work in progress - we are still figuring out the best way to run Super Dev Mode_
-### Running GWT code server through maven (works! But it is using standalone.xml configuration) 
-1. On _Drools Workbench - WebApp_ run Maven 'clean'
-2. On _Drools Workbench - WebApp_ run Maven 'csc-gwt:debug' (use the "Execute Maven Goal" button in IDEA - remember to set _Working directory_ to drools-wb-webapp)
-3. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
-4. Click the "Launch Default Browser" button when it shows up
-5. Use the following URL to see Drools-WB as it appears inside LPR 
-  - http://localhost:8088/drools-wb-webapp/drools-wb.html?standalone=true&perspective=LPRPerspective&header=AppNavBar
+## Setting Up Code Style
+1. Download the official droolsjbpm IDEA Code Style and save it in %USERPROFILE%\\.\<YOUR IDEA VERSION>\\config\\codestyles  
+   - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/ide-configuration/intellij-configuration/code-style/intellij-code-style_droolsjbpm-java-conventions.xml
+2. Change the Code Style used by IDEA for this project
+   - Select Settings -> Editor -> Code Style -> Scheme: <code>Drools and jBPM: Java Conventions</code>
+3. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
+    - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
 
-*There is still some problems using standalone-full confiugration in GWT debug mode:*
-Currently it is not possible to connect a KIE Execution Server while debugging drools-wb. 
-If you try to run csc-gwt:debug using standalone-full.xml configuration and connect a KIE server to drools-wb, it will produce errors.
-
-### Running GWT code server through IDEA (not working) 
-http://blog.athico.com/2014/05/running-drools-wb-with-gwts-superdevmode.html
-http://www.uberfireframework.org/docs/tutorial/intellij_idea.html
-http://docs.jboss.org/errai/latest/errai/reference/html_single/#_running_and_debugging_in_your_ide_using_gwt_tooling
-
-Use parameters from gwt-maven-plugin <extraJvmArgs> element
-Dev Mode parameters: -server org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher
+## Debugging client code with GWT Super Dev Mode
+1. On _Drools Workbench - WebApp_ run Maven 'clean' then 'csc-gwt:debug' 
+    - This can be setup as a 1-click job by using the "Execute Maven Goal" button in IDEA and set _Working directory_ to the drools-wb-webapp folder and enter 'clean csc-gwt:debug -e' in _Command line_
+2. Attach a IDEA Remote debugger on port 8000 (Now the GWT Development Mode window should pop up)
+3. Click the "Launch Default Browser" button when it is available
 
 # Troubleshooting
 - If deployment to WildFly fails with a file system or persistence related error it most likely means that a previous Drools-WB Java process was not terminated and has taken a file lock or JVM address binding

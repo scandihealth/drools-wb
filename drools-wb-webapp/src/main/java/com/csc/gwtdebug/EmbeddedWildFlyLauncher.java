@@ -22,23 +22,21 @@ import java.net.BindException;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import com.google.gwt.core.ext.ServletContainer;
+import com.google.gwt.core.ext.ServletContainerLauncher;
+import com.google.gwt.core.ext.TreeLogger;
+import com.google.gwt.core.ext.TreeLogger.Type;
+import com.google.gwt.core.ext.UnableToCompleteException;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jboss.errai.cdi.server.as.JBossServletContainerAdaptor;
 import org.jboss.errai.cdi.server.gwt.util.JBossUtil;
 import org.jboss.errai.cdi.server.gwt.util.StackTreeLogger;
 import org.wildfly.core.embedded.EmbeddedProcessFactory;
 import org.wildfly.core.embedded.StandaloneServer;
-
-import com.google.gwt.core.ext.ServletContainer;
-import com.google.gwt.core.ext.ServletContainerLauncher;
-import com.google.gwt.core.ext.TreeLogger;
-import com.google.gwt.core.ext.TreeLogger.Type;
-import com.google.gwt.core.ext.UnableToCompleteException;
 
 /**
  * A {@link ServletContainerLauncher} controlling an embedded WildFly instance.
@@ -51,10 +49,10 @@ import com.google.gwt.core.ext.UnableToCompleteException;
  * the system property errai.client.local.class.pattern. Existing exclusions
  * will stay intact. If no beans.xml is present, a new one will be created.
  *<p>
- * <u>CSC Modifications:</u> This file is a copy (with minor modifications) of the Errai 4.0.0.beta7 version of the launcher that works with WildFly 10.<br/>
+ * <b>CSC Modifications:</b> This file is a copy (with minor modifications) of the Errai 4.0.0.Final version of the launcher that works with WildFly 10.<br/>
  * If/when we upgrade to Errai 4, this custom launcher should no longer be necessary to be able to run drools-wb-webapp mvn gwt:debug on WildFly 10.
- * @see <a href="https://github.com/errai/errai/blob/4.0.0.Beta7/errai-cdi/jboss/src/main/java/org/jboss/errai/cdi/server/gwt/EmbeddedWildFlyLauncher.java">
- *     https://github.com/errai/errai/blob/4.0.0.Beta7/errai-cdi/jboss/src/main/java/org/jboss/errai/cdi/server/gwt/EmbeddedWildFlyLauncher.java</a>
+ * @see <a href="https://github.com/errai/errai/blob/4.0.0.Final/errai-cdi/jboss/src/main/java/org/jboss/errai/cdi/server/gwt/EmbeddedWildFlyLauncher.java">
+ *     https://github.com/errai/errai/blob/4.0.0.Final/errai-cdi/jboss/src/main/java/org/jboss/errai/cdi/server/gwt/EmbeddedWildFlyLauncher.java</a>
  * @author Christian Sadilek <christian.sadilek@gmail.com>
  */
 public class EmbeddedWildFlyLauncher extends ServletContainerLauncher {
@@ -99,7 +97,7 @@ public class EmbeddedWildFlyLauncher extends ServletContainerLauncher {
         logger = new StackTreeLogger(treeLogger);
         try {
             final String jbossHome = JBossUtil.getJBossHome(logger);
-            String[] cmdArgs = getCommandArguments(logger);
+            String[] cmdArgs = getCommandArguments();
 
             System.setProperty("jboss.http.port", "" + port);
 
@@ -227,8 +225,9 @@ public class EmbeddedWildFlyLauncher extends ServletContainerLauncher {
         exclusions.append(ERRAI_SCANNER_HINT_START);
         for (File clientLocalClass : FileUtils.listFiles(appRootDir, new ClientLocalFileFilter(), TrueFileFilter.INSTANCE)) {
             final String className = clientLocalClass.getAbsolutePath();
-            if (className.endsWith(".class")) {
-                String exclusion = className
+            // Adding package-info exclusion makes beans.xml invalid.
+            if ( className.endsWith( ".class" ) && !className.endsWith( "package-info.class" ) ) {
+                final String exclusion = className
                         .replace(classesDir.getAbsolutePath(), "")
                         .replace(".class", "")
                         .replace(File.separator, ".")
@@ -278,7 +277,7 @@ public class EmbeddedWildFlyLauncher extends ServletContainerLauncher {
         return beansXmlContent;
     }
 
-    public static String[] getCommandArguments(StackTreeLogger logger) {
+    private static String[] getCommandArguments() {
         final String rawArgs = System.getProperty(CMD_ARGS_PROPERTY);
 
         if (rawArgs == null) {
