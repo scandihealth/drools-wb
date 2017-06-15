@@ -53,7 +53,11 @@ We have packaged that fork using maven and uploaded the jar to our own internal 
    - Get it here: https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/ide-configuration/intellij-configuration/code-style/intellij-code-style_droolsjbpm-java-conventions.xml
 2. Change the Code Style used by IDEA for this project
    - Select Settings -> Editor -> Code Style -> Scheme: <code>Drools and jBPM: Java Conventions</code>
-3. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
+3. Change .properties file encoding to UTF-8
+   - Settings -> Editor -> File Encodings -> Set Default encoding for properties files to UTF-8
+   - Note: normal i18n properties files must be in ISO-8859-1 as specified by the java ResourceBundle contract.
+   - Note on note: GWT i18n properties files override that and must be in UTF-8 as specified by the GWT contract.   
+4. Follow some of the other (TBD) code style recommendations described here (e.g. XML tab spaces) 
     - https://github.com/droolsjbpm/droolsjbpm-build-bootstrap/blob/master/README.md#developing-with-intellij
 
 ## Debugging client code with GWT Super Dev Mode
