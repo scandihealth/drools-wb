@@ -81,6 +81,7 @@
   <!-- Specify the paths for translatable code -->
   <source path='client'/>
 
+  <!--todo ttn add other user agents for prod-->
   <set-property name="user.agent" value="safari"/>
   <set-property name="locale" value="default"/>
 
