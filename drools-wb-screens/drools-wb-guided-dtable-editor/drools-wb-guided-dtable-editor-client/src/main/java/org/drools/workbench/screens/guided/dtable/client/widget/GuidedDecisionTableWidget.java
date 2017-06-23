@@ -15,6 +15,7 @@
  */
 package org.drools.workbench.screens.guided.dtable.client.widget;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -81,6 +82,7 @@ import org.drools.workbench.screens.guided.dtable.client.widget.analysis.Analyze
 import org.drools.workbench.screens.guided.dtable.client.widget.analysis.DecisionTableAnalyzerProvider;
 import org.drools.workbench.screens.guided.dtable.client.widget.table.VerticalDecisionTableWidget;
 import org.drools.workbench.screens.guided.rule.client.editor.RuleAttributeWidget;
+import org.guvnor.common.services.shared.metadata.model.LprMetadataConsts;
 import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.Label;
 import org.gwtbootstrap3.client.ui.ListBox;
@@ -1313,7 +1315,14 @@ public class GuidedDecisionTableWidget extends Composite
     // BZ-996932: Added default value change notifications.
     private void refreshAttributeWidget() {
         this.attributeConfigWidget.clear();
-        if ( model.getMetadataCols().size() > 0 ) {
+        //Dont display "system managed" LPR metadata in the widget
+        List<MetadataCol52> lprMeta = new ArrayList<MetadataCol52>();
+        for ( MetadataCol52 metadataCol : model.getMetadataCols() ) {
+            if(metadataCol.getMetadata().startsWith(  LprMetadataConsts.LPRMETA  )) {
+                lprMeta.add( metadataCol );
+            }
+        }
+        if ( model.getMetadataCols().size() > 0 && model.getMetadataCols().size() > lprMeta.size()) {
             HorizontalPanel hp = new HorizontalPanel();
             hp.add( new HTML( "&nbsp;&nbsp;" ) );
             hp.add( new SmallLabel( new StringBuilder( GuidedDecisionTableConstants.INSTANCE.Metadata1() )
@@ -1321,6 +1330,9 @@ public class GuidedDecisionTableWidget extends Composite
             attributeConfigWidget.add( hp );
         }
         for ( MetadataCol52 atc : model.getMetadataCols() ) {
+            if(atc.getMetadata().startsWith( LprMetadataConsts.LPRMETA )) {
+                continue; //skip
+            }
             HorizontalPanel hp = new HorizontalPanel();
             hp.setVerticalAlignment( HasVerticalAlignment.ALIGN_MIDDLE );
             hp.add( new HTML( "&nbsp;&nbsp;&nbsp;&nbsp;" ) );
