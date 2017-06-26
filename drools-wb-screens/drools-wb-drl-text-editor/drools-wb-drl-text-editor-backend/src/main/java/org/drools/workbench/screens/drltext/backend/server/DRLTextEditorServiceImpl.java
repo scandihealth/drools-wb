@@ -16,15 +16,7 @@
 
 package org.drools.workbench.screens.drltext.backend.server;
 
-import java.io.ByteArrayInputStream;
-import java.util.Arrays;
-import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.google.common.base.Charsets;
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.commons.backend.packages.PackageNameParser;
 import org.drools.workbench.models.commons.backend.packages.PackageNameWriter;
 import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
@@ -55,6 +47,13 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @ApplicationScoped
@@ -102,6 +101,7 @@ public class DRLTextEditorServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -129,6 +129,7 @@ public class DRLTextEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public String load( final Path path ) {
         try {
@@ -141,6 +142,7 @@ public class DRLTextEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public DrlModelContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -179,6 +181,7 @@ public class DRLTextEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final String content,
@@ -202,6 +205,7 @@ public class DRLTextEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -214,6 +218,7 @@ public class DRLTextEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -228,6 +233,7 @@ public class DRLTextEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

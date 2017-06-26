@@ -16,16 +16,7 @@
 
 package org.drools.workbench.screens.guided.dtable.backend.server;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.google.common.base.Charsets;
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
 import org.drools.workbench.models.datamodel.workitems.PortableWorkDefinition;
 import org.drools.workbench.models.guided.dtable.backend.GuidedDTXMLPersistence;
@@ -38,17 +29,14 @@ import org.guvnor.common.services.backend.exceptions.ExceptionUtilities;
 import org.guvnor.common.services.backend.util.CommentedOptionFactory;
 import org.guvnor.common.services.backend.validation.GenericValidator;
 import org.guvnor.common.services.project.model.Package;
-import org.guvnor.common.services.shared.metadata.MetadataService;
 import org.guvnor.common.services.shared.metadata.model.Metadata;
 import org.guvnor.common.services.shared.metadata.model.Overview;
 import org.guvnor.common.services.shared.validation.model.ValidationMessage;
 import org.jboss.errai.bus.server.annotations.Service;
 import org.kie.workbench.common.services.backend.service.KieService;
-import org.kie.workbench.common.services.backend.source.SourceServices;
 import org.kie.workbench.common.services.datamodel.backend.server.DataModelOracleUtilities;
 import org.kie.workbench.common.services.datamodel.backend.server.service.DataModelService;
 import org.kie.workbench.common.services.datamodel.model.PackageDataModelOracleBaselinePayload;
-import org.kie.workbench.common.services.shared.project.KieProjectService;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.editor.commons.service.CopyService;
@@ -58,6 +46,14 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @ApplicationScoped
@@ -104,6 +100,7 @@ public class GuidedDecisionTableEditorServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -132,6 +129,7 @@ public class GuidedDecisionTableEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GuidedDecisionTable52 load( final Path path ) {
         try {
@@ -144,6 +142,7 @@ public class GuidedDecisionTableEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GuidedDecisionTableEditorContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -195,6 +194,7 @@ public class GuidedDecisionTableEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final GuidedDecisionTable52 model,
@@ -220,6 +220,7 @@ public class GuidedDecisionTableEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -232,6 +233,7 @@ public class GuidedDecisionTableEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -246,6 +248,7 @@ public class GuidedDecisionTableEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

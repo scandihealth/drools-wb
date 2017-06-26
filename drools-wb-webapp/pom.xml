@@ -46,6 +46,11 @@
         <artifactId>wildfly-embedded</artifactId>
         <version>2.1.0.Final</version>
       </dependency>
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-log</artifactId>
+        <version>6.5.0.csc-SNAPSHOT</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -912,6 +917,12 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-wb-log</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -968,7 +979,8 @@
             https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
           -->
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <extraJvmArgs>-Xmx4G -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <extraJvmArgs>-Xmx3G -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <draftCompile>true</draftCompile>
           <module>org.drools.workbench.DroolsWorkbench</module>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>

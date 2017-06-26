@@ -16,15 +16,7 @@
 
 package org.drools.workbench.screens.globals.backend.server;
 
-import java.io.ByteArrayInputStream;
-import java.util.Arrays;
-import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.google.common.base.Charsets;
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.datamodel.oracle.ProjectDataModelOracle;
 import org.drools.workbench.screens.globals.backend.server.util.GlobalsPersistence;
 import org.drools.workbench.screens.globals.model.GlobalsEditorContent;
@@ -51,6 +43,13 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @ApplicationScoped
@@ -96,6 +95,7 @@ public class GlobalsEditorServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -124,6 +124,7 @@ public class GlobalsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GlobalsModel load( final Path path ) {
         try {
@@ -136,6 +137,7 @@ public class GlobalsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GlobalsEditorContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -159,6 +161,7 @@ public class GlobalsEditorServiceImpl
 
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final GlobalsModel content,
@@ -187,6 +190,7 @@ public class GlobalsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -199,6 +203,7 @@ public class GlobalsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -213,6 +218,7 @@ public class GlobalsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

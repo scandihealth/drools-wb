@@ -16,18 +16,7 @@
 
 package org.drools.workbench.screens.dtablexls.backend.server;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.apache.commons.io.IOUtils;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
@@ -60,6 +49,13 @@ import org.uberfire.java.nio.file.StandardOpenOption;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.rpc.impl.SessionInfoImpl;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.*;
+import java.util.List;
 
 @Service
 @ApplicationScoped
@@ -106,6 +102,7 @@ public class DecisionTableXLSServiceImpl
         this.authenticationService = authenticationService;
     }
 
+    @DroolsLoggingToDB
     @Override
     public DecisionTableXLSContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -119,6 +116,7 @@ public class DecisionTableXLSServiceImpl
         return content;
     }
 
+    @DroolsLoggingToDB
     @Override
     public InputStream load( final Path path,
                              final String sessionId ) {
@@ -139,6 +137,7 @@ public class DecisionTableXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path resource,
                         final InputStream content,
@@ -204,6 +203,7 @@ public class DecisionTableXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final InputStream content,
@@ -266,6 +266,7 @@ public class DecisionTableXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -280,6 +281,7 @@ public class DecisionTableXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -296,6 +298,7 @@ public class DecisionTableXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

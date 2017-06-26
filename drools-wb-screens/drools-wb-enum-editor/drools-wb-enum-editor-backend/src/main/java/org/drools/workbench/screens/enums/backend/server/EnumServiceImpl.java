@@ -16,14 +16,7 @@
 
 package org.drools.workbench.screens.enums.backend.server;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.screens.enums.model.EnumModel;
 import org.drools.workbench.screens.enums.model.EnumModelContent;
 import org.drools.workbench.screens.enums.service.EnumService;
@@ -52,6 +45,14 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *
@@ -100,6 +101,7 @@ public class EnumServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -124,6 +126,7 @@ public class EnumServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public String load( final Path path ) {
         try {
@@ -136,6 +139,7 @@ public class EnumServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public EnumModelContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -151,6 +155,7 @@ public class EnumServiceImpl
                                      overview );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final String content,
@@ -175,6 +180,7 @@ public class EnumServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -187,6 +193,7 @@ public class EnumServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -201,6 +208,7 @@ public class EnumServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

@@ -16,16 +16,7 @@
 
 package org.drools.workbench.screens.testscenario.backend.server;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.datamodel.imports.Import;
 import org.drools.workbench.models.datamodel.imports.Imports;
 import org.drools.workbench.models.datamodel.oracle.ModelField;
@@ -54,6 +45,12 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
 
 @Service
 @ApplicationScoped
@@ -95,6 +92,7 @@ public class ScenarioTestEditorServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -119,6 +117,7 @@ public class ScenarioTestEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Scenario load( final Path path ) {
         try {
@@ -134,6 +133,7 @@ public class ScenarioTestEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final Scenario content,
@@ -155,6 +155,7 @@ public class ScenarioTestEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -167,6 +168,7 @@ public class ScenarioTestEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -181,6 +183,7 @@ public class ScenarioTestEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,
@@ -195,6 +198,7 @@ public class ScenarioTestEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public TestScenarioModelContent loadContent( Path path ) {
         return super.loadContent( path );
