@@ -8,8 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 /**
@@ -48,7 +47,7 @@ public class DroolsTimeLoggerTest {
         verifyNoMoreInteractions(loggerMock);
 
         //verify state
-        assertEquals("Log message not as expected", "Cannot log time as level info is not enabled", logStringArgumentCaptor.getValue().toString());
+        assertEquals("Log message not as expected", "Cannot log time as level info is not enabled", logStringArgumentCaptor.getValue() );
     }
 
     @Test
@@ -74,8 +73,8 @@ public class DroolsTimeLoggerTest {
         verifyNoMoreInteractions(loggerMock);
 
         //verify state
-        assertTrue("Method name expected", logStringArgumentCaptor.getValue().toString().contains(METHOD_NAME));
-        assertTrue("Time measured no as expected", ((afterTime - beforeTime)/1000) >= extractTime(logStringArgumentCaptor.getValue().toString()));
+        assertTrue("Method name expected", logStringArgumentCaptor.getValue().contains(METHOD_NAME));
+        assertTrue("Time measured no as expected", ((afterTime - beforeTime)/1000) >= extractTime( logStringArgumentCaptor.getValue() ));
     }
 
     private long extractTime(String s) {

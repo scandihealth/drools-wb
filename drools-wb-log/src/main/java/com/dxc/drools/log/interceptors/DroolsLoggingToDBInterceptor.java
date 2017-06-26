@@ -1,5 +1,14 @@
 package com.dxc.drools.log.interceptors;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+
 import com.dxc.drools.log.DroolsTimeLogger;
 import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import com.dxc.drools.log.annotation.DroolsNoLogging;
@@ -14,15 +23,6 @@ import com.logica.heca.lpr.util.EjbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.rpc.SessionInfo;
-
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Java EE interceptor that performs audit logging, error logging, and performance logging of intercepted methods.
@@ -62,6 +62,7 @@ public class DroolsLoggingToDBInterceptor {
             logger.error("Call " + getMethodSignatureString(method) + "failed. Error rethrown.");
             throw error;
         } catch (Throwable throwable) {
+            //todo sgr are we sure we want to log all checked exceptions? Could they not be used by validators etc in a normal use case?
             logError(getMethodSignatureString(method), throwable);
             logger.error("Call " + getMethodSignatureString(method) + "failed. Throwable rethrown as RuntimeException.");
             throw new RuntimeException("Call failed. Error has been logged to the server log and database: " + throwable.getMessage(), throwable);
@@ -137,10 +138,7 @@ public class DroolsLoggingToDBInterceptor {
 
     private boolean hasNoLoggingAnnotation(Method method) throws Exception {
         Class<?> declaringClass = method.getDeclaringClass();
-        if ((method.getAnnotation(DroolsNoLogging.class) != null) || (declaringClass.getAnnotation(DroolsNoLogging.class) != null)) {
-            return true;
-        }
-        return false;
+        return (method.getAnnotation( DroolsNoLogging.class ) != null) || (declaringClass.getAnnotation( DroolsNoLogging.class ) != null);
     }
 
     private void log(UserLogDataVO userLogDataVO) {

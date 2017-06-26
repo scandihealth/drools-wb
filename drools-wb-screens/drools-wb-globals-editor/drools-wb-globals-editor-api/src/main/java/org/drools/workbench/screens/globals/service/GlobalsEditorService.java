@@ -24,12 +24,16 @@ import org.guvnor.common.services.shared.validation.ValidationService;
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.kie.workbench.common.services.shared.source.ViewSourceService;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.ext.editor.commons.service.support.*;
+import org.uberfire.ext.editor.commons.service.support.SupportsCopy;
+import org.uberfire.ext.editor.commons.service.support.SupportsCreate;
+import org.uberfire.ext.editor.commons.service.support.SupportsDelete;
+import org.uberfire.ext.editor.commons.service.support.SupportsRead;
+import org.uberfire.ext.editor.commons.service.support.SupportsRename;
 
 /**
  * Service definition for Globals editor
  */
-@DroolsLoggingToDB
+@DroolsLoggingToDB //todo sgr does this work on interface level?
 @Remote
 public interface GlobalsEditorService
         extends

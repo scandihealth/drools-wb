@@ -1,5 +1,7 @@
 package com.dxc.drools.log.interceptors;
 
+import javax.interceptor.InvocationContext;
+
 import com.dxc.drools.log.DroolsTimeLogger;
 import com.dxc.drools.log.annotation.DroolsNoLogging;
 import com.dxc.drools.log.annotation.DroolsSuppressTimeLogger;
@@ -16,8 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.uberfire.rpc.SessionInfo;
-
-import javax.interceptor.InvocationContext;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -131,7 +131,7 @@ public class DroolsLoggingToDBInterceptorTest {
         when(mockUser.getIdentifier()).thenReturn("mockIdentifierId");
 
         // Exercise method under test
-        Object result = droolsLoggingToDBInterceptor.logToDB(invocationContext);
+        droolsLoggingToDBInterceptor.logToDB(invocationContext);
 
         // Verify expected behavoir
         verify(droolsTimeLogger).start();
@@ -149,9 +149,7 @@ public class DroolsLoggingToDBInterceptorTest {
         ArgumentCaptor<UserLogDataVO> userLogDataVOArgumentCaptor = ArgumentCaptor.forClass(UserLogDataVO.class);
         when(ejbUtilsWrapper.lookupLogManagerRemote()).thenReturn(logManagerRemote);
 
-        Class[] argumentClasses = new Class[1];
-        argumentClasses[0] = String.class;
-        when(invocationContext.getMethod()).thenReturn(DummyClass.class.getMethod("method", argumentClasses));
+        when(invocationContext.getMethod()).thenReturn(DummyClass.class.getMethod("method", String.class));
         when(invocationContext.proceed()).thenReturn("42");
         String[] args = {"argumentValue"};
         when(invocationContext.getParameters()).thenReturn(args);

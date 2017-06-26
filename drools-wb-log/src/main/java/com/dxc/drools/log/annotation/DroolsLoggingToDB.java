@@ -1,26 +1,25 @@
 package com.dxc.drools.log.annotation;
 
+import java.lang.annotation.Inherited;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.interceptor.InterceptorBinding;
+
 import com.dxc.drools.log.interceptors.DroolsLoggingToDBInterceptor;
 import com.logica.heca.lpr.service.SystemLogManager;
 import com.logica.heca.lpr.services.LogManager;
 import org.uberfire.rpc.SessionInfo;
 
-import javax.interceptor.InterceptorBinding;
-import java.lang.annotation.Inherited;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.*;
 
 /**
  * Annotation that binds {@link DroolsLoggingToDBInterceptor} to the annotation target.
  * <p/>
- * 1. If the invoked method or class is annotated with @see com.dxc.drools.log.annotation.DroolsNoLogging no logging is
+ * 1. If the invoked method or class is annotated with {@link DroolsNoLogging} no logging is
  * performed.
  * <br/>
- * 1. If a user seesion {@link SessionInfo} has been injected into the interceptor, then the call will be audit logged
+ * 1. If a user session {@link SessionInfo} has been injected into the interceptor, then the call will be audit logged
  * by {@link LogManager}.
  * <br/>
  * 2. If the called method throws an exception, then the exception will be logged by <code>log4j</code> and

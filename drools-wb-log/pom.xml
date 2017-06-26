@@ -8,9 +8,7 @@
         <version>6.5.0.csc-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
     <artifactId>drools-wb-log</artifactId>
-    <packaging>jar</packaging>
 
     <dependencyManagement>
         <dependencies>
@@ -58,52 +56,10 @@
             <groupId>org.uberfire</groupId>
             <artifactId>uberfire-api</artifactId>
         </dependency>
-        <!--&lt;!&ndash;uberfire-api transitive dependencies&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.uberfire</groupId>-->
-            <!--<artifactId>uberfire-commons</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.errai</groupId>-->
-            <!--<artifactId>errai-ioc</artifactId>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>org.jboss.errai</groupId>
             <artifactId>errai-security-server</artifactId>
         </dependency>
-        <!--&lt;!&ndash; Needed as replacement for the javassist:javassist which is excluded from errai-security-server &ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.javassist</groupId>-->
-            <!--<artifactId>javassist</artifactId>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.errai</groupId>-->
-            <!--<artifactId>errai-marshalling</artifactId>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>com.google.gwt</groupId>-->
-            <!--<artifactId>gwt-user</artifactId>-->
-            <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.uberfire</groupId>-->
-            <!--<artifactId>uberfire-server</artifactId>-->
-        <!--</dependency>-->
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-        </dependency>
-<!--        <dependency>
-            <groupId>org.jboss.errai</groupId>
-            <artifactId>errai-javax-enterprise</artifactId>
-            <scope>provided</scope>
-        </dependency>-->
         <dependency>
             <groupId>com.scandihealth.lpr.common</groupId>
             <artifactId>commonUtil</artifactId>
@@ -117,11 +73,13 @@
             <artifactId>commonDomain</artifactId>
         </dependency>
         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
-
 </project>
