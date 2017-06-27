@@ -250,15 +250,15 @@ public class DRLEditorPresenter
         int currentMetadataIndexEnd = rule.indexOf( ")", currentMetadataIndex ) + 1; //index where existing metadata ends
 
         //modify rule
-        if ( currentMetadataIndex == -1 && !("".equals( newValue ) && "null".equals( newValue )) ) {
+        if ( currentMetadataIndex == -1 && !("".equals( newValue ) || "null".equals( newValue )) ) {
             //create
             if ( newMetadataIndex > -1 ) { //only create if the DRL file actually has a rule
                 rule.insert( newMetadataIndex, metadataString );
             }
-        } else if ( currentMetadataIndex > -1 && !("".equals( newValue ) && "null".equals( newValue )) ) {
+        } else if ( currentMetadataIndex > -1 && !("".equals( newValue ) || "null".equals( newValue )) ) {
             //update
             rule.replace( currentMetadataIndex, currentMetadataIndexEnd, metadataString );
-        } else if ( currentMetadataIndex > -1 && "".equals( newValue ) && "null".equals( newValue ) ) {
+        } else if ( currentMetadataIndex > -1 && ("".equals( newValue ) || "null".equals( newValue ) )) {
             //delete
             rule.delete( currentMetadataIndex, currentMetadataIndexEnd );
         }

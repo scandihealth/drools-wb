@@ -295,15 +295,15 @@ public class GuidedRuleEditorPresenter
 
     private void updateGRMetaData( String name, String newValue ) {
         RuleMetadata currentMetaData = model.getMetaData( name );
-        if ( currentMetaData == null && !("".equals( newValue ) && "null".equals( newValue )) ) {
+        if ( currentMetaData == null && !("".equals( newValue ) || "null".equals( newValue )) ) {
             //create
             model.addMetadata( new RuleMetadata( name, newValue ) );
-        } else if ( currentMetaData != null && !("".equals( newValue ) && "null".equals( newValue )) ) {
+        } else if ( currentMetaData != null && !("".equals( newValue ) || "null".equals( newValue )) ) {
             //update
             currentMetaData.setValue( newValue );
             model.updateMetadata( currentMetaData );
 
-        } else if ( currentMetaData != null && "".equals( newValue ) && "null".equals( newValue ) ) {
+        } else if ( currentMetaData != null && ("".equals( newValue ) || "null".equals( newValue )) ) {
             //delete
             for ( int i = 0; i < model.metadataList.length; i++ ) {
                 RuleMetadata metadata = model.metadataList[i];
