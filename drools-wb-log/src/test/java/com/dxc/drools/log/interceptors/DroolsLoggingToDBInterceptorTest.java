@@ -1,7 +1,5 @@
 package com.dxc.drools.log.interceptors;
 
-import javax.interceptor.InvocationContext;
-
 import com.dxc.drools.log.DroolsTimeLogger;
 import com.dxc.drools.log.annotation.DroolsNoLogging;
 import com.dxc.drools.log.annotation.DroolsSuppressTimeLogger;
@@ -18,6 +16,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.uberfire.rpc.SessionInfo;
+
+import javax.interceptor.InvocationContext;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -41,14 +41,14 @@ public class DroolsLoggingToDBInterceptorTest {
     private DroolsLoggingToDBInterceptor droolsLoggingToDBInterceptor;
 
     @Test(expected = java.lang.NullPointerException.class)
-    public void testLogToDBNullInvocationContext() throws Exception {
+    public void testLogToDBNullInvocationContext() throws Throwable {
         // Exercise method under test
         droolsLoggingToDBInterceptor.logToDB(null);
         fail("Using a 'null' InvocationContext did not produce expected NullPointerException");
     }
 
     @Test
-    public void testDroolsNoLoggingAnnotation() throws Exception {
+    public void testDroolsNoLoggingAnnotation() throws Throwable {
 
         // Specify mock behavior
         when(invocationContext.getMethod()).thenReturn(DummyClass.class.getMethod("noLoggingMethod"));
@@ -68,7 +68,7 @@ public class DroolsLoggingToDBInterceptorTest {
     }
 
     @Test
-    public void testLoggingNoArgumentMethod() throws Exception {
+    public void testLoggingNoArgumentMethod() throws Throwable {
 
         // Specify mock behavior
         LogManagerRemote logManagerRemote = mock(LogManagerRemote.class);
@@ -116,7 +116,7 @@ public class DroolsLoggingToDBInterceptorTest {
     }
 
     @Test
-    public void testDroolsSuppressTimeLogger() throws Exception {
+    public void testDroolsSuppressTimeLogger() throws Throwable {
 
         // Specify mock behavior
         LogManagerRemote logManagerRemote = mock(LogManagerRemote.class);
@@ -142,7 +142,7 @@ public class DroolsLoggingToDBInterceptorTest {
     }
 
     @Test
-    public void testLogging() throws Exception {
+    public void testLogging() throws Throwable {
 
         // Specify mock behavior
         LogManagerRemote logManagerRemote = mock(LogManagerRemote.class);
@@ -188,7 +188,7 @@ public class DroolsLoggingToDBInterceptorTest {
     }
 
     @Test
-    public void testErrorLogging() throws Exception {
+    public void testErrorLogging() throws Throwable {
 
         // Specify mock behavior
         LogManagerRemote logManagerRemote = mock(LogManagerRemote.class);
@@ -209,7 +209,7 @@ public class DroolsLoggingToDBInterceptorTest {
         try {
             droolsLoggingToDBInterceptor.logToDB(invocationContext);
         } catch (RuntimeException e) {
-            assertEquals("Call failed. Error has been logged to the server log and database: runtimeException", e.getMessage());
+            assertEquals("runtimeException", e.getMessage());
         }
         // Verify expected behavoir
         verify(invocationContext).getMethod();

@@ -1,14 +1,5 @@
 package com.dxc.drools.log.interceptors;
 
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-
 import com.dxc.drools.log.DroolsTimeLogger;
 import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import com.dxc.drools.log.annotation.DroolsNoLogging;
@@ -23,6 +14,15 @@ import com.logica.heca.lpr.util.EjbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.rpc.SessionInfo;
+
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Java EE interceptor that performs audit logging, error logging, and performance logging of intercepted methods.
@@ -45,7 +45,7 @@ public class DroolsLoggingToDBInterceptor {
     SessionInfo sessionInfo;
 
     @AroundInvoke
-    public Object logToDB(InvocationContext invocationContext) throws Exception {
+    public Object logToDB(InvocationContext invocationContext) throws Throwable {
         Method method = invocationContext.getMethod();
 
         if (hasNoLoggingAnnotation(method)) return invocationContext.proceed(); //skip logging of this call
@@ -57,15 +57,10 @@ public class DroolsLoggingToDBInterceptor {
             // INVOKE THE ORIGINAL METHOD
             droolsTimeLogger.start();
             result = invocationContext.proceed();
-        } catch (Error error) {
-            logError(getMethodSignatureString(method), error);
-            logger.error("Call " + getMethodSignatureString(method) + "failed. Error rethrown.");
-            throw error;
         } catch (Throwable throwable) {
-            //todo sgr are we sure we want to log all checked exceptions? Could they not be used by validators etc in a normal use case?
             logError(getMethodSignatureString(method), throwable);
             logger.error("Call " + getMethodSignatureString(method) + "failed. Throwable rethrown as RuntimeException.");
-            throw new RuntimeException("Call failed. Error has been logged to the server log and database: " + throwable.getMessage(), throwable);
+            throw throwable;
         } finally {
             if (method.getAnnotation(DroolsSuppressTimeLogger.class) == null) {
                 droolsTimeLogger.log("droolsTimerLog", getMethodSignatureString(method));
