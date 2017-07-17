@@ -26,8 +26,8 @@ import org.drools.workbench.screens.dsltext.client.type.DSLResourceType;
 import org.drools.workbench.screens.dsltext.service.DSLTextEditorService;
 import org.guvnor.common.services.project.model.Package;
 import org.jboss.errai.common.client.api.Caller;
-import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -38,7 +38,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new DSL definitions
  */
 @ApplicationScoped
-public class NewDslTextHandler extends DefaultNewResourceHandler {
+public class NewDslTextHandler extends DefaultNewRuleHandler {
 
     @Inject
     private Caller<DSLTextEditorService> dslTextService;

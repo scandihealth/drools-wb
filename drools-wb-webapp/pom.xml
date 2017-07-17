@@ -968,7 +968,7 @@
             https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
           -->
           <!--todo do not commit <draftCompile>true</draftCompile>-->
-          <!--<draftCompile>true</draftCompile>-->
+          <draftCompile>true</draftCompile>
           <strict>true</strict>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
           <extraJvmArgs>-Xmx4G -Xms1024m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
