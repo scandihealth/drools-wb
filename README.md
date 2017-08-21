@@ -20,12 +20,14 @@ We have packaged that fork using maven and uploaded the jar to our own internal 
    - Open the root pom.xml as a project
    - Make sure to "Enable Auto Import" in Maven and add GWT facets (IDEA should ask you these questions in popup balloons)
    - Change File -> Project Structure -> Project -> Project SDK to <code>1.8</code> (64bit)
-6. Click the "Toggle 'Skip Tests' Mode" button in the Maven Projects sidebar window
+6. (Optional) Click the "Toggle 'Skip Tests' Mode" button in the Maven Projects sidebar window
 7. You are now ready to run Maven commands and develop
     - Run Drools Workbench (root) -> install (takes 10-15 minutes)
+    - Note: The build output of drools-wb-webapp is copied to _${env.JBOSS_HOME}/standalone/deployments_
 
 ## Setting Up Run Configuration
 1. Download and unzip [WildFly 10.1.0.Final](http://download.jboss.org/wildfly/10.1.0.Final/wildfly-10.1.0.Final.zip)
+    - Copy [kie.maven.settings.custom.xml](https://github.csc.com/tnorgard/lpr3/blob/drools-wb-integration/appserver/wildfly10/standalone/drools/configuration/kie.maven.settings.custom.xml) to your WildFly installation (e.g. \standalone\drools\configuration)
     - Insert this into _wildfly-10.1.0.Final\standalone\configuration\standalone.xml_ after the `<extensions>` element
     (modify to your liking)
     ```
@@ -34,6 +36,8 @@ We have packaged that fork using maven and uploaded the jar to our own internal 
             <property name="org.uberfire.nio.git.ssh.cert.dir" value="C:\dev\drools-wb-devdb"/>
             <property name="org.uberfire.metadata.index.dir" value="C:\dev\drools-wb-devdb"/>
             <property name="org.guvnor.m2repo.dir" value="C:\dev\drools-wb-devdb"/>
+            <property name="kie.maven.settings.m2repo.dir.local" value="${env.JBOSS_HOME}\standalone\drools\m2localrepo"/>
+            <property name="kie.maven.settings.custom" value="${env.JBOSS_HOME}\standalone\drools\configuration\kie.maven.settings.custom.xml"/>
         </system-properties>
     ```
 2. Setup a new Run configuration in IDEA
@@ -70,7 +74,7 @@ We have packaged that fork using maven and uploaded the jar to our own internal 
 - If deployment to WildFly fails with a file system or persistence related error it most likely means that a previous Drools-WB Java process was not terminated and has taken a file lock or JVM address binding
   - Make sure drools-wb-webapp is not already deployed (check standalone.xml \<deployment> tags and check \wildfly-10.1.0.Final\standalone\deployments folder)
   - Close the server and kill all instances of java.exe in your Windows task manager
-- If this doesn't fix the rpoblem, then stop the server and delete the .index and .niogit folders in the dir specified by "org.uberfire.nio.git.dir" and "org.uberfire.metadata.index.dir" and try again
+- If this doesn't fix the problem, then stop the server and delete the .index and .niogit folders in the dir specified by "org.uberfire.nio.git.dir" and "org.uberfire.metadata.index.dir" and try again
   - Note: This will reset all your application data (Data Model, rules, etc)
 
 # Tips & Tricks
