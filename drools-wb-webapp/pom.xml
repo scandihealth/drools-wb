@@ -922,6 +922,7 @@
       <!-- build-helper-maven-plugin makes it possible in a GWT multi-module setup to "hot swap" (recompile) sources from other GWT modules when running in GWT hosted mode (Super Dev Mode) -->
       <!-- Simply add the source roots (and resource roots) you want to include in your GWT compilation below -->
       <!-- See https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/productivity.html -->
+      <!--todo ttn document this-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>

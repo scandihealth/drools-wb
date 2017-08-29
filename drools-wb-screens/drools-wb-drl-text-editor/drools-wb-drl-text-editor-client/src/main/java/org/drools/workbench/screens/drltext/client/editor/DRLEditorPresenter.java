@@ -189,7 +189,7 @@ public class DRLEditorPresenter
 
     @Override
     protected void save( String commitMessage ) {
-        //todo ttn unit tests
+        //todo ttn unit tests (it seems there is a problem if drl file does not contain any keywords (rule, when, then)?
         if ( !isDSLR ) {
             // split on rule, but keep rule as part of string,
             // see https://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
