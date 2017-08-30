@@ -31,6 +31,7 @@ import org.gwtbootstrap3.client.ui.CheckBox;
 import org.jboss.errai.common.client.api.Caller;
 import org.kie.workbench.common.widgets.client.handlers.DefaultNewResourceHandler;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
+import org.kie.workbench.common.widgets.client.handlers.lpr.DefaultNewRuleHandler;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.client.mvp.PlaceManager;
 import org.uberfire.client.workbench.type.ClientResourceType;
@@ -43,7 +44,7 @@ import org.uberfire.workbench.type.ResourceTypeDefinition;
  * Handler for the creation of new DRL Text Rules
  */
 @ApplicationScoped
-public class NewDrlTextHandler extends DefaultNewResourceHandler {
+public class NewDrlTextHandler extends DefaultNewRuleHandler {
 
     @Inject
     private Caller<DRLTextEditorService> drlTextService;

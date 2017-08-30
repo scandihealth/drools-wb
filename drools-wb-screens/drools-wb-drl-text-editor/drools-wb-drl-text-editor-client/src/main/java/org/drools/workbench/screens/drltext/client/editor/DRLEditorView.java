@@ -26,6 +26,8 @@ public interface DRLEditorView extends KieEditorView,
                                        RequiresResize,
                                        UberView<DRLEditorPresenter> {
 
+    void setContent( final String drl );
+
     void setContent( final String drl,
                      final List<String> fullyQualifiedClassNames );
 
@@ -37,5 +39,4 @@ public interface DRLEditorView extends KieEditorView,
     String getContent();
 
     void setReadOnly( final boolean readOnly );
-
 }

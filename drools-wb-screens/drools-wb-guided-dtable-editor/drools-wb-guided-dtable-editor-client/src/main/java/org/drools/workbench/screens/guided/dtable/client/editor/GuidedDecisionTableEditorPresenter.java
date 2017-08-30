@@ -22,7 +22,9 @@ import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
 import com.google.gwt.user.client.ui.IsWidget;
+import org.drools.workbench.models.guided.dtable.shared.model.DTCellValue52;
 import org.drools.workbench.models.guided.dtable.shared.model.GuidedDecisionTable52;
+import org.drools.workbench.models.guided.dtable.shared.model.MetadataCol52;
 import org.drools.workbench.screens.guided.dtable.client.type.GuidedDTableResourceType;
 import org.drools.workbench.screens.guided.dtable.model.GuidedDecisionTableEditorContent;
 import org.drools.workbench.screens.guided.dtable.service.GuidedDecisionTableEditorService;
@@ -43,7 +45,6 @@ import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartTitleDecoration;
 import org.uberfire.client.annotations.WorkbenchPartView;
-import org.uberfire.ext.editor.commons.client.file.SaveOperationService;
 import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.lifecycle.OnClose;
@@ -51,16 +52,17 @@ import org.uberfire.lifecycle.OnFocus;
 import org.uberfire.lifecycle.OnMayClose;
 import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
-import org.uberfire.mvp.ParameterizedCommand;
 import org.uberfire.mvp.PlaceRequest;
 import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
+
+import static org.guvnor.common.services.shared.metadata.model.LprMetadataConsts.*;
 
 /**
  * Guided Decision Table Editor Presenter
  */
 @Dependent
-@WorkbenchEditor(identifier = "GuidedDecisionTableEditor", supportedTypes = { GuidedDTableResourceType.class })
+@WorkbenchEditor(identifier = "GuidedDecisionTableEditor", supportedTypes = {GuidedDTableResourceType.class})
 public class GuidedDecisionTableEditorPresenter
         extends KieEditor {
 
@@ -98,8 +100,8 @@ public class GuidedDecisionTableEditorPresenter
     public void onStartup( final ObservablePath path,
                            final PlaceRequest place ) {
         super.init( path,
-                    place,
-                    type );
+                place,
+                type );
     }
 
     @OnFocus
@@ -114,7 +116,7 @@ public class GuidedDecisionTableEditorPresenter
     protected void loadContent() {
         view.showLoading();
         service.call( getModelSuccessCallback(),
-                      getNoSuchFileExceptionErrorCallback() ).loadContent(versionRecordManager.getCurrentPath());
+                getNoSuchFileExceptionErrorCallback() ).loadContent( versionRecordManager.getCurrentPath() );
     }
 
     private RemoteCallback<GuidedDecisionTableEditorContent> getModelSuccessCallback() {
@@ -133,8 +135,8 @@ public class GuidedDecisionTableEditorPresenter
                 metadata = content.getOverview().getMetadata();
                 final PackageDataModelOracleBaselinePayload dataModel = content.getDataModel();
                 oracle = oracleFactory.makeAsyncPackageDataModelOracle( versionRecordManager.getCurrentPath(),
-                                                                        model,
-                                                                        dataModel );
+                        model,
+                        dataModel );
 
                 resetEditorPages( content.getOverview() );
                 addSourcePage();
@@ -142,8 +144,8 @@ public class GuidedDecisionTableEditorPresenter
                 addImportsTab( importsWidget );
 
                 importsWidget.setContent( oracle,
-                                          model.getImports(),
-                                          isReadOnly );
+                        model.getImports(),
+                        isReadOnly );
 
                 view.hideBusyIndicator();
             }
@@ -153,12 +155,12 @@ public class GuidedDecisionTableEditorPresenter
     @Override
     public void onEditTabSelected() {
         view.setContent( place,
-                         versionRecordManager.getCurrentPath(),
-                         model,
-                         content.getWorkItemDefinitions(),
-                         oracle,
-                         ruleNameService,
-                         isReadOnly );
+                versionRecordManager.getCurrentPath(),
+                model,
+                content.getWorkItemDefinitions(),
+                oracle,
+                ruleNameService,
+                isReadOnly );
     }
 
     protected Command onValidate() {
@@ -170,24 +172,78 @@ public class GuidedDecisionTableEditorPresenter
                     public void callback( final List<ValidationMessage> results ) {
                         if ( results == null || results.isEmpty() ) {
                             notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemValidatedSuccessfully(),
-                                                                      NotificationEvent.NotificationType.SUCCESS ) );
+                                    NotificationEvent.NotificationType.SUCCESS ) );
                         } else {
                             ValidationPopup.showMessages( results );
                         }
                     }
                 }, new DefaultErrorCallback() ).validate( versionRecordManager.getCurrentPath(),
-                                                          view.getContent() );
+                        view.getContent() );
             }
         };
     }
 
     @Override
-    protected void save(String commitMessage) {
-        service.call(getSaveSuccessCallback(model.hashCode()),
-                     new HasBusyIndicatorDefaultErrorCallback(view)).save(versionRecordManager.getCurrentPath(),
-                                                                          model,
-                                                                          metadata,
-                                                                          commitMessage);
+    protected void save( String commitMessage ) {
+        //todo ttn make unit test
+        updateGDTMetaData( RULE_TYPE, String.valueOf( metadata.getRuleType() ) );
+        updateGDTMetaData( ERROR_TYPE, String.valueOf( metadata.getErrorType() ) );
+        updateGDTMetaData( RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
+        updateGDTMetaData( ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
+        updateGDTMetaData( ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
+        updateGDTMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
+        updateGDTMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
+        updateGDTMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
+        updateGDTMetaData( PRODUCTION_DATE, String.valueOf( metadata.getProductionDate() ) );
+        updateGDTMetaData( ARCHIVED_DATE, String.valueOf( metadata.getArchivedDate() ) );
+        updateGDTMetaData( REPORT_RECEIVED_FROM_DATE, String.valueOf( metadata.getReportReceivedFromDate() ) );
+        updateGDTMetaData( REPORT_RECEIVED_TO_DATE, String.valueOf( metadata.getReportReceivedToDate() ) );
+        updateGDTMetaData( ENCOUNTER_START_FROM_DATE, String.valueOf( metadata.getEncounterStartFromDate() ) );
+        updateGDTMetaData( ENCOUNTER_START_TO_DATE, String.valueOf( metadata.getEncounterStartToDate() ) );
+        updateGDTMetaData( ENCOUNTER_END_FROM_DATE, String.valueOf( metadata.getEncounterEndFromDate() ) );
+        updateGDTMetaData( ENCOUNTER_END_TO_DATE, String.valueOf( metadata.getEncounterEndToDate() ) );
+        updateGDTMetaData( EPISODE_OF_CARE_START_FROM_DATE, String.valueOf( metadata.getEpisodeOfCareStartFromDate() ) );
+        updateGDTMetaData( EPISODE_OF_CARE_START_TO_DATE, String.valueOf( metadata.getEpisodeOfCareStartToDate() ) );
+
+        service.call( getSaveSuccessCallback( model.hashCode() ),
+                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
+                model,
+                metadata,
+                commitMessage );
+    }
+
+    private void updateGDTMetaData( String name, String newValue ) {
+        boolean found = false;
+        for ( MetadataCol52 metadataCol : model.getMetadataCols() ) {
+            if ( metadataCol.getMetadata().equals( name ) ) {
+                found = true;
+                if ( "".equals( newValue ) || "null".equals( newValue ) ) {
+                    //delete column + cells
+                    int index = model.getExpandedColumns().indexOf( metadataCol );
+                    model.getMetadataCols().remove( metadataCol );
+                    for ( List<DTCellValue52> row : model.getData() ) {
+                        DTCellValue52 dcv = row.remove( index );
+                    }
+                } else {
+                    //update each row with new cell values
+                    int index = model.getExpandedColumns().indexOf( metadataCol );
+                    for ( List<DTCellValue52> row : model.getData() ) {
+                        DTCellValue52 dcv = row.get( index );
+                        dcv.setStringValue( newValue );
+                    }
+                }
+            }
+        }
+        if ( !found ) {
+            //create new column + cells
+            MetadataCol52 newMetaCol = new MetadataCol52();
+            newMetaCol.setHideColumn( true );
+            newMetaCol.setMetadata( name );
+            model.getMetadataCols().add( newMetaCol );
+            for ( List<DTCellValue52> row : model.getData() ) {
+                row.add( new DTCellValue52( newValue ) );
+            }
+        }
     }
 
     @Override
@@ -198,7 +254,7 @@ public class GuidedDecisionTableEditorPresenter
                 updateSource( source );
             }
         } ).toSource( versionRecordManager.getCurrentPath(),
-                      model );
+                model );
     }
 
     @OnClose
@@ -210,7 +266,7 @@ public class GuidedDecisionTableEditorPresenter
 
     @OnMayClose
     public boolean mayClose() {
-        return mayClose(model);
+        return mayClose( model );
     }
 
     @WorkbenchPartTitle

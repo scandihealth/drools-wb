@@ -16,7 +16,9 @@
 
 package org.drools.workbench.screens.guided.rule.client.editor;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.google.gwt.dom.client.InputElement;
 import com.google.gwt.event.dom.client.ChangeEvent;
@@ -39,6 +41,7 @@ import org.drools.workbench.models.datamodel.rule.RuleAttribute;
 import org.drools.workbench.models.datamodel.rule.RuleMetadata;
 import org.drools.workbench.models.datamodel.rule.RuleModel;
 import org.drools.workbench.screens.guided.rule.client.resources.GuidedRuleEditorResources;
+import org.guvnor.common.services.shared.metadata.model.LprMetadataConsts;
 import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.ListBox;
 import org.gwtbootstrap3.client.ui.TextBox;
@@ -82,7 +85,7 @@ public class RuleAttributeWidget extends Composite {
     public static final String LOCK_RHS = "freeze_actions";
 
     public static final String DEFAULT_DIALECT = "mvel";
-    public static final String[] DIALECTS = { "java", "mvel" };
+    public static final String[] DIALECTS = {"java", "mvel"};
 
     /**
      * If the rule attribute is represented visually by a checkbox, these are
@@ -102,17 +105,27 @@ public class RuleAttributeWidget extends Composite {
         FormStyleLayout layout = new FormStyleLayout();
         //Adding metadata here, seems redundant to add a new widget for metadata. Model does handle meta data separate.
         RuleMetadata[] meta = model.metadataList;
-        if ( meta.length > 0 ) {
+
+        //Dont display "system managed" LPR metadata in the widget
+        List<RuleMetadata> lprMeta = new ArrayList<RuleMetadata>();
+        for ( RuleMetadata ruleMetadata : meta ) {
+            if(ruleMetadata.getAttributeName().startsWith(  LprMetadataConsts.LPRMETA  )) {
+                lprMeta.add( ruleMetadata );
+            }
+        }
+        if ( meta.length > 0 && meta.length > lprMeta.size() ) {
             HorizontalPanel hp = new HorizontalPanel();
             hp.add( new SmallLabel( GuidedRuleEditorResources.CONSTANTS.Metadata2() ) );
             layout.addRow( hp );
         }
         for ( int i = 0; i < meta.length; i++ ) {
-            RuleMetadata rmd = meta[ i ];
-            layout.addAttribute( rmd.getAttributeName(),
-                                 getEditorWidget( rmd,
-                                                  i,
-                                                  isReadOnly ) );
+            RuleMetadata rmd = meta[i];
+            if ( !rmd.getAttributeName().startsWith( LprMetadataConsts.LPRMETA ) ) {
+                layout.addAttribute( rmd.getAttributeName(),
+                        getEditorWidget( rmd,
+                                i,
+                                isReadOnly ) );
+            }
         }
         RuleAttribute[] attrs = model.attributes;
         if ( attrs.length > 0 ) {
@@ -121,11 +134,11 @@ public class RuleAttributeWidget extends Composite {
             layout.addRow( hp );
         }
         for ( int i = 0; i < attrs.length; i++ ) {
-            RuleAttribute at = attrs[ i ];
+            RuleAttribute at = attrs[i];
             layout.addAttribute( at.getAttributeName(),
-                                 getEditorWidget( at,
-                                                  i,
-                                                  isReadOnly ) );
+                    getEditorWidget( at,
+                            i,
+                            isReadOnly ) );
         }
 
         initWidget( layout );
@@ -217,7 +230,7 @@ public class RuleAttributeWidget extends Composite {
                 || attributeName.equals( AUTO_FOCUS_ATTR )
                 || attributeName.equals( ENABLED_ATTR ) ) {
             editor = checkBoxEditor( at,
-                                     isReadOnly );
+                    isReadOnly );
 
         } else if ( attributeName.equals( DATE_EFFECTIVE_ATTR )
                 || attributeName.equals( DATE_EXPIRES_ATTR ) ) {
@@ -233,7 +246,7 @@ public class RuleAttributeWidget extends Composite {
                     @Override
                     public void onValueChange( final ValueChangeEvent<Date> event ) {
                         final Date date = datePicker.getValue();
-                        final String sDate = ( date == null ? null : DATE_FORMATTER.format( datePicker.getValue() ) );
+                        final String sDate = (date == null ? null : DATE_FORMATTER.format( datePicker.getValue() ));
                         at.setValue( sDate );
                     }
                 } );
@@ -245,8 +258,8 @@ public class RuleAttributeWidget extends Composite {
             }
         } else if ( attributeName.equals( DIALECT_ATTR ) ) {
             final ListBox lb = new ListBox();
-            lb.addItem( DIALECTS[ 0 ] );
-            lb.addItem( DIALECTS[ 1 ] );
+            lb.addItem( DIALECTS[0] );
+            lb.addItem( DIALECTS[1] );
             lb.setEnabled( !isReadOnly );
             if ( !isReadOnly ) {
                 lb.addChangeHandler( new ChangeHandler() {
@@ -262,14 +275,14 @@ public class RuleAttributeWidget extends Composite {
             }
             if ( at.getValue() == null || at.getValue().isEmpty() ) {
                 lb.setSelectedIndex( 1 );
-                at.setValue( DIALECTS[ 1 ] );
-            } else if ( at.getValue().equals( DIALECTS[ 0 ] ) ) {
+                at.setValue( DIALECTS[1] );
+            } else if ( at.getValue().equals( DIALECTS[0] ) ) {
                 lb.setSelectedIndex( 0 );
-            } else if ( at.getValue().equals( DIALECTS[ 1 ] ) ) {
+            } else if ( at.getValue().equals( DIALECTS[1] ) ) {
                 lb.setSelectedIndex( 1 );
             } else {
                 lb.setSelectedIndex( 1 );
-                at.setValue( DIALECTS[ 1 ] );
+                at.setValue( DIALECTS[1] );
             }
             editor = lb;
         }
@@ -305,10 +318,10 @@ public class RuleAttributeWidget extends Composite {
 
         if ( rm.getAttributeName().equals( LOCK_LHS ) || rm.getAttributeName().equals( LOCK_RHS ) ) {
             editor = new InfoPopup( GuidedRuleEditorResources.CONSTANTS.FrozenAreas(),
-                                    GuidedRuleEditorResources.CONSTANTS.FrozenExplanation() );
+                    GuidedRuleEditorResources.CONSTANTS.FrozenExplanation() );
         } else {
             editor = textBoxEditor( rm,
-                                    isReadOnly );
+                    isReadOnly );
         }
 
         DirtyableHorizontalPane horiz = new DirtyableHorizontalPane();
@@ -328,12 +341,12 @@ public class RuleAttributeWidget extends Composite {
             box.setValue( false );
             at.setValue( FALSE_VALUE );
         } else {
-            box.setValue( ( at.getValue().equals( TRUE_VALUE ) ) );
+            box.setValue( (at.getValue().equals( TRUE_VALUE )) );
         }
 
         box.addClickHandler( new ClickHandler() {
             public void onClick( ClickEvent event ) {
-                at.setValue( ( box.getValue() ) ? TRUE_VALUE : FALSE_VALUE );
+                at.setValue( (box.getValue()) ? TRUE_VALUE : FALSE_VALUE );
             }
         } );
         return box;
@@ -343,7 +356,7 @@ public class RuleAttributeWidget extends Composite {
                                    final boolean isReadOnly ) {
         final TextBox box = new TextBox();
         box.setEnabled( !isReadOnly );
-        ( (InputElement) box.getElement().cast() ).setSize( ( rm.getValue().length() < 3 ) ? 3 : rm.getValue().length() );
+        (( InputElement ) box.getElement().cast()).setSize( (rm.getValue().length() < 3) ? 3 : rm.getValue().length() );
         box.setText( rm.getValue() );
         box.addChangeHandler( new ChangeHandler() {
             public void onChange( ChangeEvent event ) {
@@ -353,7 +366,7 @@ public class RuleAttributeWidget extends Composite {
 
         box.addKeyUpHandler( new KeyUpHandler() {
             public void onKeyUp( KeyUpEvent event ) {
-                ( (InputElement) box.getElement().cast() ).setSize( box.getText().length() );
+                (( InputElement ) box.getElement().cast()).setSize( box.getText().length() );
             }
         } );
         return box;
