@@ -205,8 +205,8 @@ public class DRLEditorPresenter
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
-                updateDRLMetaData( ruleBuilder, IN_PRODUCTION, String.valueOf( metadata.isInProduction() ) );
-                updateDRLMetaData( ruleBuilder, IS_DRAFT, String.valueOf( metadata.isDraft() ) );
+                updateDRLMetaData( ruleBuilder, PRODUCTION_DATE, String.valueOf( metadata.getProductionDate() ) );
+                updateDRLMetaData( ruleBuilder, ARCHIVED_DATE, String.valueOf( metadata.getArchivedDate() ) );
                 updateDRLMetaData( ruleBuilder, REPORT_RECEIVED_FROM_DATE, String.valueOf( metadata.getReportReceivedFromDate() ) );
                 updateDRLMetaData( ruleBuilder, REPORT_RECEIVED_TO_DATE, String.valueOf( metadata.getReportReceivedToDate() ) );
                 updateDRLMetaData( ruleBuilder, ENCOUNTER_START_FROM_DATE, String.valueOf( metadata.getEncounterStartFromDate() ) );

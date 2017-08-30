@@ -194,8 +194,8 @@ public class GuidedDecisionTableEditorPresenter
         updateGDTMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGDTMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGDTMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
-        updateGDTMetaData( IN_PRODUCTION, String.valueOf( metadata.isInProduction() ) );
-        updateGDTMetaData( IS_DRAFT, String.valueOf( metadata.isDraft() ) );
+        updateGDTMetaData( PRODUCTION_DATE, String.valueOf( metadata.getProductionDate() ) );
+        updateGDTMetaData( ARCHIVED_DATE, String.valueOf( metadata.getArchivedDate() ) );
         updateGDTMetaData( REPORT_RECEIVED_FROM_DATE, String.valueOf( metadata.getReportReceivedFromDate() ) );
         updateGDTMetaData( REPORT_RECEIVED_TO_DATE, String.valueOf( metadata.getReportReceivedToDate() ) );
         updateGDTMetaData( ENCOUNTER_START_FROM_DATE, String.valueOf( metadata.getEncounterStartFromDate() ) );
