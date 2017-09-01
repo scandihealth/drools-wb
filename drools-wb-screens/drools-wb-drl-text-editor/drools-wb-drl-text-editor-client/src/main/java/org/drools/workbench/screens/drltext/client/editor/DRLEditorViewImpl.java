@@ -105,6 +105,11 @@ public class DRLEditorViewImpl
     }
 
     @Override
+    public void setContent( String drl ) {
+        drlEditor.setText( drl );
+    }
+
+    @Override
     public void setContent( final String drl,
                             final List<String> fullyQualifiedClassNames ) {
         dslConditionsBrowser.setVisible( false );
