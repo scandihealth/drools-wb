@@ -17,11 +17,11 @@
                 <artifactId>commonUtil</artifactId>
                 <version>2.5-SNAPSHOT</version>
             </dependency>
-            <dependency>
-                <groupId>com.scandihealth.lpr</groupId>
-                <artifactId>commonAPI</artifactId>
-                <version>2.5-SNAPSHOT</version>
-            </dependency>
+            <!--     <dependency>
+                     <groupId>com.scandihealth.lpr</groupId>
+                     <artifactId>commonAPI</artifactId>
+                     <version>2.5-SNAPSHOT</version>
+                 </dependency> -->
             <dependency>
                 <groupId>com.scandihealth.lpr.common</groupId>
                 <artifactId>commonDomain</artifactId>
@@ -64,10 +64,10 @@
             <groupId>com.scandihealth.lpr.common</groupId>
             <artifactId>commonUtil</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.scandihealth.lpr</groupId>
-            <artifactId>commonAPI</artifactId>
-        </dependency>
+        <!--      <dependency>
+                  <groupId>com.scandihealth.lpr</groupId>
+                  <artifactId>commonAPI</artifactId>
+              </dependency> -->
         <dependency>
             <groupId>com.scandihealth.lpr.common</groupId>
             <artifactId>commonDomain</artifactId>
