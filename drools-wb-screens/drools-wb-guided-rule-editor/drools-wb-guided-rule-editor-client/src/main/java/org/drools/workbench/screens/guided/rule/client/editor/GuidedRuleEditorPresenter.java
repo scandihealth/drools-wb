@@ -43,7 +43,7 @@ import org.kie.workbench.common.widgets.client.popups.validation.ValidationPopup
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.client.source.ViewSourceView;
 import org.kie.workbench.common.widgets.configresource.client.widget.bound.ImportsWidgetPresenter;
-import org.kie.workbench.common.widgets.metadata.client.KieEditor;
+import org.kie.workbench.common.widgets.metadata.client.LPREditor;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.WorkbenchEditor;
@@ -69,7 +69,7 @@ import static org.guvnor.common.services.shared.metadata.model.LprMetadataConsts
 @Dependent
 @WorkbenchEditor(identifier = "GuidedRuleEditor", supportedTypes = {GuidedRuleDRLResourceType.class, GuidedRuleDSLRResourceType.class}, priority = 102)
 public class GuidedRuleEditorPresenter
-        extends KieEditor {
+        extends LPREditor {
 
     @Inject
     private ImportsWidgetPresenter importsWidget;

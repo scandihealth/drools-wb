@@ -12,8 +12,8 @@
   <artifactId>drools-wb-drl-text-editor-api</artifactId>
   <packaging>jar</packaging>
 
-  <name>Drools Workbench - Technical Rule Editor - API</name>
-  <description>Drools Workbench - Technical Rule Editor - API</description>
+  <name>Drools Workbench - DRL Text Editor - API</name>
+  <description>Drools Workbench - DRL Text Editor - API</description>
 
   <dependencies>
 
