@@ -16,6 +16,14 @@
 
 package org.drools.workbench.screens.guided.dtable.backend.server;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
 import org.drools.workbench.models.datamodel.workitems.PortableWorkDefinition;
@@ -46,14 +54,6 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @ApplicationScoped
