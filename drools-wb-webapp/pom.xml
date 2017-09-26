@@ -55,6 +55,10 @@
   </dependencyManagement>
 
   <dependencies>
+    <dependency>
+      <groupId>org.guvnor</groupId>
+      <artifactId>guvnor-lpr-consts</artifactId>
+    </dependency>
 
     <!-- dependencies added because of new illegal transitive dependency check -->
     <dependency>
@@ -995,6 +999,9 @@
           <!-- drools-compiler has dependency on org.eclipse.jdt.core.compiler:ecj:jar:3.5.1:compile, see http://code.google.com/p/google-web-toolkit/issues/detail?id=4479 -->
           <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
           <compileSourcesArtifacts>
+            <!-- LPR -->
+          <compileSourcesArtifact>org.guvnor:guvnor-lpr-consts</compileSourcesArtifact>
+
             <!-- Guvnor -->
             <compileSourcesArtifact>org.guvnor:guvnor-asset-mgmt-api</compileSourcesArtifact>
             <compileSourcesArtifact>org.guvnor:guvnor-asset-mgmt-client</compileSourcesArtifact>
