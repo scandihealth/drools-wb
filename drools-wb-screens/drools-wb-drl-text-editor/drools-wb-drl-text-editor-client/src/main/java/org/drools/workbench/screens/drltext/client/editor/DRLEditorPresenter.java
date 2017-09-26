@@ -35,7 +35,7 @@ import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.kie.workbench.common.widgets.client.popups.validation.ValidationPopup;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
-import org.kie.workbench.common.widgets.metadata.client.KieEditor;
+import org.kie.workbench.common.widgets.metadata.client.lpr.LPREditor;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.WorkbenchEditor;
@@ -63,7 +63,7 @@ import static org.guvnor.common.services.shared.metadata.model.LprMetadataConsts
 @Dependent
 @WorkbenchEditor(identifier = "DRLEditor", supportedTypes = {DRLResourceType.class, DSLRResourceType.class})
 public class DRLEditorPresenter
-        extends KieEditor {
+        extends LPREditor {
 
     @Inject
     private Caller<DRLTextEditorService> drlTextEditorService;

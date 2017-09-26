@@ -12,8 +12,8 @@
   <artifactId>drools-wb-drl-text-editor-client</artifactId>
   <packaging>jar</packaging>
 
-  <name>Drools Workbench - Technical Rule Editor - Client</name>
-  <description>Drools Workbench - Technical Rule Editor - Client</description>
+  <name>Drools Workbench - DRL Text Editor - Client</name>
+  <description>Drools Workbench - DRL Text Editor - Client</description>
 
   <dependencies>
 
@@ -36,7 +36,7 @@
     </dependency>
     <dependency>
       <groupId>org.guvnor</groupId>
-      <artifactId>guvnor-services-consts</artifactId>
+      <artifactId>guvnor-lpr-consts</artifactId>
     </dependency>
     <dependency>
       <groupId>org.guvnor</groupId>

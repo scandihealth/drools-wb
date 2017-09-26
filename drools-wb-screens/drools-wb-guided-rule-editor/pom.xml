@@ -28,8 +28,8 @@
   <artifactId>drools-wb-guided-rule-editor</artifactId>
   <packaging>pom</packaging>
 
-  <name>Drools Workbench - Rule Editor</name>
-  <description>Drools Workbench - Rule Editor</description>
+  <name>Drools Workbench - Guided Rule Editor</name>
+  <description>Drools Workbench - Guided Rule Editor</description>
 
   <modules>
     <module>drools-wb-guided-rule-editor-api</module>
