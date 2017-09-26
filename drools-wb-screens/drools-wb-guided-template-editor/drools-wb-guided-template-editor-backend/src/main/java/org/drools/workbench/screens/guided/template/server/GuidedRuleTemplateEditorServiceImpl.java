@@ -16,16 +16,7 @@
 
 package org.drools.workbench.screens.guided.template.server;
 
-import java.io.ByteArrayInputStream;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.google.common.base.Charsets;
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
 import org.drools.workbench.models.guided.template.backend.RuleTemplateModelXMLPersistenceImpl;
 import org.drools.workbench.models.guided.template.shared.TemplateModel;
@@ -56,6 +47,14 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @ApplicationScoped
@@ -101,6 +100,7 @@ public class GuidedRuleTemplateEditorServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     public Path create( final Path context,
                         final String fileName,
                         final TemplateModel content,
@@ -128,6 +128,7 @@ public class GuidedRuleTemplateEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public TemplateModel load( final Path path ) {
         try {
@@ -140,6 +141,7 @@ public class GuidedRuleTemplateEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GuidedTemplateEditorContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -171,6 +173,7 @@ public class GuidedRuleTemplateEditorServiceImpl
                                                 dataModel );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final TemplateModel model,
@@ -195,6 +198,7 @@ public class GuidedRuleTemplateEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -207,6 +211,7 @@ public class GuidedRuleTemplateEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -221,6 +226,7 @@ public class GuidedRuleTemplateEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

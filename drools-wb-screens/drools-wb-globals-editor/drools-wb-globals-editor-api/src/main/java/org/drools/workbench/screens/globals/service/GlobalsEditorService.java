@@ -23,11 +23,7 @@ import org.guvnor.common.services.shared.validation.ValidationService;
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.kie.workbench.common.services.shared.source.ViewSourceService;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.ext.editor.commons.service.support.SupportsCopy;
-import org.uberfire.ext.editor.commons.service.support.SupportsCreate;
-import org.uberfire.ext.editor.commons.service.support.SupportsDelete;
-import org.uberfire.ext.editor.commons.service.support.SupportsRead;
-import org.uberfire.ext.editor.commons.service.support.SupportsRename;
+import org.uberfire.ext.editor.commons.service.support.*;
 
 /**
  * Service definition for Globals editor

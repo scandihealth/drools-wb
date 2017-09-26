@@ -16,16 +16,7 @@
 
 package org.drools.workbench.screens.guided.dtree.backend.server;
 
-import java.io.ByteArrayInputStream;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import com.google.common.base.Charsets;
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.workbench.models.datamodel.oracle.PackageDataModelOracle;
 import org.drools.workbench.models.guided.dtree.backend.GuidedDecisionTreeDRLPersistence;
 import org.drools.workbench.models.guided.dtree.shared.model.GuidedDecisionTree;
@@ -55,6 +46,14 @@ import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
 import org.uberfire.workbench.type.FileNameUtil;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @ApplicationScoped
@@ -101,6 +100,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         safeSessionInfo = new SafeSessionInfo( sessionInfo );
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -129,6 +129,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GuidedDecisionTree load( final Path path ) {
         try {
@@ -147,6 +148,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public GuidedDecisionTreeEditorContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -195,6 +197,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final GuidedDecisionTree model,
@@ -220,6 +223,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -232,6 +236,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -246,6 +251,7 @@ public class GuidedDecisionTreeEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

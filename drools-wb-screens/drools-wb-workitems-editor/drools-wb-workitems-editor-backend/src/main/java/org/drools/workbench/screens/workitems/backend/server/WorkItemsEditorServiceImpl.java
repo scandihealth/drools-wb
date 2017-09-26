@@ -16,34 +16,12 @@
 
 package org.drools.workbench.screens.workitems.backend.server;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import org.drools.core.process.core.ParameterDefinition;
 import org.drools.core.process.core.WorkDefinition;
 import org.drools.core.process.core.datatype.DataType;
-import org.drools.core.process.core.datatype.impl.type.BooleanDataType;
-import org.drools.core.process.core.datatype.impl.type.FloatDataType;
-import org.drools.core.process.core.datatype.impl.type.IntegerDataType;
-import org.drools.core.process.core.datatype.impl.type.ObjectDataType;
-import org.drools.core.process.core.datatype.impl.type.StringDataType;
-import org.drools.workbench.models.datamodel.workitems.PortableBooleanParameterDefinition;
-import org.drools.workbench.models.datamodel.workitems.PortableFloatParameterDefinition;
-import org.drools.workbench.models.datamodel.workitems.PortableIntegerParameterDefinition;
-import org.drools.workbench.models.datamodel.workitems.PortableObjectParameterDefinition;
-import org.drools.workbench.models.datamodel.workitems.PortableParameterDefinition;
-import org.drools.workbench.models.datamodel.workitems.PortableStringParameterDefinition;
-import org.drools.workbench.models.datamodel.workitems.PortableWorkDefinition;
+import org.drools.core.process.core.datatype.impl.type.*;
+import org.drools.workbench.models.datamodel.workitems.*;
 import org.drools.workbench.screens.workitems.model.WorkItemDefinitionElements;
 import org.drools.workbench.screens.workitems.model.WorkItemsModelContent;
 import org.drools.workbench.screens.workitems.service.WorkItemsEditorService;
@@ -75,6 +53,13 @@ import org.uberfire.io.IOService;
 import org.uberfire.java.nio.file.FileAlreadyExistsException;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.annotation.PostConstruct;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.util.*;
 
 @Service
 @ApplicationScoped
@@ -153,6 +138,7 @@ public class WorkItemsEditorServiceImpl
         return workItemDefinitionElements;
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path create( final Path context,
                         final String fileName,
@@ -186,6 +172,7 @@ public class WorkItemsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public String load( final Path path ) {
         try {
@@ -239,6 +226,7 @@ public class WorkItemsEditorServiceImpl
         return workItemDefinitionElements;
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path save( final Path resource,
                       final String content,
@@ -260,6 +248,7 @@ public class WorkItemsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -272,6 +261,7 @@ public class WorkItemsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -286,6 +276,7 @@ public class WorkItemsEditorServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

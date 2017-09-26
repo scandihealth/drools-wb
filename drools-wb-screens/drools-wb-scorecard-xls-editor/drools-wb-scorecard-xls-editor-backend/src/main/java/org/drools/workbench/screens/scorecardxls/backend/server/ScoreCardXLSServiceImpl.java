@@ -16,15 +16,7 @@
 
 package org.drools.workbench.screens.scorecardxls.backend.server;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.List;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import com.google.common.base.Charsets;
 import org.apache.commons.io.IOUtils;
 import org.drools.workbench.screens.scorecardxls.service.ScoreCardXLSContent;
@@ -50,6 +42,15 @@ import org.uberfire.java.nio.file.StandardOpenOption;
 import org.uberfire.rpc.SessionInfo;
 import org.uberfire.rpc.impl.SessionInfoImpl;
 import org.uberfire.workbench.events.ResourceOpenedEvent;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.List;
 
 @Service
 @ApplicationScoped
@@ -93,6 +94,7 @@ public class ScoreCardXLSServiceImpl
         this.authenticationService = authenticationService;
     }
 
+    @DroolsLoggingToDB
     @Override
     public ScoreCardXLSContent loadContent( final Path path ) {
         return super.loadContent( path );
@@ -106,6 +108,7 @@ public class ScoreCardXLSServiceImpl
         return content;
     }
 
+    @DroolsLoggingToDB
     public InputStream load( final Path path,
                              final String sessionId ) {
         try {
@@ -123,6 +126,7 @@ public class ScoreCardXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     public Path create( final Path resource,
                         final InputStream content,
                         final String sessionId,
@@ -156,6 +160,7 @@ public class ScoreCardXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     public Path save( final Path resource,
                       final InputStream content,
                       final String sessionId,
@@ -188,6 +193,7 @@ public class ScoreCardXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public void delete( final Path path,
                         final String comment ) {
@@ -200,6 +206,7 @@ public class ScoreCardXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path rename( final Path path,
                         final String newName,
@@ -214,6 +221,7 @@ public class ScoreCardXLSServiceImpl
         }
     }
 
+    @DroolsLoggingToDB
     @Override
     public Path copy( final Path path,
                       final String newName,

@@ -16,11 +16,6 @@
  */
 package org.drools.workbench.backend.server;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-
 import org.picketlink.authentication.event.PreAuthenticateEvent;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.PartitionManager;
@@ -29,6 +24,11 @@ import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.basic.Grant;
 import org.picketlink.idm.model.basic.Role;
 import org.picketlink.idm.model.basic.User;
+
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @ApplicationScoped
 public class PicketLinkDefaultUsers {
@@ -52,16 +52,19 @@ public class PicketLinkDefaultUsers {
         final User director = new User( "director" );
         final User user = new User( "user" );
         final User guest = new User( "guest" );
+        final User sgr = new User( "sgr" );
 
         identityManager.add( admin );
         identityManager.add( director );
         identityManager.add( user );
         identityManager.add( guest );
+        identityManager.add( sgr );
 
         identityManager.updateCredential( admin, new Password( "admin" ) );
         identityManager.updateCredential( director, new Password( "director" ) );
         identityManager.updateCredential( user, new Password( "user" ) );
         identityManager.updateCredential( guest, new Password( "guest" ) );
+        identityManager.updateCredential( sgr, new Password( "sgr" ) );
 
         final Role roleAdmin = new Role( "admin" );
         final Role roleAnalyst = new Role( "analyst" );
@@ -78,6 +81,10 @@ public class PicketLinkDefaultUsers {
         relationshipManager.add( new Grant( director, roleAnalyst ) );
 
         relationshipManager.add( new Grant( user, roleAnalyst ) );
+
+        relationshipManager.add( new Grant( sgr, roleAnalyst ) );
+        relationshipManager.add( new Grant( sgr, roleAdmin ) );
+        relationshipManager.add( new Grant( sgr, roleKieMgmt ) );
     }
 
 }

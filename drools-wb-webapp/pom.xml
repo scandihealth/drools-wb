@@ -46,6 +46,11 @@
         <artifactId>wildfly-embedded</artifactId>
         <version>2.1.0.Final</version>
       </dependency>
+      <dependency>
+        <groupId>org.drools</groupId>
+        <artifactId>drools-wb-log</artifactId>
+        <version>6.5.0.csc-SNAPSHOT</version>
+      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -912,6 +917,12 @@
         </exclusion>
       </exclusions>
     </dependency>
+
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-wb-log</artifactId>
+    </dependency>
+
   </dependencies>
 
   <build>
@@ -922,7 +933,6 @@
       <!-- build-helper-maven-plugin makes it possible in a GWT multi-module setup to "hot swap" (recompile) sources from other GWT modules when running in GWT hosted mode (Super Dev Mode) -->
       <!-- Simply add the source roots (and resource roots) you want to include in your GWT compilation below -->
       <!-- See https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/productivity.html -->
-      <!--todo ttn document this-->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
@@ -968,11 +978,9 @@
             See GWT-Maven-Plugin Test support here:
             https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
           -->
-          <!--todo do not commit <draftCompile>true</draftCompile>-->
-          <draftCompile>false</draftCompile>
-          <strict>true</strict>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
-          <extraJvmArgs>-Xmx4G -Xms1024m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <extraJvmArgs>-Xmx3G -XX:MaxPermSize=256m -Xms1024m -XX:PermSize=128m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
+          <!--<draftCompile>true</draftCompile>-->
           <module>org.drools.workbench.DroolsWorkbench</module>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
@@ -1172,30 +1180,6 @@
             <id>default-deploy</id>
             <configuration>
               <skip>true</skip>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
-        <artifactId>maven-resources-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>copy-resources</id>
-            <phase>install</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${env.JBOSS_HOME}/standalone/deployments</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.build.directory}</directory>
-                  <includes>
-                    <include>drools-wb-webapp.war</include>
-                  </includes>
-                  <!--<filtering>true</filtering>-->
-                </resource>
-              </resources>
             </configuration>
           </execution>
         </executions>
