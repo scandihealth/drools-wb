@@ -42,8 +42,6 @@ import org.kie.workbench.common.widgets.metadata.client.lpr.LPREditor;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchMenu;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchPartTitleDecoration;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
@@ -268,16 +266,6 @@ public class GuidedDecisionTableEditorPresenter
     @OnMayClose
     public boolean mayClose() {
         return mayClose( model );
-    }
-
-    @WorkbenchPartTitle
-    public String getTitleText() {
-        return super.getTitleText();
-    }
-
-    @WorkbenchPartTitleDecoration
-    public IsWidget getTitle() {
-        return super.getTitle();
     }
 
     @WorkbenchPartView

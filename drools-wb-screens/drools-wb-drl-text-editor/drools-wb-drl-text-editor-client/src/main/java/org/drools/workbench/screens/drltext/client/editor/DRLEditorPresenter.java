@@ -40,8 +40,6 @@ import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchMenu;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchPartTitleDecoration;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.callbacks.Callback;
 import org.uberfire.client.workbench.type.ClientResourceType;
@@ -273,16 +271,6 @@ public class DRLEditorPresenter
     @OnMayClose
     public boolean mayClose() {
         return super.mayClose( view.getContent() );
-    }
-
-    @WorkbenchPartTitleDecoration
-    public IsWidget getTitle() {
-        return super.getTitle();
-    }
-
-    @WorkbenchPartTitle
-    public String getTitleText() {
-        return super.getTitleText();
     }
 
     private ClientResourceType getResourceType( Path path ) {

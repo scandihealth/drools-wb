@@ -48,8 +48,6 @@ import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchMenu;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchPartTitleDecoration;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.workbench.type.ClientResourceType;
 import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
@@ -264,16 +262,6 @@ public class GuidedRuleEditorPresenter
     @OnMayClose
     public boolean mayClose() {
         return super.mayClose( view.getContent() );
-    }
-
-    @WorkbenchPartTitle
-    public String getTitleText() {
-        return super.getTitleText();
-    }
-
-    @WorkbenchPartTitleDecoration
-    public IsWidget getTitle() {
-        return super.getTitle();
     }
 
     private ClientResourceType getResourceType( final Path path ) {

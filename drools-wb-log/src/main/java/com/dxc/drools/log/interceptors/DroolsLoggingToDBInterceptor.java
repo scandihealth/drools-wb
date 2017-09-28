@@ -1,5 +1,14 @@
 package com.dxc.drools.log.interceptors;
 
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.annotation.Priority;
+import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
+
 import com.dxc.drools.log.DroolsTimeLogger;
 import com.dxc.drools.log.annotation.DroolsLoggingToDB;
 import com.dxc.drools.log.annotation.DroolsNoLogging;
@@ -14,15 +23,6 @@ import com.logica.heca.lpr.util.EjbUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.uberfire.rpc.SessionInfo;
-
-import javax.annotation.Priority;
-import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptor;
-import javax.interceptor.InvocationContext;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Java EE interceptor that performs audit logging, error logging, and performance logging of intercepted methods.
@@ -140,7 +140,7 @@ public class DroolsLoggingToDBInterceptor {
             LogManagerRemote logManagerRemote = ejbUtilsWrapper.lookupLogManagerRemote();
             logManagerRemote.log( userLogDataVO );
         } catch ( Throwable t ) {
-            logger.error( "User activity was not logged to the DB because of: " + t.getMessage() + " --- Attempted to log activity: " + userLogDataVO.getInformation() );
+            logger.error( "User activity was not logged to the DB because of: " + t.getMessage() + " --- Attempted to log activity: " + userLogDataVO.getFunction() );
         }
     }
 
@@ -150,7 +150,7 @@ public class DroolsLoggingToDBInterceptor {
             SystemLogManagerRemote systemLogManagerRemote = ejbUtilsWrapper.lookupSystemLogManagerRemote();
             systemLogManagerRemote.log( systemLogEntry, throwable );
         } catch ( Throwable t ) {
-            logger.error( "System error was not logged to the DB because of: " + t.getMessage() + " --- Attempted to log message: " + throwable.getMessage() + " --- originating from method: " + methodName  );
+            logger.error( "System error was not logged to the DB because of: " + t.getMessage() + " --- Attempted to log message: " + throwable.getMessage() + " --- originating from method: " + methodName );
         }
 
     }
