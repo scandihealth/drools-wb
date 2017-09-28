@@ -236,6 +236,7 @@ public class GuidedRuleEditorPresenter
         updateGRMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGRMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGRMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
+        updateGRMetaData( IS_VALID_FOR_PRIVATE_SECTOR_REPORTS, String.valueOf( metadata.isValidForPrivateSectorReports() ) );
         updateGRMetaData( PRODUCTION_DATE, String.valueOf( metadata.getProductionDate() ) );
         updateGRMetaData( ARCHIVED_DATE, String.valueOf( metadata.getArchivedDate() ) );
         updateGRMetaData( REPORT_RECEIVED_FROM_DATE, String.valueOf( metadata.getReportReceivedFromDate() ) );
