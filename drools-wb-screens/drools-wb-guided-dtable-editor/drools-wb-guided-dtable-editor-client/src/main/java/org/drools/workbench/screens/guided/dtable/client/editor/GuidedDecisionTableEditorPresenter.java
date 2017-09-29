@@ -171,7 +171,11 @@ public class GuidedDecisionTableEditorPresenter
                         if ( results == null || results.isEmpty() ) {
                             notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemValidatedSuccessfully(),
                                     NotificationEvent.NotificationType.SUCCESS ) );
+                            if ( moveToProdCmdWaitingForValidation != null ) {
+                                moveToProdCmdWaitingForValidation.execute();
+                            }
                         } else {
+                            moveToProdCmdWaitingForValidation = null;
                             ValidationPopup.showMessages( results );
                         }
                     }
