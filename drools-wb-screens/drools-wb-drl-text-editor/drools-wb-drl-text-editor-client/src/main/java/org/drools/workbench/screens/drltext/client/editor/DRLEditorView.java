@@ -22,7 +22,7 @@ import org.drools.workbench.models.datamodel.rule.DSLSentence;
 import org.kie.workbench.common.widgets.metadata.client.KieEditorView;
 import org.uberfire.client.mvp.UberView;
 
-public interface DRLEditorView extends KieEditorView,
+public interface DRLEditorView extends KieEditorView<String>,
                                        RequiresResize,
                                        UberView<DRLEditorPresenter> {
 
@@ -35,8 +35,6 @@ public interface DRLEditorView extends KieEditorView,
                      final List<String> fullyQualifiedClassNames,
                      final List<DSLSentence> dslConditions,
                      final List<DSLSentence> dslActions );
-
-    String getContent();
 
     void setReadOnly( final boolean readOnly );
 }

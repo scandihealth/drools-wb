@@ -30,11 +30,8 @@ import org.drools.workbench.screens.drltext.client.type.DRLResourceType;
 import org.drools.workbench.screens.drltext.client.type.DSLRResourceType;
 import org.drools.workbench.screens.drltext.model.DrlModelContent;
 import org.drools.workbench.screens.drltext.service.DRLTextEditorService;
-import org.guvnor.common.services.shared.validation.model.ValidationMessage;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
-import org.kie.workbench.common.widgets.client.popups.validation.ValidationPopup;
-import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.kie.workbench.common.widgets.metadata.client.lpr.LPREditor;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
@@ -43,7 +40,6 @@ import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.callbacks.Callback;
 import org.uberfire.client.workbench.type.ClientResourceType;
-import org.uberfire.ext.widgets.common.client.callbacks.DefaultErrorCallback;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.lifecycle.OnClose;
 import org.uberfire.lifecycle.OnMayClose;
@@ -166,27 +162,7 @@ public class DRLEditorPresenter
     }
 
     protected Command onValidate() {
-        return new Command() {
-            @Override
-            public void execute() {
-                drlTextEditorService.call( new RemoteCallback<List<ValidationMessage>>() {
-                    @Override
-                    public void callback( final List<ValidationMessage> results ) {
-                        if ( results == null || results.isEmpty() ) {
-                            notification.fire( new NotificationEvent( CommonConstants.INSTANCE.ItemValidatedSuccessfully(),
-                                    NotificationEvent.NotificationType.SUCCESS ) );
-                            if ( moveToProdCmdWaitingForValidation != null ) {
-                                moveToProdCmdWaitingForValidation.execute();
-                            }
-                        } else {
-                            moveToProdCmdWaitingForValidation = null;
-                            ValidationPopup.showMessages( results );
-                        }
-                    }
-                }, new DefaultErrorCallback() ).validate( versionRecordManager.getCurrentPath(),
-                        view.getContent() );
-            }
-        };
+        return getValidationCallback( drlTextEditorService, view );
     }
 
     @Override
@@ -222,7 +198,7 @@ public class DRLEditorPresenter
             }
             view.setContent( contentBuilder.toString() );
         }
-        drlTextEditorService.call( getSaveSuccessCallback( view.getContent().hashCode() ),
+        drlTextEditorService.call( getSaveSuccessCallback( getCurrentHash() ),
                 new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
                 view.getContent(),
                 metadata,
@@ -295,4 +271,8 @@ public class DRLEditorPresenter
         return menus;
     }
 
+    @Override
+    protected Integer getCurrentHash() {
+        return view != null && view.getContent() != null ? view.getContent().hashCode() : null;
+    }
 }

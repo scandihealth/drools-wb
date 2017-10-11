@@ -35,7 +35,7 @@ import org.uberfire.mvp.PlaceRequest;
  * Guided Decision Table Editor View implementation
  */
 public class GuidedDecisionTableEditorViewImpl
-        extends KieEditorViewImpl
+        extends KieEditorViewImpl<GuidedDecisionTable52>
         implements GuidedDecisionTableEditorView {
 
     private final SimplePanel panel = new SimplePanel();

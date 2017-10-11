@@ -31,7 +31,7 @@ import org.kie.workbench.common.widgets.metadata.client.KieEditorViewImpl;
 import org.uberfire.backend.vfs.Path;
 
 public class GuidedRuleEditorViewImpl
-        extends KieEditorViewImpl
+        extends KieEditorViewImpl<RuleModel>
         implements GuidedRuleEditorView {
 
     private final EventBus localBus = new SimpleEventBus();

@@ -30,7 +30,7 @@ import org.uberfire.mvp.PlaceRequest;
 /**
  * Guided Decision Table Editor View definition
  */
-public interface GuidedDecisionTableEditorView extends KieEditorView,
+public interface GuidedDecisionTableEditorView extends KieEditorView<GuidedDecisionTable52>,
                                                        IsWidget {
 
     void setContent( final PlaceRequest place,
@@ -40,8 +40,6 @@ public interface GuidedDecisionTableEditorView extends KieEditorView,
                      final AsyncPackageDataModelOracle oracle,
                      final Caller<RuleNamesService> ruleNamesService,
                      final boolean isReadOnly );
-
-    GuidedDecisionTable52 getContent();
 
     void onFocus();
 

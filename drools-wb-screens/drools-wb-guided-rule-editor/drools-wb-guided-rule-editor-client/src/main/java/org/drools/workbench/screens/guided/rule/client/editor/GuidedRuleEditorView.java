@@ -26,7 +26,7 @@ import org.uberfire.backend.vfs.Path;
 
 public interface GuidedRuleEditorView
         extends
-        KieEditorView,
+        KieEditorView<RuleModel>,
         IsWidget {
 
     void setContent(final Path path,
@@ -35,8 +35,6 @@ public interface GuidedRuleEditorView
             final Caller<RuleNamesService> ruleNamesService,
             final boolean isReadOnly,
             final boolean isDSLEnabled);
-
-    RuleModel getContent();
 
     void refresh();
 

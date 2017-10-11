@@ -35,7 +35,7 @@ import org.uberfire.ext.widgets.common.client.ace.AceEditor;
 import org.uberfire.ext.widgets.common.client.ace.AceEditorTheme;
 
 public class DRLEditorViewImpl
-        extends KieEditorViewImpl
+        extends KieEditorViewImpl<String>
         implements DRLEditorView {
 
     interface ViewBinder

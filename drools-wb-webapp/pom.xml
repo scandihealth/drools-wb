@@ -41,7 +41,7 @@
 
   <profiles>
     <profile>
-      <id>gwt:draft</id>
+      <id>gwt:dev</id>
       <build>
         <plugins>
           <plugin>
@@ -49,6 +49,10 @@
             <artifactId>csc-gwt-maven-plugin</artifactId>
             <configuration>
               <draftCompile>true</draftCompile>
+              <!--<incremental>true</incremental>-->
+              <optimizationLevel>0</optimizationLevel>
+              <saveSource>true</saveSource>
+              <!--<logLevel>DEBUG</logLevel>-->
               <!--<style>PRETTY</style>-->
             </configuration>
           </plugin>
@@ -1002,10 +1006,10 @@
             https://gwt-maven-plugin.github.io/gwt-maven-plugin/user-guide/testing.html#
           -->
           <strict>true</strict>
+          <failOnError>true</failOnError>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
           <extraJvmArgs>-Xmx4G -Xms1024m -Xss1M -XX:CompileThreshold=7000 -Derrai.jboss.home=${errai.jboss.home} -Derrai.jboss.args=--server-config=standalone.xml -Derrai.dev.context=drools-wb-webapp -Derrai.marshalling.server.classOutput=${project.build.outputDirectory} -Dorg.uberfire.async.executor.safemode=true</extraJvmArgs>
           <module>org.drools.workbench.DroolsWorkbench</module>
-          <logLevel>INFO</logLevel>
           <noServer>false</noServer>
           <server>com.csc.gwtdebug.EmbeddedWildFlyLauncher</server>
           <port>8088</port>
