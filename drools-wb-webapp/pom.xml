@@ -68,11 +68,6 @@
         <artifactId>wildfly-embedded</artifactId>
         <version>2.1.0.Final</version>
       </dependency>
-      <dependency>
-        <groupId>org.drools</groupId>
-        <artifactId>drools-wb-log</artifactId>
-        <version>6.5.0.csc-SNAPSHOT</version>
-      </dependency>
     </dependencies>
   </dependencyManagement>
 
@@ -943,12 +938,6 @@
         </exclusion>
       </exclusions>
     </dependency>
-
-    <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-wb-log</artifactId>
-    </dependency>
-
   </dependencies>
 
   <build>
