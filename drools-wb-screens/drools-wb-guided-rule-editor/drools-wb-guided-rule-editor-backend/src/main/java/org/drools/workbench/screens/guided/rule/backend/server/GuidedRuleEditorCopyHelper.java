@@ -15,6 +15,7 @@
 */
 package org.drools.workbench.screens.guided.rule.backend.server;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
@@ -100,9 +101,11 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
         }
 
         if ( model != null ) {
-            Map<String, Object> attributes = ioService.readAttributes( _destination );
+            //Set LPR metadata
+            Map<String, Object> attributes = new HashMap<String, Object>();
+            attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
+            attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
             setDroolsLPRMetadata( model );
-            setDotFileLPRMetadata( attributes );
             //Save file
             model.name = ruleName;
             ioService.write( _destination,
@@ -122,17 +125,6 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
         if ( archDate != null ) {
             archDate.setValue( Long.toString( 0 ) );
             model.updateMetadata( archDate );
-        }
-    }
-
-    private void setDotFileLPRMetadata( Map<String, Object> attributes ) {
-        Long prodDate = ( Long ) attributes.get( LprMetadataConsts.PRODUCTION_DATE );
-        if ( prodDate != null && prodDate > 0 ) {
-            attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
-        }
-        Long archivedDate = ( Long ) attributes.get( LprMetadataConsts.ARCHIVED_DATE );
-        if ( archivedDate != null && archivedDate > 0 ) {
-            attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
         }
     }
 }

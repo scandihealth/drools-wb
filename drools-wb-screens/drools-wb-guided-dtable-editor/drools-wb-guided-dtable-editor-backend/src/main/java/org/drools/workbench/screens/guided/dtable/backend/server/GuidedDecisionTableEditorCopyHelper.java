@@ -15,15 +15,21 @@
 */
 package org.drools.workbench.screens.guided.dtable.backend.server;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.drools.workbench.models.guided.dtable.backend.GuidedDTXMLPersistence;
+import org.drools.workbench.models.guided.dtable.shared.model.DTCellValue52;
 import org.drools.workbench.models.guided.dtable.shared.model.GuidedDecisionTable52;
+import org.drools.workbench.models.guided.dtable.shared.model.MetadataCol52;
 import org.drools.workbench.screens.guided.dtable.type.GuidedDTableResourceTypeDefinition;
 import org.drools.workbench.screens.guided.rule.backend.server.GuidedRuleEditorServiceUtilities;
 import org.guvnor.common.services.backend.util.CommentedOptionFactory;
+import org.guvnor.common.services.shared.metadata.model.LprMetadataConsts;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.ext.editor.commons.backend.service.helper.CopyHelper;
@@ -40,7 +46,7 @@ public class GuidedDecisionTableEditorCopyHelper implements CopyHelper {
     private GuidedDTableResourceTypeDefinition resourceType;
 
     @Inject
-    @Named( "ioStrategy" )
+    @Named("ioStrategy")
     private IOService ioService;
 
     @Inject
@@ -49,29 +55,53 @@ public class GuidedDecisionTableEditorCopyHelper implements CopyHelper {
     @Inject
     private CommentedOptionFactory commentedOptionFactory;
 
-
     @Override
-    public boolean supports( final Path destination ) {
-        return (resourceType.accept( destination ));
+    public boolean supports(final Path destination) {
+        return (resourceType.accept(destination));
     }
 
     @Override
-    public void postProcess( final Path source,
-                             final Path destination ) {
+    public void postProcess(final Path source,
+                            final Path destination) {
         //Load existing file
-        final org.uberfire.java.nio.file.Path _destination = Paths.convert( destination );
-        final String content = ioService.readAllString( Paths.convert( destination ) );
-        final GuidedDecisionTable52 model = GuidedDTXMLPersistence.getInstance().unmarshal( content );
+        final org.uberfire.java.nio.file.Path _destination = Paths.convert(destination);
+        final String content = ioService.readAllString(Paths.convert(destination));
+        final GuidedDecisionTable52 model = GuidedDTXMLPersistence.getInstance().unmarshal(content);
 
         //Update table name
-        final String tableName = FileNameUtil.removeExtension( destination,
-                                                               resourceType );
-        model.setTableName( tableName );
+        final String tableName = FileNameUtil.removeExtension(destination,
+                resourceType);
+        model.setTableName(tableName);
+
+        //Set LPR metadata
+        Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
+        attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
+        setDroolsLPRMetadata( model );
 
         //Save file
-        ioService.write( _destination,
-                         GuidedDTXMLPersistence.getInstance().marshal( model ),
-                         commentedOptionFactory.makeCommentedOption( "File [" + source.toURI() + "] copied to [" + destination.toURI() + "]." ) );
+        ioService.write(_destination,
+                GuidedDTXMLPersistence.getInstance().marshal(model),
+                attributes,
+                commentedOptionFactory.makeCommentedOption("File [" + source.toURI() + "] copied to [" + destination.toURI() + "]."));
     }
 
+    private void setDroolsLPRMetadata(GuidedDecisionTable52 model) {
+        for (MetadataCol52 metadataCol : model.getMetadataCols()) {
+            if (LprMetadataConsts.PRODUCTION_DATE.equals(metadataCol.getMetadata())) {
+                int index = model.getExpandedColumns().indexOf(metadataCol);
+                for (List<DTCellValue52> row : model.getData()) {
+                    DTCellValue52 dcv = row.get(index);
+                    dcv.setStringValue(Long.toString(0L));
+                }
+            }
+            if (LprMetadataConsts.ARCHIVED_DATE.equals(metadataCol.getMetadata())) {
+                int index = model.getExpandedColumns().indexOf(metadataCol);
+                for (List<DTCellValue52> row : model.getData()) {
+                    DTCellValue52 dcv = row.get(index);
+                    dcv.setStringValue(Long.toString(0L));
+                }
+            }
+        }
+    }
 }
