@@ -203,6 +203,16 @@ public class GuidedRuleEditorPresenter
 
     @Override
     protected void save( String commitMessage ) {
+        setDroolsMetadata();
+        service.call( getSaveSuccessCallback( getCurrentHash() ),
+                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
+                view.getContent(),
+                metadata,
+                commitMessage );
+    }
+
+    @Override
+    protected void setDroolsMetadata() {
         //todo ttn make unit test
         updateGRMetaData( RULE_TYPE, String.valueOf( metadata.getRuleType() ) );
         updateGRMetaData( ERROR_TYPE, String.valueOf( metadata.getErrorType() ) );
@@ -223,13 +233,8 @@ public class GuidedRuleEditorPresenter
         updateGRMetaData( ENCOUNTER_END_TO_DATE, String.valueOf( metadata.getEncounterEndToDate() ) );
         updateGRMetaData( EPISODE_OF_CARE_START_FROM_DATE, String.valueOf( metadata.getEpisodeOfCareStartFromDate() ) );
         updateGRMetaData( EPISODE_OF_CARE_START_TO_DATE, String.valueOf( metadata.getEpisodeOfCareStartToDate() ) );
-
-        service.call( getSaveSuccessCallback( getCurrentHash() ),
-                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
-                view.getContent(),
-                metadata,
-                commitMessage );
     }
+
 
     @OnClose
     public void onClose() {

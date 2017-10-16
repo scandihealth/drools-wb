@@ -167,6 +167,16 @@ public class DRLEditorPresenter
 
     @Override
     protected void save( String commitMessage ) {
+        setDroolsMetadata();
+        drlTextEditorService.call( getSaveSuccessCallback( getCurrentHash() ),
+                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
+                view.getContent(),
+                metadata,
+                commitMessage );
+    }
+
+    @Override
+    protected void setDroolsMetadata() {
         //todo ttn unit tests (it seems there is a problem if drl file does not contain any keywords (rule, when, then)?
         if ( !isDSLR ) {
             // split on rule, but keep rule as part of string,
@@ -198,11 +208,6 @@ public class DRLEditorPresenter
             }
             view.setContent( contentBuilder.toString() );
         }
-        drlTextEditorService.call( getSaveSuccessCallback( getCurrentHash() ),
-                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
-                view.getContent(),
-                metadata,
-                commitMessage );
     }
 
     private void updateDRLMetaData( StringBuilder rule, String name, String newValue ) {
