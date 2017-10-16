@@ -32,19 +32,10 @@
     <module>drools-wb-workitems-editor</module>
   </modules>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.drools</groupId>
-        <artifactId>drools-wb-log</artifactId>
-        <version>6.5.0.csc-SNAPSHOT</version>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
   <dependencies>
     <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-wb-log</artifactId>
+      <groupId>org.kie.workbench.services</groupId>
+      <artifactId>kie-wb-common-lpr-log</artifactId>
     </dependency>
   </dependencies>
 
