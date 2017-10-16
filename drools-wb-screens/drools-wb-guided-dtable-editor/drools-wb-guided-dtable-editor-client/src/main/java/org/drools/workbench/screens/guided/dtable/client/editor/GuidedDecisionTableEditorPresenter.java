@@ -163,6 +163,16 @@ public class GuidedDecisionTableEditorPresenter
 
     @Override
     protected void save( String commitMessage ) {
+        setDroolsMetadata();
+        service.call( getSaveSuccessCallback( getCurrentHash() ),
+                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
+                model,
+                metadata,
+                commitMessage );
+    }
+
+    @Override
+    protected void setDroolsMetadata() {
         //todo ttn make unit test
         updateGDTMetaData( RULE_TYPE, String.valueOf( metadata.getRuleType() ) );
         updateGDTMetaData( ERROR_TYPE, String.valueOf( metadata.getErrorType() ) );
@@ -183,13 +193,8 @@ public class GuidedDecisionTableEditorPresenter
         updateGDTMetaData( ENCOUNTER_END_TO_DATE, String.valueOf( metadata.getEncounterEndToDate() ) );
         updateGDTMetaData( EPISODE_OF_CARE_START_FROM_DATE, String.valueOf( metadata.getEpisodeOfCareStartFromDate() ) );
         updateGDTMetaData( EPISODE_OF_CARE_START_TO_DATE, String.valueOf( metadata.getEpisodeOfCareStartToDate() ) );
-
-        service.call( getSaveSuccessCallback( getCurrentHash() ),
-                new HasBusyIndicatorDefaultErrorCallback( view ) ).save( versionRecordManager.getCurrentPath(),
-                model,
-                metadata,
-                commitMessage );
     }
+
 
     private void updateGDTMetaData( String name, String newValue ) {
         boolean found = false;

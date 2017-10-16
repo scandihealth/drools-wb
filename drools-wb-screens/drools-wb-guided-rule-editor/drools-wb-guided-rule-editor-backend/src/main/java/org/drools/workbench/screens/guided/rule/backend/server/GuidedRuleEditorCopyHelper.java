@@ -16,15 +16,18 @@
 package org.drools.workbench.screens.guided.rule.backend.server;
 
 import java.util.List;
+import java.util.Map;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.drools.workbench.models.commons.backend.rule.RuleModelDRLPersistenceImpl;
+import org.drools.workbench.models.datamodel.rule.RuleMetadata;
 import org.drools.workbench.models.datamodel.rule.RuleModel;
 import org.drools.workbench.screens.guided.rule.type.GuidedRuleDRLResourceTypeDefinition;
 import org.drools.workbench.screens.guided.rule.type.GuidedRuleDSLRResourceTypeDefinition;
 import org.guvnor.common.services.backend.util.CommentedOptionFactory;
+import org.guvnor.common.services.shared.metadata.model.LprMetadataConsts;
 import org.kie.workbench.common.services.datamodel.backend.server.service.DataModelService;
 import org.uberfire.backend.server.util.Paths;
 import org.uberfire.backend.vfs.Path;
@@ -66,7 +69,7 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
 
     @Override
     public boolean supports( final Path destination ) {
-        return ( drlResourceType.accept( destination ) || dslrResourceType.accept( destination ) );
+        return (drlResourceType.accept( destination ) || dslrResourceType.accept( destination ));
     }
 
     @Override
@@ -83,26 +86,53 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
         String ruleName = null;
         if ( drlResourceType.accept( destination ) ) {
             model = RuleModelDRLPersistenceImpl.getInstance().unmarshal( drl,
-                                                                         globals,
-                                                                         dataModelService.getDataModel( destination ) );
+                    globals,
+                    dataModelService.getDataModel( destination ) );
             ruleName = FileNameUtil.removeExtension( destination,
-                                                     drlResourceType );
+                    drlResourceType );
         } else if ( dslrResourceType.accept( destination ) ) {
             model = RuleModelDRLPersistenceImpl.getInstance().unmarshalUsingDSL( drl,
-                                                                                 globals,
-                                                                                 dataModelService.getDataModel( destination ),
-                                                                                 dsls );
+                    globals,
+                    dataModelService.getDataModel( destination ),
+                    dsls );
             ruleName = FileNameUtil.removeExtension( destination,
-                                                     dslrResourceType );
+                    dslrResourceType );
         }
 
         if ( model != null ) {
+            Map<String, Object> attributes = ioService.readAttributes( _destination );
+            setDroolsLPRMetadata( model );
+            setDotFileLPRMetadata( attributes );
             //Save file
             model.name = ruleName;
             ioService.write( _destination,
-                             RuleModelDRLPersistenceImpl.getInstance().marshal( model ),
-                             commentedOptionFactory.makeCommentedOption( "File [" + source.toURI() + "] copied to [" + destination.toURI() + "]." ) );
+                    RuleModelDRLPersistenceImpl.getInstance().marshal( model ),
+                    attributes,
+                    commentedOptionFactory.makeCommentedOption( "File [" + source.toURI() + "] copied to [" + destination.toURI() + "]." ) );
         }
     }
 
+    private void setDroolsLPRMetadata( RuleModel model ) {
+        RuleMetadata prodDate = model.getMetaData( LprMetadataConsts.PRODUCTION_DATE );
+        RuleMetadata archDate = model.getMetaData( LprMetadataConsts.ARCHIVED_DATE );
+        if ( prodDate != null ) {
+            prodDate.setValue( Long.toString( 0 ) );
+            model.updateMetadata( prodDate );
+        }
+        if ( archDate != null ) {
+            archDate.setValue( Long.toString( 0 ) );
+            model.updateMetadata( archDate );
+        }
+    }
+
+    private void setDotFileLPRMetadata( Map<String, Object> attributes ) {
+        Long prodDate = ( Long ) attributes.get( LprMetadataConsts.PRODUCTION_DATE );
+        if ( prodDate != null && prodDate > 0 ) {
+            attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
+        }
+        Long archivedDate = ( Long ) attributes.get( LprMetadataConsts.ARCHIVED_DATE );
+        if ( archivedDate != null && archivedDate > 0 ) {
+            attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
+        }
+    }
 }
