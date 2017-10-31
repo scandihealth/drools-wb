@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import org.drools.workbench.client.docks.AuthoringWorkbenchDocks;
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.inbox.client.InboxPresenter;
+import org.guvnor.messageconsole.client.console.resources.MessageConsoleResources;
 import org.kie.workbench.common.screens.projecteditor.client.menu.ProjectMenu;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
@@ -97,6 +98,13 @@ public class AuthoringPerspective {
                 .endMenu()
                 .newTopLevelMenu(AppConstants.INSTANCE.Repository())
                 .withItems(repositoryMenu.getMenuItems())
+                .endMenu()
+                .newTopLevelMenu( MessageConsoleResources.CONSTANTS.MessageConsole() ).position( MenuPosition.RIGHT ).respondsWith( new Command() {
+                    @Override
+                    public void execute() {
+                        placeManager.goTo( "org.kie.workbench.common.screens.messageconsole.MessageConsole" );
+                    }
+                } )
                 .endMenu()
                 .newTopLevelMenu( AppConstants.INSTANCE.assetSearch() ).position( MenuPosition.RIGHT ).respondsWith( new Command() {
                     @Override

@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import org.drools.workbench.client.docks.LPRWorkbenchDocks;
 import org.drools.workbench.client.resources.i18n.AppConstants;
+import org.guvnor.messageconsole.client.console.resources.MessageConsoleResources;
 import org.kie.workbench.common.widgets.client.handlers.lpr.NewRulesMenu;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,6 +104,13 @@ public class LPRPerspective {
         return MenuFactory
                 .newTopLevelMenu( AppConstants.INSTANCE.New() )
                 .withItems( newRulesMenu.getMenuItems() )
+                .endMenu()
+                .newTopLevelMenu( MessageConsoleResources.CONSTANTS.MessageConsole() ).position( MenuPosition.RIGHT ).respondsWith( new Command() {
+                    @Override
+                    public void execute() {
+                        placeManager.goTo( "org.kie.workbench.common.screens.messageconsole.MessageConsole" );
+                    }
+                } )
                 .endMenu()
                 .newTopLevelMenu( AppConstants.INSTANCE.assetSearch() ).position( MenuPosition.RIGHT ).respondsWith( new Command() {
                     @Override
