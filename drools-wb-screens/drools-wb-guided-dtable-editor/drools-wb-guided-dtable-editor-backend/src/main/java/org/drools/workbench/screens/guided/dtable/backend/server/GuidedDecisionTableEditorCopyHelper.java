@@ -75,6 +75,7 @@ public class GuidedDecisionTableEditorCopyHelper implements CopyHelper {
 
         //Set LPR metadata
         Map<String, Object> attributes = new HashMap<String, Object>();
+        attributes.put( LprMetadataConsts.HAS_PROD_VERSION, false );
         attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
         attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
         setDroolsLPRMetadata( model );
@@ -93,6 +94,13 @@ public class GuidedDecisionTableEditorCopyHelper implements CopyHelper {
                 for (List<DTCellValue52> row : model.getData()) {
                     DTCellValue52 dcv = row.get(index);
                     dcv.setStringValue(Long.toString(0L));
+                }
+            }
+            if (LprMetadataConsts.HAS_PROD_VERSION.equals(metadataCol.getMetadata())) {
+                int index = model.getExpandedColumns().indexOf(metadataCol);
+                for (List<DTCellValue52> row : model.getData()) {
+                    DTCellValue52 dcv = row.get(index);
+                    dcv.setBooleanValue(false);
                 }
             }
             if (LprMetadataConsts.ARCHIVED_DATE.equals(metadataCol.getMetadata())) {

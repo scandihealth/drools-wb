@@ -28,41 +28,45 @@ public class DRLCopyHelper implements CopyHelper {
     }
 
     @Inject
-    public DRLCopyHelper(@Named("ioStrategy") IOService ioService,
-                         DRLResourceTypeDefinition drlResourceType,
-                         CommentedOptionFactory commentedOptionFactory) {
-        this.ioService = checkNotNull("ioService", ioService);
-        this.drlResourceType = checkNotNull("drlResourceType", drlResourceType);
-        this.commentedOptionFactory = checkNotNull("commentedOptionFactory", commentedOptionFactory);
+    public DRLCopyHelper( @Named("ioStrategy") IOService ioService,
+                          DRLResourceTypeDefinition drlResourceType,
+                          CommentedOptionFactory commentedOptionFactory ) {
+        this.ioService = checkNotNull( "ioService", ioService );
+        this.drlResourceType = checkNotNull( "drlResourceType", drlResourceType );
+        this.commentedOptionFactory = checkNotNull( "commentedOptionFactory", commentedOptionFactory );
     }
 
     @Override
-    public boolean supports(Path destination) {
-        return drlResourceType.accept(destination);
+    public boolean supports( Path destination ) {
+        return drlResourceType.accept( destination );
     }
 
     @Override
-    public void postProcess(Path source, Path destination) {
+    public void postProcess( Path source, Path destination ) {
         //Load existing file
-        org.uberfire.java.nio.file.Path _destination = Paths.convert(destination);
-        String drl = ioService.readAllString(_destination);
+        org.uberfire.java.nio.file.Path _destination = Paths.convert( destination );
+        String drl = ioService.readAllString( _destination );
         //Set LPR metadata
         Map<String, Object> attributes = new HashMap<String, Object>();
-        attributes.put(LprMetadataConsts.PRODUCTION_DATE, 0L);
-        attributes.put(LprMetadataConsts.ARCHIVED_DATE, 0L);
-        drl = setDroolsLPRMetadata(drl);
+        attributes.put( LprMetadataConsts.HAS_PROD_VERSION, false );
+        attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
+        attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
+        drl = setDroolsLPRMetadata( drl );
 
-        ioService.write(_destination,
+        ioService.write( _destination,
                 drl,
                 attributes,
-                commentedOptionFactory.makeCommentedOption("File [" + source.toURI() + "] copied to [" + destination.toURI() + "]."));
+                commentedOptionFactory.makeCommentedOption( "File [" + source.toURI() + "] copied to [" + destination.toURI() + "]." ) );
     }
 
-    private String setDroolsLPRMetadata(String drl) {
-        String prodDate = StringUtils.substringBetween(drl, LprMetadataConsts.PRODUCTION_DATE + "(", ")");
-        String archivedDate = StringUtils.substringBetween(drl, LprMetadataConsts.ARCHIVED_DATE + "(", ")");
-        String newDrl = StringUtils.replace(drl, LprMetadataConsts.PRODUCTION_DATE + "(" + prodDate + ")", LprMetadataConsts.PRODUCTION_DATE + "(0)");
-        newDrl = StringUtils.replace(newDrl, LprMetadataConsts.ARCHIVED_DATE + "(" + archivedDate + ")", LprMetadataConsts.ARCHIVED_DATE + "(0)");
+    private String setDroolsLPRMetadata( String drl ) {
+        String hasProdVersion = StringUtils.substringBetween( drl, LprMetadataConsts.HAS_PROD_VERSION + "(", ")" );
+        String prodDate = StringUtils.substringBetween( drl, LprMetadataConsts.PRODUCTION_DATE + "(", ")" );
+        String archivedDate = StringUtils.substringBetween( drl, LprMetadataConsts.ARCHIVED_DATE + "(", ")" );
+
+        String newDrl = StringUtils.replace( drl, LprMetadataConsts.PRODUCTION_DATE + "(" + prodDate + ")", LprMetadataConsts.PRODUCTION_DATE + "(0)" );
+        newDrl = StringUtils.replace( newDrl, LprMetadataConsts.ARCHIVED_DATE + "(" + archivedDate + ")", LprMetadataConsts.ARCHIVED_DATE + "(0)" );
+        newDrl = StringUtils.replace( newDrl, LprMetadataConsts.HAS_PROD_VERSION + "(" + hasProdVersion + ")", LprMetadataConsts.HAS_PROD_VERSION + "(false)" );
         return newDrl;
     }
 }

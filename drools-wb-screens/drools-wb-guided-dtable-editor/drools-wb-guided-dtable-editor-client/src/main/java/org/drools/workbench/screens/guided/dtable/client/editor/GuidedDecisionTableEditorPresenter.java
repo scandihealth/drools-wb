@@ -184,6 +184,7 @@ public class GuidedDecisionTableEditorPresenter
         updateGDTMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
         updateGDTMetaData( IS_VALID_FOR_PRIVATE_SECTOR_REPORTS, String.valueOf( metadata.isValidForPrivateSectorReports() ) );
         updateGDTMetaData( PRODUCTION_DATE, String.valueOf( metadata.getProductionDate() ) );
+        updateGDTMetaData( HAS_PROD_VERSION, String.valueOf( metadata.hasProdVersion() ) );
         updateGDTMetaData( ARCHIVED_DATE, String.valueOf( metadata.getArchivedDate() ) );
         updateGDTMetaData( REPORT_RECEIVED_FROM_DATE, String.valueOf( metadata.getReportReceivedFromDate() ) );
         updateGDTMetaData( REPORT_RECEIVED_TO_DATE, String.valueOf( metadata.getReportReceivedToDate() ) );

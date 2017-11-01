@@ -103,6 +103,7 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
         if ( model != null ) {
             //Set LPR metadata
             Map<String, Object> attributes = new HashMap<String, Object>();
+            attributes.put( LprMetadataConsts.HAS_PROD_VERSION, false );
             attributes.put( LprMetadataConsts.PRODUCTION_DATE, 0L );
             attributes.put( LprMetadataConsts.ARCHIVED_DATE, 0L );
             setDroolsLPRMetadata( model );
@@ -116,8 +117,13 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
     }
 
     private void setDroolsLPRMetadata( RuleModel model ) {
+        RuleMetadata hasProdVersion = model.getMetaData( LprMetadataConsts.HAS_PROD_VERSION );
         RuleMetadata prodDate = model.getMetaData( LprMetadataConsts.PRODUCTION_DATE );
         RuleMetadata archDate = model.getMetaData( LprMetadataConsts.ARCHIVED_DATE );
+        if ( hasProdVersion != null ) {
+            hasProdVersion.setValue( Boolean.toString( false ) );
+            model.updateMetadata( hasProdVersion );
+        }
         if ( prodDate != null ) {
             prodDate.setValue( Long.toString( 0 ) );
             model.updateMetadata( prodDate );

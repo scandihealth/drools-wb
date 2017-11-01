@@ -61,6 +61,7 @@ public class GuidedRuleEditorCopyHelperTest {
     private GuidedRuleDSLRResourceTypeDefinition dslrResourceType = new GuidedRuleDSLRResourceTypeDefinition();
 
     private final String drl = "rule \"rule\"\n" +
+            "@lprmeta.hasProdVersion(true)\n" +
             "@lprmeta.productionDate(1)\n" +
             "@lprmeta.archivedDate(2)\n" +
             "@lprmeta.errorNumber(3)\n" +
@@ -72,6 +73,7 @@ public class GuidedRuleEditorCopyHelperTest {
             "end";
 
     private final String dslr = "rule \"rule\"\n" +
+            "@lprmeta.hasProdVersion(true)\n" +
             "@lprmeta.productionDate(1)\n" +
             "@lprmeta.archivedDate(2)\n" +
             "@lprmeta.errorNumber(3)\n" +
@@ -85,6 +87,7 @@ public class GuidedRuleEditorCopyHelperTest {
     private String[] dsls = new String[]{"There is a person=Person()"};
 
     private Map<String, Object> attributes = new HashMap<String, Object>() {{
+        put( LprMetadataConsts.HAS_PROD_VERSION, true );
         put(LprMetadataConsts.PRODUCTION_DATE, 1L);
         put(LprMetadataConsts.ARCHIVED_DATE, 2L);
         put(LprMetadataConsts.ERROR_NUMBER, 3L);
@@ -129,9 +132,11 @@ public class GuidedRuleEditorCopyHelperTest {
         assertTrue(newDrl.contains("MyNewFile"));
 
         //test that rule is copied with LPR draft status (and preserving other LPR attributes)
+        assertEquals(false, attributesArgumentCaptor.getValue().get(LprMetadataConsts.HAS_PROD_VERSION));
         assertEquals(0L, attributesArgumentCaptor.getValue().get(LprMetadataConsts.PRODUCTION_DATE));
         assertEquals(0L, attributesArgumentCaptor.getValue().get(LprMetadataConsts.ARCHIVED_DATE));
-        assertEquals(2, attributesArgumentCaptor.getValue().size()); //should not write any other attributes
+        assertEquals(3, attributesArgumentCaptor.getValue().size()); //should not write any other attributes
+        assertTrue(newDrl.contains("@" + LprMetadataConsts.HAS_PROD_VERSION + "(false)"));
         assertTrue(newDrl.contains("@" + LprMetadataConsts.PRODUCTION_DATE + "(0)"));
         assertTrue(newDrl.contains("@" + LprMetadataConsts.ARCHIVED_DATE + "(0)"));
         assertTrue(newDrl.contains("@" + LprMetadataConsts.ERROR_NUMBER + "(3)"));
