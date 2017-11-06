@@ -182,7 +182,7 @@ public class GuidedDecisionTableEditorPresenter
         updateGDTMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGDTMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGDTMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
-        updateGDTMetaData( IS_VALID_FOR_PRIVATE_SECTOR_REPORTS, String.valueOf( metadata.isValidForPrivateSectorReports() ) );
+        updateGDTMetaData( IS_VALID_FOR_PRIMARY_SECTOR_REPORTS, String.valueOf( metadata.isValidForPrimarySectorReports() ) );
         updateGDTMetaData( PRODUCTION_DATE, String.valueOf( metadata.getProductionDate() ) );
         updateGDTMetaData( HAS_PROD_VERSION, String.valueOf( metadata.hasProdVersion() ) );
         updateGDTMetaData( ARCHIVED_DATE, String.valueOf( metadata.getArchivedDate() ) );
