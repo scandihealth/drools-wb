@@ -32,14 +32,19 @@ import org.drools.workbench.screens.drltext.model.DrlModelContent;
 import org.drools.workbench.screens.drltext.service.DRLTextEditorService;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
+import org.kie.workbench.common.widgets.metadata.client.KieEditorWrapperView;
 import org.kie.workbench.common.widgets.metadata.client.lpr.LPREditor;
+import org.kie.workbench.common.widgets.metadata.client.lpr.LPRFileMenuBuilder;
+import org.kie.workbench.common.widgets.metadata.client.widget.OverviewWidgetPresenter;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.callbacks.Callback;
+import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
 import org.uberfire.client.workbench.type.ClientResourceType;
+import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.lifecycle.OnClose;
 import org.uberfire.lifecycle.OnMayClose;
@@ -62,9 +67,6 @@ public class DRLEditorPresenter
     @Inject
     private Caller<DRLTextEditorService> drlTextEditorService;
 
-    @Inject
-    private Event<NotificationEvent> notification;
-
     private DRLEditorView view;
 
     @Inject
@@ -75,10 +77,28 @@ public class DRLEditorPresenter
 
     private boolean isDSLR;
 
+
+    /**
+     * Wide constructor used by unit test to set mocks
+     */
     @Inject
-    public DRLEditorPresenter( final DRLEditorView view ) {
+    public DRLEditorPresenter( final DRLEditorView view,
+                               final Caller<DRLTextEditorService> drlTextEditorService,
+                               final KieEditorWrapperView kieView,
+                               final VersionRecordManager versionRecordManager,
+                               final OverviewWidgetPresenter overviewWidget,
+                               final Event<NotificationEvent> notification,
+                               final Event<ChangeTitleWidgetEvent> changeTitleNotification,
+                               final LPRFileMenuBuilder lprMenuBuilder ) {
         super( view );
         this.view = view;
+        this.drlTextEditorService = drlTextEditorService;
+        this.notification = notification;
+        this.kieView = kieView;
+        this.versionRecordManager = versionRecordManager;
+        this.overviewWidget = overviewWidget;
+        this.changeTitleNotification = changeTitleNotification;
+        this.lprMenuBuilder = lprMenuBuilder;
     }
 
     @PostConstruct
@@ -92,7 +112,7 @@ public class DRLEditorPresenter
         super.init( path,
                 place,
                 getResourceType( path ) );
-        this.isDSLR = resourceTypeDSLR.accept( path );
+        this.isDSLR = resourceTypeDSLR != null && resourceTypeDSLR.accept( path );
     }
 
     protected void loadContent() {
@@ -177,11 +197,10 @@ public class DRLEditorPresenter
 
     @Override
     protected void setDroolsMetadata() {
-        //todo ttn unit tests (it seems there is a problem if drl file does not contain any keywords (rule, when, then)?
         if ( !isDSLR ) {
             // split on rule, but keep rule as part of string,
             // see https://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
-            String[] rules = view.getContent().split( "(?=\\s+rule\\s+)" ); //matches the "rule" keyword surrounded by at least one whitespace (spaces, tabs and new lines) on each side
+            String[] rules = view.getContent().split( "(?=rule\\s+[\"'].*[\"'])" ); //matches rule "name" and matches rule 'name'
             StringBuilder contentBuilder = new StringBuilder();
             for ( String rule : rules ) {
                 StringBuilder ruleBuilder = new StringBuilder( rule );
@@ -212,18 +231,10 @@ public class DRLEditorPresenter
     }
 
     private void updateDRLMetaData( StringBuilder rule, String name, String newValue ) {
-        //index from where to insert new metadata
-        int newMetadataIndex = -1;
         String metadataString = "\n\t@" + name + "(" + newValue + ")";
-        RegExp patternWhen = RegExp.compile( "\\s+when\\s+" ); //matches the "when" keyword surrounded by at least one whitespace (spaces, tabs and new lines) on each side
-        RegExp patternThen = RegExp.compile( "\\s+then\\s+" ); //matches the "then" keyword surrounded by at least one whitespace (spaces, tabs and new lines) on each side
-        MatchResult matchResultWhen = patternWhen.exec( rule.toString() );
-        MatchResult matchResultThen = patternThen.exec( rule.toString() );
-        if ( matchResultWhen != null ) {
-            newMetadataIndex = matchResultWhen.getIndex();
-        } else if ( matchResultThen != null ) {
-            newMetadataIndex = matchResultThen.getIndex();
-        }
+        RegExp pattern = RegExp.compile( "rule\\s+[\"'].*[\"']", "g" ); //matches rule "name" and matches rule 'name', (use "g" flag so getLastIndex() returns end of match)
+        //index from where to insert new metadata (metadata should start next line after rule keyword)
+        int newMetadataIndex = pattern.test( rule.toString() ) ? pattern.getLastIndex() : -1;
 
         //index from where to replace or delete existing metadata
         int currentMetadataIndex = -1;
@@ -243,7 +254,7 @@ public class DRLEditorPresenter
         } else if ( currentMetadataIndex > -1 && !("".equals( newValue ) || "null".equals( newValue )) ) {
             //update
             rule.replace( currentMetadataIndex, currentMetadataIndexEnd, metadataString );
-        } else if ( currentMetadataIndex > -1 && ("".equals( newValue ) || "null".equals( newValue ) )) {
+        } else if ( currentMetadataIndex > -1 && ("".equals( newValue ) || "null".equals( newValue )) ) {
             //delete
             rule.delete( currentMetadataIndex, currentMetadataIndexEnd );
         }
@@ -260,7 +271,7 @@ public class DRLEditorPresenter
     }
 
     private ClientResourceType getResourceType( Path path ) {
-        if ( resourceTypeDRL.accept( path ) ) {
+        if ( resourceTypeDRL != null && resourceTypeDRL.accept( path ) ) {
             return resourceTypeDRL;
         } else {
             return resourceTypeDSLR;

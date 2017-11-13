@@ -17,6 +17,7 @@
 package org.drools.workbench.screens.guided.rule.client.editor;
 
 import javax.enterprise.context.Dependent;
+import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -29,9 +30,12 @@ import org.drools.workbench.screens.guided.rule.client.type.GuidedRuleDRLResourc
 import org.drools.workbench.screens.guided.rule.client.type.GuidedRuleDSLRResourceType;
 import org.drools.workbench.screens.guided.rule.model.GuidedEditorContent;
 import org.drools.workbench.screens.guided.rule.service.GuidedRuleEditorService;
+import org.guvnor.messageconsole.events.PublishMessagesEvent;
+import org.guvnor.messageconsole.events.UnpublishMessagesEvent;
 import org.jboss.errai.common.client.api.Caller;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.kie.workbench.common.services.datamodel.model.PackageDataModelOracleBaselinePayload;
+import org.kie.workbench.common.services.shared.lpr.LPRManageProductionService;
 import org.kie.workbench.common.services.shared.rulename.RuleNamesService;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracle;
 import org.kie.workbench.common.widgets.client.datamodel.AsyncPackageDataModelOracleFactory;
@@ -39,13 +43,19 @@ import org.kie.workbench.common.widgets.client.datamodel.ImportAddedEvent;
 import org.kie.workbench.common.widgets.client.datamodel.ImportRemovedEvent;
 import org.kie.workbench.common.widgets.client.source.ViewSourceView;
 import org.kie.workbench.common.widgets.configresource.client.widget.bound.ImportsWidgetPresenter;
+import org.kie.workbench.common.widgets.metadata.client.KieEditorWrapperView;
 import org.kie.workbench.common.widgets.metadata.client.lpr.LPREditor;
+import org.kie.workbench.common.widgets.metadata.client.lpr.LPRFileMenuBuilder;
+import org.kie.workbench.common.widgets.metadata.client.widget.OverviewWidgetPresenter;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
 import org.uberfire.client.annotations.WorkbenchEditor;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPartView;
+import org.uberfire.client.workbench.events.ChangeTitleWidgetEvent;
 import org.uberfire.client.workbench.type.ClientResourceType;
+import org.uberfire.ext.editor.commons.client.file.SaveOperationService;
+import org.uberfire.ext.editor.commons.client.history.VersionRecordManager;
 import org.uberfire.ext.widgets.common.client.callbacks.HasBusyIndicatorDefaultErrorCallback;
 import org.uberfire.ext.widgets.common.client.common.popups.errors.ErrorPopup;
 import org.uberfire.lifecycle.OnClose;
@@ -54,6 +64,8 @@ import org.uberfire.lifecycle.OnStartup;
 import org.uberfire.mvp.Command;
 import org.uberfire.mvp.ParameterizedCommand;
 import org.uberfire.mvp.PlaceRequest;
+import org.uberfire.rpc.SessionInfo;
+import org.uberfire.workbench.events.NotificationEvent;
 import org.uberfire.workbench.model.menu.Menus;
 
 import static org.guvnor.common.services.shared.metadata.model.LprMetadataConsts.*;
@@ -91,10 +103,41 @@ public class GuidedRuleEditorPresenter
     private RuleModel model;
     private AsyncPackageDataModelOracle oracle;
 
+    /**
+     * Wide constructor used by unit test to set mocks
+     */
     @Inject
-    public GuidedRuleEditorPresenter( final GuidedRuleEditorView view ) {
+    public GuidedRuleEditorPresenter( final GuidedRuleEditorView view,
+                                      final Caller<GuidedRuleEditorService> service,
+                                      final Caller<LPRManageProductionService> lprProdService,
+                                      final KieEditorWrapperView kieView,
+                                      final VersionRecordManager versionRecordManager,
+                                      final OverviewWidgetPresenter overviewWidget,
+                                      final Event<NotificationEvent> notification,
+                                      final Event<ChangeTitleWidgetEvent> changeTitleNotification,
+                                      final Event<PublishMessagesEvent> publishMessages,
+                                      final Event<UnpublishMessagesEvent> unpublishMessages,
+                                      final LPRFileMenuBuilder lprMenuBuilder,
+                                      final AsyncPackageDataModelOracleFactory oracleFactory,
+                                      final ImportsWidgetPresenter importsWidget,
+                                      final SaveOperationService saveOperationService,
+                                      final SessionInfo sessionInfo ) {
         super( view );
         this.view = view;
+        this.service = service;
+        this.lprProdService = lprProdService;
+        this.notification = notification;
+        this.kieView = kieView;
+        this.versionRecordManager = versionRecordManager;
+        this.overviewWidget = overviewWidget;
+        this.changeTitleNotification = changeTitleNotification;
+        this.publishMessages = publishMessages;
+        this.unpublishMessages = unpublishMessages;
+        this.lprMenuBuilder = lprMenuBuilder;
+        this.oracleFactory = oracleFactory;
+        this.importsWidget = importsWidget;
+        this.saveOperationService = saveOperationService;
+        this.sessionInfo = sessionInfo;
     }
 
     @OnStartup
@@ -104,7 +147,7 @@ public class GuidedRuleEditorPresenter
         super.init( path,
                 place,
                 getResourceType( path ) );
-        this.isDSLEnabled = resourceTypeDSL.accept( path );
+        this.isDSLEnabled = resourceTypeDSL != null && resourceTypeDSL.accept( path );
     }
 
     protected void loadContent() {
@@ -213,7 +256,6 @@ public class GuidedRuleEditorPresenter
 
     @Override
     protected void setDroolsMetadata() {
-        //todo ttn make unit test
         updateGRMetaData( RULE_TYPE, String.valueOf( metadata.getRuleType() ) );
         updateGRMetaData( ERROR_TYPE, String.valueOf( metadata.getErrorType() ) );
         updateGRMetaData( RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
@@ -249,10 +291,10 @@ public class GuidedRuleEditorPresenter
     }
 
     private ClientResourceType getResourceType( final Path path ) {
-        if ( resourceTypeDRL.accept( path ) ) {
+        if ( resourceTypeDRL != null && resourceTypeDRL.accept( path ) ) {
             return resourceTypeDRL;
         } else {
-            return resourceTypeDRL;
+            return resourceTypeDSL;
         }
     }
 
