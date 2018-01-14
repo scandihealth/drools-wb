@@ -16,6 +16,11 @@
  */
 package org.drools.workbench.backend.server;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+
 import org.picketlink.authentication.event.PreAuthenticateEvent;
 import org.picketlink.idm.IdentityManager;
 import org.picketlink.idm.PartitionManager;
@@ -24,11 +29,6 @@ import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.basic.Grant;
 import org.picketlink.idm.model.basic.Role;
 import org.picketlink.idm.model.basic.User;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 @ApplicationScoped
 public class PicketLinkDefaultUsers {
@@ -48,23 +48,23 @@ public class PicketLinkDefaultUsers {
         final IdentityManager identityManager = partitionManager.createIdentityManager();
         final RelationshipManager relationshipManager = partitionManager.createRelationshipManager();
 
-        final User admin = new User( "admin" );
-        final User director = new User( "director" );
-        final User user = new User( "user" );
-        final User guest = new User( "guest" );
-        final User sgr = new User( "sgr" );
+        final User sds = new User( "sds" );
+//        final User director = new User( "director" );
+//        final User user = new User( "user" );
+//        final User guest = new User( "guest" );
+        final User dxc = new User( "dxc" );
 
-        identityManager.add( admin );
-        identityManager.add( director );
-        identityManager.add( user );
-        identityManager.add( guest );
-        identityManager.add( sgr );
+        identityManager.add( sds );
+//        identityManager.add( director );
+//        identityManager.add( user );
+//        identityManager.add( guest );
+        identityManager.add( dxc );
 
-        identityManager.updateCredential( admin, new Password( "admin" ) );
-        identityManager.updateCredential( director, new Password( "director" ) );
-        identityManager.updateCredential( user, new Password( "user" ) );
-        identityManager.updateCredential( guest, new Password( "guest" ) );
-        identityManager.updateCredential( sgr, new Password( "sgr" ) );
+        identityManager.updateCredential( sds, new Password( "zkOWAc" ) );
+//        identityManager.updateCredential( director, new Password( "director" ) );
+//        identityManager.updateCredential( user, new Password( "user" ) );
+//        identityManager.updateCredential( guest, new Password( "guest" ) );
+        identityManager.updateCredential( dxc, new Password( "cwTedqt" ) );
 
         final Role roleAdmin = new Role( "admin" );
         final Role roleAnalyst = new Role( "analyst" );
@@ -74,17 +74,17 @@ public class PicketLinkDefaultUsers {
         identityManager.add( roleAnalyst );
         identityManager.add( roleKieMgmt );
 
-        relationshipManager.add( new Grant( admin, roleAnalyst ) );
-        relationshipManager.add( new Grant( admin, roleAdmin ) );
-        relationshipManager.add( new Grant( admin, roleKieMgmt ) );
+        relationshipManager.add( new Grant( sds, roleAnalyst ) );
+        relationshipManager.add( new Grant( sds, roleAdmin ) );
+        relationshipManager.add( new Grant( sds, roleKieMgmt ) );
 
-        relationshipManager.add( new Grant( director, roleAnalyst ) );
+//        relationshipManager.add( new Grant( director, roleAnalyst ) );
 
-        relationshipManager.add( new Grant( user, roleAnalyst ) );
+//        relationshipManager.add( new Grant( user, roleAnalyst ) );
 
-        relationshipManager.add( new Grant( sgr, roleAnalyst ) );
-        relationshipManager.add( new Grant( sgr, roleAdmin ) );
-        relationshipManager.add( new Grant( sgr, roleKieMgmt ) );
+        relationshipManager.add( new Grant( dxc, roleAnalyst ) );
+        relationshipManager.add( new Grant( dxc, roleAdmin ) );
+        relationshipManager.add( new Grant( dxc, roleKieMgmt ) );
     }
 
 }
