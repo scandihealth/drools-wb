@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;
+import com.google.gwt.regexp.shared.SplitResult;
 import com.google.gwt.user.client.ui.IsWidget;
 import org.drools.workbench.models.datamodel.rule.DSLSentence;
 import org.drools.workbench.screens.drltext.client.type.DRLResourceType;
@@ -198,11 +199,12 @@ public class DRLEditorPresenter
     @Override
     protected void setDroolsMetadata() {
         if ( !isDSLR ) {
-            // split on rule, but keep rule as part of string,
-            // see https://stackoverflow.com/questions/2206378/how-to-split-a-string-but-also-keep-the-delimiters
-            String[] rules = view.getContent().split( "(?=rule\\s+[\"'].*[\"'])" ); //matches rule "name" and matches rule 'name'
+            // split on rule, but keep delimiter as part of string by using lookahead regexp
+            RegExp pattern = RegExp.compile( "(?=rule\\s*[\"'])", "g" );
+            SplitResult splitResult = pattern.split( view.getContent() );
             StringBuilder contentBuilder = new StringBuilder();
-            for ( String rule : rules ) {
+            for ( int i = 0; i < splitResult.length(); i++ ) {
+                String rule = splitResult.get( i );
                 StringBuilder ruleBuilder = new StringBuilder( rule );
                 updateDRLMetaData( ruleBuilder, RULE_TYPE, String.valueOf( metadata.getRuleType() ) );
                 updateDRLMetaData( ruleBuilder, ERROR_TYPE, String.valueOf( metadata.getErrorType() ) );
@@ -231,8 +233,7 @@ public class DRLEditorPresenter
     }
 
     private void updateDRLMetaData( StringBuilder rule, String name, String newValue ) {
-        String metadataString = "\n\t@" + name + "(" + newValue + ")";
-        RegExp pattern = RegExp.compile( "rule\\s+[\"'].*[\"']", "g" ); //matches rule "name" and matches rule 'name', (use "g" flag so getLastIndex() returns end of match)
+        RegExp pattern = RegExp.compile( "rule\\s*(\".*?\")|('.*?')", "gs" ); //matches rule "my name is 'bob'" and matches rule 'my name is "bob"'. (uses "g" flag so getLastIndex() returns end of match)
         //index from where to insert new metadata (metadata should start next line after rule keyword)
         int newMetadataIndex = pattern.test( rule.toString() ) ? pattern.getLastIndex() : -1;
 
@@ -246,6 +247,7 @@ public class DRLEditorPresenter
         int currentMetadataIndexEnd = rule.indexOf( ")", currentMetadataIndex ) + 1; //index where existing metadata ends
 
         //modify rule
+        String metadataString = "\n\t@" + name + "(" + newValue + ")";
         if ( currentMetadataIndex == -1 && !("".equals( newValue ) || "null".equals( newValue )) ) {
             //create
             if ( newMetadataIndex > -1 ) { //only create if the DRL file actually has a rule
