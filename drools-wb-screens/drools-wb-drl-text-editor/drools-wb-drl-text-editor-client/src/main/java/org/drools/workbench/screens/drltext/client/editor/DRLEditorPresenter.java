@@ -211,6 +211,7 @@ public class DRLEditorPresenter
                 updateDRLMetaData( ruleBuilder, RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
                 updateDRLMetaData( ruleBuilder, ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
                 updateDRLMetaData( ruleBuilder, ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
+                updateDRLMetaData( ruleBuilder, ERROR_BY_DAYS, String.valueOf( metadata.getErrorByDays() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
@@ -248,15 +249,15 @@ public class DRLEditorPresenter
 
         //modify rule
         String metadataString = "\n\t@" + name + "(" + newValue + ")";
-        if ( currentMetadataIndex == -1 && !("".equals( newValue ) || "null".equals( newValue )) ) {
+        if ( currentMetadataIndex == -1 && !("".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue )) ) {
             //create
             if ( newMetadataIndex > -1 ) { //only create if the DRL file actually has a rule
                 rule.insert( newMetadataIndex, metadataString );
             }
-        } else if ( currentMetadataIndex > -1 && !("".equals( newValue ) || "null".equals( newValue )) ) {
+        } else if ( currentMetadataIndex > -1 && !("".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue )) ) {
             //update
             rule.replace( currentMetadataIndex, currentMetadataIndexEnd, metadataString );
-        } else if ( currentMetadataIndex > -1 && ("".equals( newValue ) || "null".equals( newValue )) ) {
+        } else if ( currentMetadataIndex > -1 && ("".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue )) ) {
             //delete
             rule.delete( currentMetadataIndex, currentMetadataIndexEnd );
         }

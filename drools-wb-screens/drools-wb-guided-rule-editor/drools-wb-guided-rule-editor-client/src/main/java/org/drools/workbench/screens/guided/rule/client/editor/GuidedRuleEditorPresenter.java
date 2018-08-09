@@ -261,6 +261,7 @@ public class GuidedRuleEditorPresenter
         updateGRMetaData( RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
         updateGRMetaData( ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
         updateGRMetaData( ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
+        updateGRMetaData( ERROR_BY_DAYS, String.valueOf( metadata.getErrorByDays() ) );
         updateGRMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGRMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGRMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
@@ -310,15 +311,15 @@ public class GuidedRuleEditorPresenter
 
     private void updateGRMetaData( String name, String newValue ) {
         RuleMetadata currentMetaData = model.getMetaData( name );
-        if ( currentMetaData == null && !("".equals( newValue ) || "null".equals( newValue )) ) {
+        if ( currentMetaData == null && !("".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue )) ) {
             //create
             model.addMetadata( new RuleMetadata( name, newValue ) );
-        } else if ( currentMetaData != null && !("".equals( newValue ) || "null".equals( newValue )) ) {
+        } else if ( currentMetaData != null && !("".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue )) ) {
             //update
             currentMetaData.setValue( newValue );
             model.updateMetadata( currentMetaData );
 
-        } else if ( currentMetaData != null && ("".equals( newValue ) || "null".equals( newValue )) ) {
+        } else if ( currentMetaData != null && ("".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue )) ) {
             //delete
             for ( int i = 0; i < model.metadataList.length; i++ ) {
                 RuleMetadata metadata = model.metadataList[i];

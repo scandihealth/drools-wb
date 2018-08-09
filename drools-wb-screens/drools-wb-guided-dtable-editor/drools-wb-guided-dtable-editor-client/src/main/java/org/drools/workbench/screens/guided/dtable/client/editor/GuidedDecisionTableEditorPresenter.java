@@ -179,6 +179,7 @@ public class GuidedDecisionTableEditorPresenter
         updateGDTMetaData( RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
         updateGDTMetaData( ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
         updateGDTMetaData( ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
+        updateGDTMetaData( ERROR_BY_DAYS, String.valueOf( metadata.getErrorByDays() ) );
         updateGDTMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGDTMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGDTMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
@@ -202,7 +203,7 @@ public class GuidedDecisionTableEditorPresenter
         for ( MetadataCol52 metadataCol : model.getMetadataCols() ) {
             if ( metadataCol.getMetadata().equals( name ) ) {
                 found = true;
-                if ( "".equals( newValue ) || "null".equals( newValue ) ) {
+                if ( "".equals( newValue ) || "null".equals( newValue ) || "undefined".equals( newValue ) ) {
                     //delete column + cells
                     int index = model.getExpandedColumns().indexOf( metadataCol );
                     model.getMetadataCols().remove( metadataCol );
