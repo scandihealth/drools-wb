@@ -211,7 +211,7 @@ public class DRLEditorPresenter
                 updateDRLMetaData( ruleBuilder, RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
                 updateDRLMetaData( ruleBuilder, ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
                 updateDRLMetaData( ruleBuilder, ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
-                updateDRLMetaData( ruleBuilder, ERROR_BY_DAYS, String.valueOf( metadata.getErrorByDays() ) );
+                updateDRLMetaData( ruleBuilder, WARNING_TIME_LIMIT, String.valueOf( metadata.getWarningTimeLimit() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
                 updateDRLMetaData( ruleBuilder, IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );

@@ -179,7 +179,7 @@ public class GuidedDecisionTableEditorPresenter
         updateGDTMetaData( RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
         updateGDTMetaData( ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
         updateGDTMetaData( ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
-        updateGDTMetaData( ERROR_BY_DAYS, String.valueOf( metadata.getErrorByDays() ) );
+        updateGDTMetaData( WARNING_TIME_LIMIT, String.valueOf( metadata.getWarningTimeLimit() ) );
         updateGDTMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGDTMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGDTMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );

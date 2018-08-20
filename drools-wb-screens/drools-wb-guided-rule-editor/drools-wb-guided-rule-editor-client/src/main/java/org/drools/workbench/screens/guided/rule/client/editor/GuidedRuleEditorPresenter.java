@@ -261,7 +261,7 @@ public class GuidedRuleEditorPresenter
         updateGRMetaData( RULE_GROUP, String.valueOf( metadata.getRuleGroup() ) );
         updateGRMetaData( ERROR_TEXT, String.valueOf( metadata.getErrorText() ) );
         updateGRMetaData( ERROR_NUMBER, String.valueOf( metadata.getErrorNumber() ) );
-        updateGRMetaData( ERROR_BY_DAYS, String.valueOf( metadata.getErrorByDays() ) );
+        updateGRMetaData( WARNING_TIME_LIMIT, String.valueOf( metadata.getWarningTimeLimit() ) );
         updateGRMetaData( IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) );
         updateGRMetaData( IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) );
         updateGRMetaData( IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) );
