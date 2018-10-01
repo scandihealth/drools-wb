@@ -445,7 +445,7 @@ public class GuidedRuleEditorPresenterTest {
         assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.IS_VALID_FOR_DUSAS_ABROAD_REPORTS, String.valueOf( metadata.isValidForDUSASAbroadReports() ) ) ) );
         assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.IS_VALID_FOR_DUSAS_SPECIALITY_REPORTS, String.valueOf( metadata.isValidForDUSASSpecialityReports() ) ) ) );
         assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.IS_VALID_FOR_LPR_REPORTS, String.valueOf( metadata.isValidForLPRReports() ) ) ) );
-        assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.IS_VALID_FOR_PRIMARY_SECTOR_REPORTS, String.valueOf( metadata.isValidForPrimarySectorReports() ) ) ) );
+        assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.IS_VALID_FOR_PRIVATE_SECTOR_REPORTS, String.valueOf( metadata.isValidForPrivateSectorReports() ) ) ) );
         assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.ENCOUNTER_START_FROM_DATE, String.valueOf( metadata.getEncounterStartFromDate() ) ) ) );
         assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.ENCOUNTER_START_TO_DATE, String.valueOf( metadata.getEncounterStartToDate() ) ) ) );
         assertTrue( ArrayUtils.contains( viewContent.metadataList, new RuleMetadata( LprMetadataConsts.ENCOUNTER_END_FROM_DATE, String.valueOf( metadata.getEncounterEndFromDate() ) ) ) );

@@ -78,7 +78,7 @@ public class DRLEditorPresenterTest {
             "\t@lprmeta.archivedDate(0)\n" +
             "\t@lprmeta.productionDate(0)\n" +
             "\t@lprmeta.hasProdVersion(false)\n" +
-            "\t@lprmeta.isValidForPrimarySectorReports(false)\n" +
+            "\t@lprmeta.isValidForPrivateSectorReports(false)\n" +
             "\t@lprmeta.isValidForLPRReports(false)\n" +
             "\t@lprmeta.isValidForDUSASSpecialityReports(false)\n" +
             "\t@lprmeta.isValidForDUSASAbroadReports(false)\n" +
