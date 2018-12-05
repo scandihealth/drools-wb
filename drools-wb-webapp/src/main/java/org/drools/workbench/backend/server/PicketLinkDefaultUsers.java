@@ -78,6 +78,14 @@ public class PicketLinkDefaultUsers {
         relationshipManager.add( new Grant( sds, roleAdmin ) );
         relationshipManager.add( new Grant( sds, roleKieMgmt ) );
 
+        relationshipManager.add( new Grant( erv, roleAnalyst ) );
+        relationshipManager.add( new Grant( erv, roleAdmin ) );
+        relationshipManager.add( new Grant( erv, roleKieMgmt ) );
+
+        relationshipManager.add( new Grant( krni, roleAnalyst ) );
+        relationshipManager.add( new Grant( krni, roleAdmin ) );
+        relationshipManager.add( new Grant( krni, roleKieMgmt ) );
+
 //        relationshipManager.add( new Grant( director, roleAnalyst ) );
 
 //        relationshipManager.add( new Grant( user, roleAnalyst ) );
