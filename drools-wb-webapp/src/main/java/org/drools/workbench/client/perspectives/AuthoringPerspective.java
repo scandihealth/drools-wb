@@ -16,7 +16,9 @@
 package org.drools.workbench.client.perspectives;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -29,10 +31,15 @@ import org.kie.workbench.common.screens.projecteditor.client.menu.ProjectMenu;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcePresenter;
 import org.kie.workbench.common.widgets.client.handlers.NewResourcesMenu;
 import org.kie.workbench.common.widgets.client.menu.RepositoryMenu;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.uberfire.client.annotations.Perspective;
 import org.uberfire.client.annotations.WorkbenchMenu;
 import org.uberfire.client.annotations.WorkbenchPerspective;
+import org.uberfire.client.mvp.Activity;
+import org.uberfire.client.mvp.ActivityManager;
 import org.uberfire.client.mvp.PlaceManager;
+import org.uberfire.client.mvp.WorkbenchActivity;
 import org.uberfire.client.workbench.panels.impl.MultiListWorkbenchPanelPresenter;
 import org.uberfire.mvp.Command;
 import org.uberfire.mvp.PlaceRequest;
@@ -71,8 +78,14 @@ public class AuthoringPerspective {
     @Inject
     private AuthoringWorkbenchDocks docks;
 
+    @Inject
+    private ActivityManager activityManager;
+
+    private static final Logger log = LoggerFactory.getLogger( AuthoringPerspective.class );
+
     @PostConstruct
     public void setup() {
+        listenForMessageEvents();
         docks.setup("AuthoringPerspective", new DefaultPlaceRequest( "org.kie.guvnor.explorer" ) );
     }
 
@@ -151,6 +164,39 @@ public class AuthoringPerspective {
                     }
                 }).endMenu().build().getItems().get(0));
         return menuItems;
+    }
+
+    private native void listenForMessageEvents() /*-{
+        console.log('Drools-WB listening for messages');
+        var that = this;
+        $wnd.addEventListener("message", function (event) {
+            console.log('Drools-WB message received: ', event.data);
+            try {
+                if (event.data === 'mayClose') {
+                    var activityManager = that.@org.drools.workbench.client.perspectives.AuthoringPerspective::activityManager;
+                    var startedActivities = activityManager.@org.uberfire.client.mvp.ActivityManagerImpl::startedActivities;
+                    var mayClose = that.@org.drools.workbench.client.perspectives.AuthoringPerspective::mayClose(*)(startedActivities);
+                    var message = {message: mayClose, isResponseTo: 'mayClose'};
+                    console.log('Drools-WB sending message:', message);
+                    event.source.postMessage(message, event.origin);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }, false);
+    }-*/;
+
+    private boolean mayClose( Map<Activity, PlaceRequest> startedActivities ) {
+        boolean mayClose = true;
+        log.trace( "Calling mayClose with startedActivities=" + Arrays.toString( startedActivities.entrySet().toArray() ) );
+        for ( Activity activity : startedActivities.keySet() ) {
+            log.trace( "Checking Activity: " + activity.getIdentifier() );
+            if ( mayClose && activity instanceof WorkbenchActivity ) {
+                mayClose = (( WorkbenchActivity ) activity).onMayClose();
+                log.trace( "WorkbenchActivity: " + activity.getIdentifier() + " may close: " + mayClose );
+            }
+        }
+        return mayClose;
     }
 
 }
