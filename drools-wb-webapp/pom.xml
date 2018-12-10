@@ -50,7 +50,6 @@
             <configuration>
               <draftCompile>true</draftCompile>
               <!--<incremental>true</incremental>-->
-              <optimizationLevel>0</optimizationLevel>
               <saveSource>true</saveSource>
               <!--<logLevel>DEBUG</logLevel>-->
               <!--<style>PRETTY</style>-->

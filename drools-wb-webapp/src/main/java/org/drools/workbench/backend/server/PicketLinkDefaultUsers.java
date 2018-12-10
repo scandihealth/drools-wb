@@ -49,12 +49,16 @@ public class PicketLinkDefaultUsers {
         final RelationshipManager relationshipManager = partitionManager.createRelationshipManager();
 
         final User sds = new User( "sds" );
+        final User erv = new User( "erv" );
+        final User krni = new User( "krni" );
 //        final User director = new User( "director" );
 //        final User user = new User( "user" );
 //        final User guest = new User( "guest" );
         final User dxc = new User( "dxc" );
 
         identityManager.add( sds );
+        identityManager.add( erv );
+        identityManager.add( krni );
 //        identityManager.add( director );
 //        identityManager.add( user );
 //        identityManager.add( guest );
