@@ -16,6 +16,9 @@
  */
 package org.drools.workbench.backend.server;
 
+import java.io.FileInputStream;
+import java.lang.invoke.MethodHandles;
+import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
@@ -29,9 +32,12 @@ import org.picketlink.idm.credential.Password;
 import org.picketlink.idm.model.basic.Grant;
 import org.picketlink.idm.model.basic.Role;
 import org.picketlink.idm.model.basic.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ApplicationScoped
 public class PicketLinkDefaultUsers {
+    private static final Logger logger = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass());
 
     @Inject
     private PartitionManager partitionManager;
@@ -64,11 +70,12 @@ public class PicketLinkDefaultUsers {
 //        identityManager.add( guest );
         identityManager.add( dxc );
 
-        identityManager.updateCredential( sds, new Password( "zkOWAc" ) );
-//        identityManager.updateCredential( director, new Password( "director" ) );
-//        identityManager.updateCredential( user, new Password( "user" ) );
-//        identityManager.updateCredential( guest, new Password( "guest" ) );
-        identityManager.updateCredential( dxc, new Password( "cwTedqt" ) );
+        Properties passwords = getPasswords();
+
+        identityManager.updateCredential(sds, new Password( passwords.getProperty("sds") ) );
+        identityManager.updateCredential(erv, new Password( passwords.getProperty("erv") ) );
+        identityManager.updateCredential(krni, new Password( passwords.getProperty("krni") ) );
+        identityManager.updateCredential(dxc, new Password( passwords.getProperty("dxc") ) );
 
         final Role roleAdmin = new Role( "admin" );
         final Role roleAnalyst = new Role( "analyst" );
@@ -99,4 +106,18 @@ public class PicketLinkDefaultUsers {
         relationshipManager.add( new Grant( dxc, roleKieMgmt ) );
     }
 
+    private Properties getPasswords() {
+        Properties properties = new Properties();
+        String fileName = System.getProperty("jboss.server.config.dir") + "/users.properties";
+        try {
+            FileInputStream fis = new FileInputStream(fileName);
+            if(fis != null) {
+                properties.load(fis);
+                fis.close();
+            }
+        } catch(Exception e) {
+            logger.error("Error read user passwords from property file", e);
+        }
+        return properties;
+    }
 }
