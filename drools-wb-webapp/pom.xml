@@ -1253,6 +1253,15 @@
         </executions>
       </plugin>
       -->
+      <plugin>
+        <groupId>org.wildfly.plugins</groupId>
+        <artifactId>wildfly-maven-plugin</artifactId>
+        <configuration>
+          <server-groups>
+            <server-group>master-group</server-group>
+          </server-groups>
+        </configuration>
+      </plugin>
     </plugins>
 
   </build>
