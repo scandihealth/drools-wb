@@ -116,7 +116,8 @@ public class GuidedRuleEditorCopyHelperTest {
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(drl);
 
         helper.postProcess(pathSource,
-                pathDestination);
+                pathDestination,
+                "");
 
         final ArgumentCaptor<String> drlArgumentCaptor = ArgumentCaptor.forClass(String.class);
         final ArgumentCaptor<Map> attributesArgumentCaptor = ArgumentCaptor.forClass(Map.class);
@@ -152,7 +153,8 @@ public class GuidedRuleEditorCopyHelperTest {
         when(ioService.readAllString(any(org.uberfire.java.nio.file.Path.class))).thenReturn(dslr);
 
         helper.postProcess(pathSource,
-                pathDestination);
+                pathDestination,
+                "");
 
         final ArgumentCaptor<String> drlArgumentCaptor = ArgumentCaptor.forClass(String.class);
         verify(ioService,

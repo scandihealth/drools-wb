@@ -22,6 +22,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.apache.commons.lang3.StringUtils;
 import org.drools.workbench.models.commons.backend.rule.RuleModelDRLPersistenceImpl;
 import org.drools.workbench.models.datamodel.rule.RuleMetadata;
 import org.drools.workbench.models.datamodel.rule.RuleModel;
@@ -75,7 +76,8 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
 
     @Override
     public void postProcess( final Path source,
-                             final Path destination ) {
+                             final Path destination,
+                             final String comment ) {
         //Load existing file
         final org.uberfire.java.nio.file.Path _destination = Paths.convert( destination );
         final String drl = ioService.readAllString( _destination );
@@ -112,8 +114,18 @@ public class GuidedRuleEditorCopyHelper implements CopyHelper {
             ioService.write( _destination,
                     RuleModelDRLPersistenceImpl.getInstance().marshal( model ),
                     attributes,
-                    commentedOptionFactory.makeCommentedOption( "File [" + source.toURI() + "] copied to [" + destination.toURI() + "]." ) );
+                    commentedOptionFactory.makeCommentedOption(
+                            getCommitMessage(source, destination, comment)
+                    ) );
         }
+    }
+
+    private String getCommitMessage(final Path source,
+                                    final Path destination,
+                                    final String comment ) {
+        final String copyMessage = "File [" + source.toURI() + "] copied to [" + destination.toURI() + "].";
+        if(StringUtils.isEmpty(comment)) return copyMessage;
+        return comment.trim() + " - " + copyMessage;
     }
 
     private void setDroolsLPRMetadata( RuleModel model ) {

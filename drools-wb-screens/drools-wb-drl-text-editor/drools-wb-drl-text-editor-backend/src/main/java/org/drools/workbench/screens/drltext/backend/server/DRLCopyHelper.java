@@ -42,7 +42,7 @@ public class DRLCopyHelper implements CopyHelper {
     }
 
     @Override
-    public void postProcess( Path source, Path destination ) {
+    public void postProcess( Path source, Path destination, final String comment ) {
         //Load existing file
         org.uberfire.java.nio.file.Path _destination = Paths.convert( destination );
         String drl = ioService.readAllString( _destination );

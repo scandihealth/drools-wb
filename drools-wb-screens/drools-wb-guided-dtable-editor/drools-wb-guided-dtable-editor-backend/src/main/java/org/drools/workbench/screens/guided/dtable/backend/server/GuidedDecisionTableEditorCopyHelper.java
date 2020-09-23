@@ -62,7 +62,8 @@ public class GuidedDecisionTableEditorCopyHelper implements CopyHelper {
 
     @Override
     public void postProcess(final Path source,
-                            final Path destination) {
+                            final Path destination,
+                            final String comment ) {
         //Load existing file
         final org.uberfire.java.nio.file.Path _destination = Paths.convert(destination);
         final String content = ioService.readAllString(Paths.convert(destination));
